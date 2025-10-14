@@ -46,18 +46,14 @@
     {{> footer}}
 
 <script>
-    // --- ELEMENTOS DEL DOM ---
     const loginForm = document.querySelector('.login-form');
 
-    // --- FUNCIÓN PARA ENVIAR EL FORMULARIO AL BACKEND ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // 1. Recopilar datos del formulario
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        // 2. Enviar datos al backend
         try {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -68,10 +64,9 @@
             const result = await response.json();
 
             if (response.ok) {
-                // 3. Guardar el token y redirigir
                 localStorage.setItem('authToken', result.token);
                 alert('¡Inicio de sesión exitoso!');
-                window.location.href = '/dashboard.html'; // O a la página que quieras
+                window.location.href = '/index.html'; 
             } else {
                 alert(`Error: ${result.error}`);
             }
