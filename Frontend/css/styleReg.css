@@ -1,0 +1,249 @@
+.header-registro {
+    background-image: url(images/SentadillaXray2.jpg);
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.registro-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.registro-box {
+    background-color: rgba(4, 4, 4, 0.95);
+    border: 2px solid #a70a15;
+    border-radius: 15px;
+    padding: 50px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    margin-top: 80px;
+}
+
+.registro-box h1 {
+    font-size: 32px;
+    color: #e1160d;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.registro-box p {
+    color: #818181;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.registro-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #1a1a1a;
+    border: 1px solid #a70a15;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    background-color: #252525;
+    border-color: #e1160d;
+    box-shadow: 0 0 8px rgba(225, 22, 13, 0.3);
+}
+
+.form-group input::placeholder {
+    color: #666;
+}
+
+.password-requirements {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.password-requirements p {
+    color: #e1160d;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.req-item {
+    display: flex;
+    align-items: center;
+    color: #818181;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
+}
+
+.req-item:last-child {
+    margin-bottom: 0;
+}
+
+.req-icon {
+    color: #666;
+    margin-right: 8px;
+    font-weight: bold;
+    min-width: 15px;
+}
+
+.req-item.met {
+    color: #4caf50;
+}
+
+.req-item.met .req-icon {
+    color: #4caf50;
+}
+
+.password-match {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.password-match.match {
+    color: #4caf50;
+}
+
+.password-match.no-match {
+    color: #f44336;
+}
+
+.form-checkbox {
+    margin-bottom: 20px;
+}
+
+.form-checkbox label {
+    display: flex;
+    align-items: center;
+    color: #818181;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.form-checkbox input {
+    width: 16px !important;
+    height: 16px;
+    margin-right: 8px;
+    cursor: pointer;
+    padding: 0 !important;
+}
+
+.btn-registro-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #e1160d;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-registro-submit:hover {
+    background-color: #a70a15;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+}
+
+.btn-registro-submit:active {
+    transform: translateY(0);
+}
+
+.btn-registro-submit:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.registro-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #FFFFFF29;
+    text-align: center;
+}
+
+.registro-footer p {
+    color: #818181;
+    font-size: 12px;
+    margin: 0;
+}
+
+.registro-footer a {
+    color: #e1160d;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.registro-footer a:hover {
+    color: #ffffff;
+}
+
+@media(max-width: 768px) {
+    .registro-box {
+        padding: 30px 20px;
+        margin-top: 80px;
+    }
+
+    .registro-box h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .registro-box p {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .password-requirements {
+        padding: 10px;
+    }
+}
