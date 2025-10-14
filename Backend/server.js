@@ -6,8 +6,10 @@ import 'dotenv/config';
 import { supabase } from './lib/supabaseClient.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { engine } from 'express-handlebars';
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -42,7 +44,12 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/videos', videosRouter);
 
-
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'index.html')); 
+});
+app.get('/Galeria', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'galery.html')); 
+});
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
