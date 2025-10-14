@@ -1,4 +1,3 @@
-iddleware/upload.js
 import multer from 'multer';
 import path from 'path';
 
