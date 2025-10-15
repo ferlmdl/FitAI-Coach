@@ -39,7 +39,7 @@ app.engine(
   })
 );
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/videos', videosRouter);
@@ -47,8 +47,12 @@ app.use('/api/videos', videosRouter);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend', 'index.html')); 
 });
-app.get('/Galeria', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend', 'galery.html')); 
+app.get('/galery.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'galery.html')); 
+});
+
+app.get('/login.html', (req, res) => {
+      res.sendFile(path.join(__dirname, '../Frontend/layouts', 'login.html')); 
 });
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
