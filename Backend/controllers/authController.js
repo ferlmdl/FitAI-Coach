@@ -1,41 +1,70 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const users = [];
+import { supabase } from '../lib/supabaseClient.js';
 
 export const register = async (req, res) => {
     try {
-        const { email, name, password, height, weight, level } = req.body;
+        const { email, name, password } = req.body; 
+        
         if (!email || !name || !password) {
             return res.status(400).json({ success: false, error: 'Faltan campos obligatorios' });
         }
-        if (users.find(u => u.email === email)) {
-            return res.status(409).json({ success: false, error: 'El usuario ya existe' });
-        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        users.push({ email, name, password: hashedPassword, height, weight, level });
-        res.status(201).json({ success: true, message: 'Usuario registrado' });
+
+        const { data, error } = await supabase
+            .from('users') 
+            .insert([
+                {
+                    email: email,
+                    name: name,
+                    password: hashedPassword 
+                }
+            ])
+            .select(); 
+
+        if (error) {
+            console.error('Error de Supabase al insertar:', error);
+            if (error.code === '23505') {
+                return res.status(409).json({ success: false, error: 'El correo electrónico ya está registrado' });
+            }
+            return res.status(500).json({ success: false, error: 'Error al registrar el usuario en la base de datos' });
+        }
+
+        res.status(201).json({ success: true, message: 'Usuario registrado exitosamente' });
+
     } catch (error) {
-        console.error('Error en registro: ', error);
-        res.status(500).json({ success: false, error: 'Error de servidor' });
+        console.error('Error general en el servidor:', error);
+        res.status(500).json({ success: false, error: 'Error interno del servidor' });
     }
 };
 
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = users.find(u => u.email === email);
-        if (!user) {
+        
+        const { data: user, error } = await supabase
+            .from('user')
+            .select('*')
+            .eq('email', email)
+            .single(); 
+
+        console.log('usuario encintrado:', user);
+        console.log('error de supabase:', error);
+        if (error || !user) {
             return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
         }
+        
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) {
             return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
         }
-        const token = jwt.sign({ email: user.email, name: user.name }, 'secreto', { expiresIn: '1h' });
+        
+        const token = jwt.sign({ id: user.id, email: user.email }, 'secreto', { expiresIn: '1h' });
         res.json({ success: true, token });
+    
     } catch (error) {
-        console.error('Error en login: ', error);
+        console.error('Error en login:', error);
         res.status(500).json({ success: false, error: 'Error de servidor' });
     }
 };

@@ -5,21 +5,21 @@ export const getUsers = (req, res) => {
 };
 export const getUserByEmail = (req, res) => {
     const { email } = req.params;
-    const user = users.find(u => u.email === email);
-    if (!user) {
+    const users = users.find(u => u.email === email);
+    if (!users) {
         return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
     }
-    res.json({ success: true, user });
+    res.json({ success: true, users });
 };
 
 export const updateUser = (req, res) => {
     const { email } = req.params;
-    const user = users.find(u => u.email === email);
-    if (!user) {
+    const users = users.find(u => u.email === email);
+    if (!users) {
         return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
     }
-    Object.assign(user, req.body);
-    res.json({ success: true, message: 'Usuario actualizado', user });
+    Object.assign(users, req.body);
+    res.json({ success: true, message: 'Usuario actualizado', users });
 };
 
 export const deleteUser = (req, res) => {

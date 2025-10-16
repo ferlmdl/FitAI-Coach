@@ -1,5 +1,5 @@
 const registroForm = document.getElementById('registroForm');
-    const contrasenaInput = document.getElementById('contrasena');
+    const passwordInput = document.getElementById('password');
     const confirmarpasswordInput = document.getElementById('confirmarpassword');
     const passwordMatch = document.getElementById('passwordMatch');
 
@@ -11,8 +11,8 @@ const registroForm = document.getElementById('registroForm');
         symbol: { validator: (password) => /[!@#$%^&*\-_]/.test(password), el: document.getElementById('req-symbol') }
     };
 
-    contrasenaInput.addEventListener('input', () => {
-        const password = contrasenaInput.value;
+    passwordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
         Object.values(requirements).forEach(req => {
             req.el.classList.toggle('met', req.validator(password));
         });
@@ -27,7 +27,7 @@ const registroForm = document.getElementById('registroForm');
             passwordMatch.className = 'password-match';
             return;
         }
-        if (contrasenaInput.value === confirmarpasswordInput.value) {
+        if (passwordInput.value === confirmarpasswordInput.value) {
             passwordMatch.textContent = '✓ Las contraseñas coinciden';
             passwordMatch.className = 'password-match match';
         } else {
@@ -39,7 +39,7 @@ const registroForm = document.getElementById('registroForm');
     registroForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const password = contrasenaInput.value;
+        const password = passwordInput.value;
         const allRequirementsMet = Object.values(requirements).every(req => req.validator(password));
 
         if (!allRequirementsMet) {
@@ -56,7 +56,7 @@ const registroForm = document.getElementById('registroForm');
             name: formData.get('name'),
             userName: formData.get('userName'),
             email: formData.get('email'),
-            password: formData.get('contrasena')
+            password: formData.get('password')
         };
 
         try {
