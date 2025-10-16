@@ -54,6 +54,15 @@ app.get('/galery.html', (req, res) => {
 app.get('/login.html', (req, res) => {
       res.sendFile(path.join(__dirname, '../Frontend/layouts', 'login.html')); 
 });
+app.get('/register.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'register.html')); 
+});
+app.get('/profile.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'profile.html'));
+});
+app.get('/upload.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'upload.html'));
+});
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
