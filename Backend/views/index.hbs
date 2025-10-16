@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIT AI</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <input type="checkbox" id="menu" style="display: none;" /> 
+
+<header class="hero-wrapper">
+    <div class="header-info container">
+        <h1>Fit AI - Coach</h1>
+        <p>Tu entrenador personal de IA.</p>
+        {{#if isLoggedIn}}
+            <a href="/profile" class="btn-1">Ir a Mi Perfil</a>
+        {{else}}
+            <a href="/login" class="btn-1">Ingresa aquí</a>
+        {{/if}}
+    </div>
+
+</header>
+<section class="gym container">
+    <div class="gym-1">
+        <h2><span>Ejercicios</span> Guiados </h2>
+        <p>
+        Si no sabes por dónde empezar, no te preocupes. Nosotros te guiaremos en cada paso gracias a la IA integrada de google.
+        </p>
+        <a href="/login" class="btn-2">Empieza</a>
+    </div>
+
+    <div class="gym-2">
+        <img class="img-1" src="images/g1.jpg" alt="gym">
+        <img class="img-2" src="images/g2.jpg" alt="gym">
+    </div>
+</section>
+
+<section class="gym container">
+    <div class="gym-2">
+        <img class="img-1" src="images/g3.jpg" alt="gym">
+        <img class="img-2" src="images/g4.jpg" alt="gym">
+    </div>
+
+    <div class="gym-1">
+        <h2><span>Aprende</span> de forma individual </h2>
+        <p>
+        Sin importar tu nivel, te ayudamos a mejorar tu técnica y alcanzar tus objetivos con planes personalizados. Desde la comodidad de tu hogar.
+        </p>
+    </div>
+</section>
+
+<section class="gym container">
+    <div class="gym-1">
+        <h2><span>Ejercicio</span> Funcional </h2>
+        <p>
+        Mejora tu fuerza, equilibrio y flexibilidad con rutinas de ejercicio funcional diseñadas para adaptarse a tu nivel y objetivos.
+        Porque tu bienestar es nuestra prioridad.
+        Y sabemos lo importante de verse y sentirse bien.
+        </p>
+        <a href="login" class="btn-2">Empieza</a>
+    </div>
+
+    <div class="gym-2">
+        <img class="img-1" src="images/g5.jpg" alt="gym">
+        <img class="img-2" src="images/g6.jpg" alt="gym">
+    </div>
+</section>
+</body>
+</html>

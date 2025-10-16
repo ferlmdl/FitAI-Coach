@@ -1,5 +1,6 @@
-const registroForm = document.getElementById('registroForm');
-    const passwordInput = document.getElementById('password');
+document.addEventListener('DOMContentLoaded', () => {
+    const registroForm = document.getElementById('registroForm'); // Asegúrate que tu form tenga este id="registroForm"
+    const contrasenaInput = document.getElementById('password');
     const confirmarpasswordInput = document.getElementById('confirmarpassword');
     const passwordMatch = document.getElementById('passwordMatch');
 
@@ -8,74 +9,68 @@ const registroForm = document.getElementById('registroForm');
         upper: { validator: (password) => /[A-Z]/.test(password), el: document.getElementById('req-upper') },
         lower: { validator: (password) => /[a-z]/.test(password), el: document.getElementById('req-lower') },
         number: { validator: (password) => /[0-9]/.test(password), el: document.getElementById('req-number') },
-        symbol: { validator: (password) => /[!@#$%^&*\-_]/.test(password), el: document.getElementById('req-symbol') }
+        symbol: { validator: (password) => /[!@#$%^&*-_]/.test(password), el: document.getElementById('req-symbol') }
     };
 
-    passwordInput.addEventListener('input', () => {
-        const password = passwordInput.value;
-        Object.values(requirements).forEach(req => {
-            req.el.classList.toggle('met', req.validator(password));
+    if(contrasenaInput) {
+        contrasenaInput.addEventListener('input', () => {
+            const password = contrasenaInput.value;
+            Object.values(requirements).forEach(req => {
+                if(req.el) req.el.classList.toggle('met', req.validator(password));
+            });
+            checkPasswordMatch();
         });
-        checkPasswordMatch();
-    });
+    }
 
-    confirmarpasswordInput.addEventListener('input', checkPasswordMatch);
-
+    if(confirmarpasswordInput) {
+        confirmarpasswordInput.addEventListener('input', checkPasswordMatch);
+    }
+    
     function checkPasswordMatch() {
+        if (!confirmarpasswordInput || !passwordMatch) return;
         if (confirmarpasswordInput.value === '') {
             passwordMatch.textContent = '';
             passwordMatch.className = 'password-match';
             return;
         }
-        if (passwordInput.value === confirmarpasswordInput.value) {
-            passwordMatch.textContent = '✓ Las contraseñas coinciden';
+        if (contrasenaInput.value === confirmarpasswordInput.value) {
+            passwordMatch.textContent = 'Las contraseñas coinciden';
             passwordMatch.className = 'password-match match';
         } else {
-            passwordMatch.textContent = '✗ Las contraseñas no coinciden';
+            passwordMatch.textContent = 'Las contraseñas no coinciden';
             passwordMatch.className = 'password-match no-match';
         }
     }
 
-    registroForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    if(registroForm) {
+        registroForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(registroForm);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                password: formData.get('password')
+            };
 
-        const password = passwordInput.value;
-        const allRequirementsMet = Object.values(requirements).every(req => req.validator(password));
+            try {
+                const response = await fetch(`/api/auth/register`, { // No necesitas la URL completa
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
 
-        if (!allRequirementsMet) {
-            alert('La contraseña no cumple todos los requisitos.');
-            return;
-        }
-        if (password !== confirmarpasswordInput.value) {
-            alert('Las contraseñas no coinciden.');
-            return;
-        }
+                const result = await response.json();
 
-        const formData = new FormData(registroForm);
-        const data = {
-            name: formData.get('name'),
-            userName: formData.get('userName'),
-            email: formData.get('email'),
-            password: formData.get('password')
-        };
-
-        try {
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
-                window.location.href = '/login.html';
-            } else {
-                alert(`Error: ${result.error}`);
+                if (response.ok) {
+                    alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
+                    window.location.href = '/login';
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                alert('No se pudo conectar con el servidor.');
             }
-        } catch (error) {
-            console.error('Error de conexión:', error);
-            alert('No se pudo conectar con el servidor.');
-        }
-    });
+        });
+    }
+});

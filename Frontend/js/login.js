@@ -18,7 +18,7 @@
             if (response.ok) {
                 localStorage.setItem('authToken', result.token);
                 alert('¡Inicio de sesión exitoso!');
-                window.location.href = '/index.html'; 
+                window.location.href = '/'; 
             } else {
                 alert(`Error: ${result.error}`);
             }

@@ -1,12 +1,12 @@
 import supabase from '../lib/supabaseClient.js';
 
 class UserModel {
-    static async createUser({ email, password, username }) {
+    static async createUser({ email, password, userName }) {
         const { user, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                data: { username }
+                data: { userName }
             }
         });
         if (error) throw error;
@@ -15,7 +15,7 @@ class UserModel {
 
     static async getUserById(id) {
         const { data, error } = await supabase
-            .from('users')
+            .from('profiles')
             .select('*')
             .eq('id', id)
             .single();
@@ -25,7 +25,7 @@ class UserModel {
 
     static async updateUser(id, updates) {
         const { data, error } = await supabase
-            .from('users')
+            .from('profiles')
             .update(updates)
             .eq('id', id)
             .single();
@@ -35,7 +35,7 @@ class UserModel {
 
     static async deleteUser(id) {
         const { data, error } = await supabase
-            .from('users')
+            .from('profiles')
             .delete()
             .eq('id', id)
             .single();

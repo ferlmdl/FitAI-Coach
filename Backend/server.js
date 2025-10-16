@@ -7,6 +7,8 @@ import { supabase } from './lib/supabaseClient.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
+import cookieParser from 'cookie-parser';
+import { checkAuth } from './middleware/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 async function testSupabaseConnection() {
-    const { data, error } = await supabase.from('users').select('*').limit(1);
+    const { data, error } = await supabase.from('profiles').select('*').limit(1); 
     if (error) {
         console.error('Error al conectar con Supabase:', error);
     } else {
@@ -24,45 +26,58 @@ async function testSupabaseConnection() {
 }
 
 testSupabaseConnection();
+
 app.engine(
-  "html",
-  engine({
-    extname: ".html",
-    layoutsDir: path.join(__dirname, '../Frontend/layouts'),
-    partialsDir: path.join(__dirname, '../Frontend/partials'),
-    defaultLayout: "principal",
-    helpers: {
-      json: function(context) {
-        return JSON.stringify(context);
-      }
-    }
-  })
+    "hbs",
+    engine({
+        extname: ".hbs",
+        layoutsDir: path.join(__dirname, '../Backend/views/layouts'),
+        partialsDir: path.join(__dirname, '../Backend/views/partials'),
+        defaultLayout: "main",
+        helpers: {
+            json: function(context) {
+                return JSON.stringify(context);
+            }
+        }
+    })
 );
+
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views')); 
+
 app.use(express.json());
+app.use(cookieParser());
+app.use(checkAuth);
 app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/videos', videosRouter);
 
+
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend', 'index.html')); 
-});
-app.get('/galery.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'galery.html')); 
+    res.render('index'); 
 });
 
-app.get('/login.html', (req, res) => {
-      res.sendFile(path.join(__dirname, '../Frontend/layouts', 'login.html')); 
+app.get('/galery', (req, res) => {
+    res.render('galery'); 
 });
-app.get('/register.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'register.html')); 
+
+app.get('/login', (req, res) => {
+    res.render('login'); 
 });
-app.get('/profile.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'profile.html'));
+
+app.get('/register', (req, res) => {
+    res.render('register'); 
 });
-app.get('/upload.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/layouts', 'upload.html'));
+
+app.get('/profile', (req, res) => {
+    res.render('profile');
 });
+
+app.get('/upload', (req, res) => {
+    res.render('upload');
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

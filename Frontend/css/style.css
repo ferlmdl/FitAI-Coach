@@ -16,39 +16,39 @@ body{
 .container{
     max-width: 1200px;
     margin: 0 auto;
-
+    padding: 0 20px; 
 }
 
-.header {
-    background-image: url(images/SentadillaXray2.jpg);
-    background-position: top center;
+/* ======================================= */
+/* HEADER Y HERO SECTION                   */
+/* ======================================= */
+.hero-wrapper {
+    background-image: url(/images/SentadillaXray2.jpg); /* Ruta corregida a /images/ */
+    background-position: center bottom;
     background-repeat: no-repeat;
     background-size: cover;
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    min-height: 70vh; 
+    position: relative; 
 }
 
 .menu{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    background-color: #040404;
+    border-bottom: 1px solid #FFFFFF29;
+    z-index: 1000;
+}
+
+.menu .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 1000;
-    background-color: #040404;
-    border-bottom: 1px solid #FFFFFF29;
 }
 
 .logo{
     color: #a70a15;
     font-size: 25px;
     font-weight: 800;
-
+    padding: 20px 0; 
 }
 
 .menu .navbar ul li{
@@ -67,16 +67,30 @@ body{
     color: #e1160d;
 }
 
-#menu {
+#menu-toggle {
     display: none;
 }
-.menu-icono{
+
+.menu-icon{
+    display: none;
+    cursor: pointer;
+}
+
+.menu-icon img{
     width: 25px;
 }
 
-.menu label{
-    display: none;
-    cursor: pointer;
+.header-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
 }
 
 .header-info h1{
@@ -93,7 +107,6 @@ body{
     font-size: 22px;
     text-transform: capitalize;
     margin-bottom: 35px;
-
 }
 
 .btn-1 {
@@ -110,17 +123,18 @@ body{
     background-color: #a70a15;
 }
 
+/* ======================================= */
+/* SECCIONES DE CONTENIDO (GYM)            */
+/* ======================================= */
 .gym{
-    padding: 100px 0;
+    padding: 100px 0; 
     display: flex;
     align-items: center;
-
 }
 
 .gym-1{
     width: 50%;
     padding-right: 150px;
-
 }
 
 .gym-1 h2{
@@ -155,88 +169,148 @@ body{
     background-color: #a70a15;
 }
 
-
 .img-1, .img-2{
     width: 250px;
     margin-right: 30px;
 }
 
-.footer{
+/* ======================================= */
+/* FOOTER - ESTILOS BASE (PARA TODOS)      */
+/* ======================================= */
+.footer {
     border-top: 1px solid #FFFFFF29;
     padding: 50px 0;
+    background-color: #040404;
+    color: #CCCCCC; /* Color de texto base para el footer */
+}
+
+.footer-content {
     display: flex;
     justify-content: space-between;
-    background-color: #040404;
-
+    width: 100%;
+    flex-wrap: wrap; 
 }
 
-.footer h3{
-    color: #a70a15;
-    font-size: 25px;
-    font-weight: 800;
-
+.footer-section {
+    flex: 1;
+    padding: 0 20px;
+    min-width: 250px;
+    margin-bottom: 20px; /* Espacio para móvil */
 }
 
-.links ul{
-    display: flex;
-
+.footer h2 {
+    color: #FFFFFF;
+    margin-bottom: 15px;
+    font-size: 20px; /* Tamaño unificado para los títulos */
 }
 
-.links ul li{
-    margin-right: 35px;
-
+.footer .links ul {
+    padding: 0;
 }
 
-.links ul li a{
-    color: #818181;
+.footer .links a {
+    color: #CCCCCC;
+    transition: color 0.3s ease;
 }
 
+.footer .links a:hover {
+    color: #e1160d;
+}
+
+.social-links img {
+    width: 32px;
+    margin-right: 10px;
+}
+
+.footer-bottom {
+    color: #A0A0A0;
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #FFFFFF29;
+}
+
+
+/* ======================================= */
+/* MEDIA QUERIES (Móvil)                   */
+/* ======================================= */
 @media(max-width:991px){
-    .menu {
-        padding: 20px;
-    }
-
-    .menu label{
+    .menu-icon {
         display: initial;
+        padding: 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 20px 0;
+        z-index: 1001;
+        background: transparent;
+        border: none;
     }
 
-    .menu .navbar{
+    .menu-icon svg { width: 30px; height: 30px; stroke: #FFFFFF; }
+    .icon-close { display: none; }
+    #menu-toggle:checked ~ .menu-icon .icon-close { display: block; }
+    #menu-toggle:checked ~ .menu-icon .icon-menu { display: none; }
+    
+    .menu .navbar {
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background-color: #06060694;
-        display: none;
-    }
-
-    .menu .navbar ul li{
         width: 100%;
+        background-color: #060606; 
+        border-top: 1px solid #FFFFFF29;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    #menu:checked ~ .navbar{
-        display: initial;
+    #menu-toggle:checked ~ .navbar {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 
-    .header-content {
-        padding: 30px;
+    .menu .navbar ul { display: block; padding: 0; }
+    .menu .navbar ul li{ float: none; width: 100%; }
+    .menu .navbar ul li a{ padding: 15px 20px; text-align: center; }
+    
+    .hero-wrapper {
+        min-height: 50vh; 
+    }
+    
+    .hero-wrapper:has(#menu-toggle:checked ~ .navbar) {
+        min-height: calc(50vh + 250px); 
+    }
+    
+    .header-info {
+        position: static; 
+        transform: none;
+        padding: 50px 20px;
     }
 
     .header-info h1{
         font-size: 50px;
-        margin-bottom: 5px;
     }
+
     .gym{
         flex-direction: column;
-        align-items: center;
         text-align: center;
-        padding: 30px;
-
+        padding: 50px 30px 30px 30px;
     }
+
     .gym-1{
         width: 100%;
         padding: 0;
+        order: 2; /* Cambiamos el orden para que el texto aparezca después en algunos casos */
+    }
+    .gym-2{
         order: 1;
     }
+
     .gym-1 h2{
         justify-content: center;
         margin-bottom: 15px;
@@ -245,24 +319,27 @@ body{
         margin-bottom: 35px;
     }
     .gym-2{
-        order: 2;
         width: 100%;
         flex-direction: column;
         align-items: center;
     }
     .img-1, .img-2{
         margin: 0 0 20px 0;
-
     }
-    .footer{
+
+    /* ESTILOS DEL FOOTER QUE CAMBIAN EN MÓVIL */
+    .footer-content {
         flex-direction: column;
         align-items: center;
+        text-align: center;
     }
-    .foote h3{
-        margin-bottom: 15px;
+    
+    .links ul {
+        justify-content: center;
+    }
 
-    }
     .links ul li{
         margin: 0 10px;
     }
 }
+

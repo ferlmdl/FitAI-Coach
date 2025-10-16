@@ -11,9 +11,8 @@ export const register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-
         const { data, error } = await supabase
-            .from('users') 
+            .from('profiles') 
             .insert([
                 {
                     email: email,
@@ -42,29 +41,44 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
         const { data: user, error } = await supabase
-            .from('user')
+            .from('profiles')
             .select('*')
             .eq('email', email)
             .single(); 
 
-        console.log('usuario encintrado:', user);
-        console.log('error de supabase:', error);
-        if (error || !user) {
+        if (error && error.code !== 'PGRST116') { 
+            console.error('Error de Supabase al buscar usuario:', error);
+            return res.status(500).json({ success: false, error: 'Error en la base de datos' });
+        }
+        if (!user) {
             return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
         }
         
-        const valid = await bcrypt.compare(password, user.password);
-        if (!valid) {
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
             return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
         }
-        
         const token = jwt.sign({ id: user.id, email: user.email }, 'secreto', { expiresIn: '1h' });
-        res.json({ success: true, token });
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600000, 
+            path: '/' 
+        });
+
+        res.status(200).json({ success: true, message: 'Inicio de sesión exitoso' });
     
     } catch (error) {
         console.error('Error en login:', error);
         res.status(500).json({ success: false, error: 'Error de servidor' });
     }
+};
+export const logout = (req, res) => {
+    res.cookie('authToken', '', {
+        httpOnly: true,
+        expires: new Date(0),
+        path: '/'
+    });
+    res.status(200).json({ success: true, message: 'Sesión cerrada exitosamente' });
 };

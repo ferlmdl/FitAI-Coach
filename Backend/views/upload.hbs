@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Subir Videos</title>
+        <script src="/js/auth.js" defer></script>
+        <script src="/js/upload.js" defer></script>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+<body>
+    <main class="container">
+        <a href="/index.html" class="back-button" title="Volver al inicio">←</a>
+        
+        <div class="header">
+            <h1>Subir Videos</h1>
+            <p>Selecciona o arrastra los videos que deseas subir</p>
+        </div>
+
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🎬</div>
+            <div class="upload-text">Haz clic aquí o arrastra videos</div>
+            <div class="upload-hint">Solo archivos de video permitidos</div>
+            <input type="file" id="fileInput" class="file-input" multiple accept="video/*">
+        </div>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="file-list" id="fileList"></div>
+
+        <button class="upload-button" id="uploadBtn" onclick="uploadFiles()" disabled>
+            Subir Videos
+        </button>
+
+        <div class="restrictions">
+            <h3>Restricciones:</h3>
+            <ul>
+                <li>Tamaño máximo por video: 100MB</li>
+                <li>Formatos permitidos: MP4, AVI, MOV, WMV, FLV, MKV</li>
+                <li>Máximo 3 videos simultáneamente</li>
+                <li>Resolución recomendada: hasta 1080p</li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>
