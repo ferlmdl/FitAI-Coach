@@ -1,12 +1,15 @@
 import supabase from '../lib/supabaseClient.js';
 
 class UserModel {
-    static async createUser({ email, password, userName }) {
+    static async createUser({ email, password, userName, allName }) {
         const { user, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                data: { userName }
+                data: { userName: userName,
+                        allName: allName
+                 }
+
             }
         });
         if (error) throw error;

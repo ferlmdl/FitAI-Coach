@@ -1,36 +1,30 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { supabase } from '../lib/supabaseClient.js';
 
 export const register = async (req, res) => {
     try {
-        const { email, name, password } = req.body; 
+        const { email, allName, password, userName } = req.body; 
         
-        if (!email || !name || !password) {
+        if (!email || !allName || !password || !userName) {
             return res.status(400).json({ success: false, error: 'Faltan campos obligatorios' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const { data, error } = await supabase
-            .from('profiles') 
-            .insert([
-                {
-                    email: email,
-                    name: name,
-                    password: hashedPassword 
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    userName: userName,
+                    allName: allName
                 }
-            ])
-            .select(); 
+            }
+        });
 
         if (error) {
-            console.error('Error de Supabase al insertar:', error);
-            if (error.code === '23505') {
-                return res.status(409).json({ success: false, error: 'El correo electrónico ya está registrado' });
-            }
-            return res.status(500).json({ success: false, error: 'Error al registrar el usuario en la base de datos' });
+            console.error('Error de Supabase al registrar:', error);
+            return res.status(400).json({ success: false, error: error.message });
         }
 
-        res.status(201).json({ success: true, message: 'Usuario registrado exitosamente' });
+        res.status(201).json({ success: true, user: data.user });
 
     } catch (error) {
         console.error('Error general en el servidor:', error);
@@ -41,41 +35,52 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { data: user, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('email', email)
-            .single(); 
 
-        if (error && error.code !== 'PGRST116') { 
-            console.error('Error de Supabase al buscar usuario:', error);
-            return res.status(500).json({ success: false, error: 'Error en la base de datos' });
+        if (!email || !password) {
+            return res.status(400).json({ success: false, error: 'Email y password son requeridos' });
         }
-        if (!user) {
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            console.error('Error de Supabase al iniciar sesión:', error);
             return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
         }
         
-        const validPassword = await bcrypt.compare(password, user.password);
-        if (!validPassword) {
-            return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
-        }
-        const token = jwt.sign({ id: user.id, email: user.email }, 'secreto', { expiresIn: '1h' });
-        res.cookie('authToken', token, {
+        const { session, user } = data;
+
+        res.cookie('sb-access-token', session.access_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 3600000, 
+            maxAge: session.expires_in * 1000,
             path: '/' 
         });
 
-        res.status(200).json({ success: true, message: 'Inicio de sesión exitoso' });
+        res.cookie('sb-refresh-token', session.refresh_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 60 * 24 * 30 * 1000,
+            path: '/' 
+        });
+
+        res.status(200).json({ success: true, message: 'Inicio de sesión exitoso', user });
     
     } catch (error) {
         console.error('Error en login:', error);
         res.status(500).json({ success: false, error: 'Error de servidor' });
     }
 };
+
 export const logout = (req, res) => {
-    res.cookie('authToken', '', {
+    res.cookie('sb-access-token', '', {
+        httpOnly: true,
+        expires: new Date(0),
+        path: '/'
+    });
+    res.cookie('sb-refresh-token', '', {
         httpOnly: true,
         expires: new Date(0),
         path: '/'

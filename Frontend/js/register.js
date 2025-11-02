@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const registroForm = document.getElementById('registroForm'); // Asegúrate que tu form tenga este id="registroForm"
+    const registroForm = document.getElementById('registroForm');
     const contrasenaInput = document.getElementById('password');
     const confirmarpasswordInput = document.getElementById('confirmarpassword');
     const passwordMatch = document.getElementById('passwordMatch');
@@ -47,13 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const formData = new FormData(registroForm);
             const data = {
-                name: formData.get('name'),
+                allName: formData.get('allName'),
                 email: formData.get('email'),
-                password: formData.get('password')
+                password: formData.get('password'),
+                userName: formData.get('userName')
             };
 
             try {
-                const response = await fetch(`/api/auth/register`, { // No necesitas la URL completa
+                const response = await fetch(`/api/auth/register`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
