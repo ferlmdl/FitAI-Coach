@@ -1,0 +1,52 @@
+Styleanalysis.css
+/* Archivo: Frontend/css/styleAnalysis.css */
+
+.analysis-container {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.analysis-group {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+}
+
+.analysis-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    color: #fff;
+}
+
+.description-wrapper h3 {
+    font-size: 1.5rem;
+    color: #e1160d;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.description-wrapper h4 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-top: 20px;
+}
+
+.description-wrapper p {
+    color: #ccc;
+    line-height: 1.7;
+}
+
+.video-wrapper video {
+    border-radius: 10px;
+}
+
+/* Media Query para móviles */
+@media (max-width: 991px) {
+    .analysis-content {
+        grid-template-columns: 1fr; /* Una columna */
+    }
+}

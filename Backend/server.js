@@ -20,9 +20,8 @@ async function testSupabaseConnection() {
     if (error) {
         console.error('Error al conectar con Supabase:', error);
     } else {
-        console.log('Conexión a Supabase exitosa. Datos de prueba:', data);
+        console.log('Conexión a Supabase exitosa. Datos:', data);
     }
-
 }
 
 testSupabaseConnection();
@@ -58,8 +57,25 @@ app.get('/', (req, res) => {
     res.render('index'); 
 });
 
-app.get('/galery', (req, res) => {
-    res.render('galery'); 
+app.get('/galery', async (req, res) => {
+    if (!res.locals.isLoggedIn) {
+        return res.redirect('/login');
+    }
+    const userId = res.locals.user.id;
+
+    const { data: videos, error } = await supabase
+        .from('video')
+        .select('*')
+        .eq('user_id', userId) 
+        .order('created_at', { ascending: false }); 
+    if (error) {
+        console.error('Error al buscar videos:', error);
+        return res.status(500).send('Error al cargar la galería.');
+    }
+
+    res.render('galery', {
+        videos: videos
+    });
 });
 
 app.get('/login', (req, res) => {
@@ -70,8 +86,70 @@ app.get('/register', (req, res) => {
     res.render('register'); 
 });
 
-app.get('/profile', (req, res) => {
-    res.render('profile');
+app.get('/analysis/:exerciseName', async (req, res) => {
+    if (!res.locals.isLoggedIn) {
+        return res.redirect('/login');
+    }
+
+    const exerciseName = req.params.exerciseName;
+
+    const { data: analysisData, error } = await supabase
+        .from('videos_usuario') 
+        .select('*')
+        .eq('nombre_video', exerciseName) 
+        .single();
+
+    if (error || !analysisData) {
+        console.error('Error al buscar análisis:', error);
+        return res.render('analysis', {
+            error: 'No se encontró un análisis para este ejercicio.'
+        });
+    }
+
+    res.render('analysis', {
+        analysis: analysisData,
+        pageStyles: [
+            { href: '/css/styleAnalysis.css' } 
+        ]
+    });
+});
+
+app.get('/profile', async (req, res) => {
+    if (!res.locals.isLoggedIn) {
+        return res.redirect('/login');
+    }
+
+    const userId = res.locals.user.id;
+
+    const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single(); 
+
+    if (profileError) {
+        console.error('Error al buscar el perfil:', profileError);
+        return res.status(500).send('Error al cargar el perfil.');
+    }
+
+    const { count: videoCount, error: countError } = await supabase
+        .from('video')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId); 
+    
+    const createdAtDate = new Date(profileData.created_at);
+    const currentDate = new Date();
+    
+    const yearDiff = currentDate.getFullYear() - createdAtDate.getFullYear();
+    const monthDiff = currentDate.getMonth() - createdAtDate.getMonth();
+    
+    const monthsActive = Math.max(0, yearDiff * 12 + monthDiff);
+
+    res.render('profile', {
+        profile: profileData,
+        videoCount: videoCount || 0,
+        monthsActive: monthsActive
+    });
 });
 
 app.get('/upload', (req, res) => {

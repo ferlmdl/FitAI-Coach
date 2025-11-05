@@ -1,26 +1,27 @@
+// Archivo: Backend/models/video.js
 import { supabase } from '../lib/supabaseClient.js';
 
-class video {
+class VideoModel {
     static async createVideo({ userId, videoUrl, title, exerciseType }) {
         const { data, error } = await supabase
-            .from('videos')
+            .from('video')
             .insert({
                 user_id: userId,
-                video_url: videoUrl,
-                title,
+                video_route: videoUrl,
+                title: title,
                 exercise_type: exerciseType,
-                status: 'uploaded'
+                status: 'uploaded', // <-- Asegura que el status se guarde
+                analysis: null      // <-- Pone 'analysis' como nulo por ahora
             })
             .select()
             .single();
-
         if (error) throw error;
         return data;
     }
 
     static async getVideoById(id) {
         const { data, error } = await supabase
-            .from('videos')
+            .from('video')
             .select('*')
             .eq('id', id)
             .single();
@@ -31,7 +32,7 @@ class video {
 
     static async getVideosByUserId(userId) {
         const { data, error } = await supabase
-            .from('videos')
+            .from('video')
             .select('*')
             .eq('user_id', userId)
             .order('created_at', { ascending: false });
@@ -41,7 +42,7 @@ class video {
 
     static async updateVideo(id, updates) {
         const { data, error } = await supabase
-            .from('videos')
+            .from('video')
             .update(updates)
             .eq('id', id)
             .select()
@@ -53,9 +54,10 @@ class video {
 
     static async deleteVideo(id) {
         const { data, error } = await supabase
-            .from('videos')
+            .from('video')
             .delete()
             .eq('id', id)
+            .select()
             .single();
 
         if (error) throw error;
@@ -63,4 +65,4 @@ class video {
     }
 }
 
-export default video;
+export default VideoModel;

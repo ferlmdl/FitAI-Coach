@@ -2,10 +2,19 @@ import { supabase } from '../lib/supabaseClient.js';
 
 export const register = async (req, res) => {
     try {
-        const { email, allName, password, userName } = req.body; 
+        const { email, allName, password, userName, age } = req.body; 
         
-        if (!email || !allName || !password || !userName) {
+        if (!email || !allName || !password || !userName || !age) {
             return res.status(400).json({ success: false, error: 'Faltan campos obligatorios' });
+        }
+
+        // Validación básica de formato de correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Por favor ingresa un correo con formato válido (ejemplo@dominio.com)' 
+            });
         }
 
         const { data, error } = await supabase.auth.signUp({
@@ -14,8 +23,9 @@ export const register = async (req, res) => {
             options: {
                 data: {
                     userName: userName,
-                    allName: allName
-                }
+                    allName: allName,
+                    age: age
+                },
             }
         });
 
@@ -66,7 +76,18 @@ export const login = async (req, res) => {
             path: '/' 
         });
 
-        res.status(200).json({ success: true, message: 'Inicio de sesión exitoso', user });
+        // Establecer cookie de autenticación para las vistas
+        res.cookie('authToken', session.access_token, {
+            maxAge: session.expires_in * 1000,
+            path: '/'
+        });
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Inicio de sesión exitoso', 
+            user,
+            token: session.access_token
+        });
     
     } catch (error) {
         console.error('Error en login:', error);

@@ -23,7 +23,7 @@ body{
 /* HEADER Y HERO SECTION                   */
 /* ======================================= */
 .hero-wrapper {
-    background-image: url(/images/SentadillaXray2.jpg); /* Ruta corregida a /images/ */
+    background-image: url(/images/SentadillaXray2.jpg);
     background-position: center bottom;
     background-repeat: no-repeat;
     background-size: cover;
@@ -31,17 +31,32 @@ body{
     position: relative; 
 }
 
-.menu{
+.menu {
     width: 100%;
     background-color: #040404;
     border-bottom: 1px solid #FFFFFF29;
     z-index: 1000;
-}
 
-.menu .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 20px; 
+}
+main {
+    /* 1. Añade espacio arriba y abajo para que el 
+       contenido no se pegue al header ni al footer.
+    */
+    padding-top: 7rem;
+    padding-bottom: 4rem;
+
+    /* 2. ¡LA SOLUCIÓN! 
+       Esto fuerza al <main> a tener una altura mínima.
+       Ocupará el 100% de la altura de la pantalla (100vh) MENOS
+       la altura de tu header (ej. 70px) y tu footer (ej. 150px).
+       
+       Ajusta el '220px' si tu header+footer miden más o menos.
+    */
+    min-height: calc(100vh - 220px);
 }
 
 .logo{
@@ -67,18 +82,14 @@ body{
     color: #e1160d;
 }
 
-#menu-toggle {
-    display: none;
-}
+/* (ID 'menu-toggle' de checkbox eliminado) */
 
 .menu-icon{
-    display: none;
+    display: none; /* Oculto en PC, se mostrará en móvil */
     cursor: pointer;
 }
 
-.menu-icon img{
-    width: 25px;
-}
+/* (Estilos de .menu-icon img eliminados, usamos SVG) */
 
 .header-info {
     display: flex;
@@ -235,56 +246,65 @@ body{
 /* ======================================= */
 /* MEDIA QUERIES (Móvil)                   */
 /* ======================================= */
-@media(max-width:991px){
+/* BLOQUE MODIFICADO:
+   Ahora usa la clase '.is-active' que añade el JavaScript.
+*/
+@media(max-width:991px) {
+    
     .menu-icon {
-        display: initial;
-        padding: 20px 0;
-        display: flex;
+        display: flex; /* Cambiado a flex */
         align-items: center;
         justify-content: center;
-        cursor: pointer;
         padding: 20px 0;
-        z-index: 1001;
+        cursor: pointer;
+        z-index: 1001; /* Sobre el menú */
         background: transparent;
         border: none;
     }
 
-    .menu-icon svg { width: 30px; height: 30px; stroke: #FFFFFF; }
-    .icon-close { display: none; }
-    #menu-toggle:checked ~ .menu-icon .icon-close { display: block; }
-    #menu-toggle:checked ~ .menu-icon .icon-menu { display: none; }
+    .menu-icon svg { 
+        width: 30px; 
+        height: 30px; 
+        stroke: #FFFFFF; 
+    }
+    
+    /* Lógica para mostrar/ocultar íconos */
+    .menu-icon .icon-close { display: none; }
+    .menu-icon .icon-menu { display: block; }
+    .menu-icon.is-active .icon-close { display: block; }
+    .menu-icon.is-active .icon-menu { display: none; }
     
     .menu .navbar {
-        position: absolute;
-        top: 100%;
-        left: 0;
+        position: fixed; /* Cambiado a 'fixed' para un menú lateral */
+        top: 0;
         right: 0;
-        width: 100%;
+        width: 250px; /* Ancho del menú */
+        height: 100vh; /* Alto completo */
         background-color: #060606; 
-        border-top: 1px solid #FFFFFF29;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        border-left: 1px solid #FFFFFF29;
+        padding-top: 80px; /* Espacio superior */
+        z-index: 1000; /* Debajo del botón */
+        
+        /* Estado oculto */
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
     }
 
-    #menu-toggle:checked ~ .navbar {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+    /* Estado visible (cuando JS añade la clase) */
+    .menu .navbar.is-active {
+        transform: translateX(0);
     }
 
+    /* Estilos de los links en móvil */
     .menu .navbar ul { display: block; padding: 0; }
-    .menu .navbar ul li{ float: none; width: 100%; }
-    .menu .navbar ul li a{ padding: 15px 20px; text-align: center; }
+    .menu .navbar ul li { float: none; width: 100%; }
+    .menu .navbar ul li a { padding: 15px 20px; text-align: center; }
     
     .hero-wrapper {
         min-height: 50vh; 
     }
     
-    .hero-wrapper:has(#menu-toggle:checked ~ .navbar) {
-        min-height: calc(50vh + 250px); 
-    }
+    /* (Se elimina el :has() que no es necesario) */
     
     .header-info {
         position: static; 
@@ -305,7 +325,7 @@ body{
     .gym-1{
         width: 100%;
         padding: 0;
-        order: 2; /* Cambiamos el orden para que el texto aparezca después en algunos casos */
+        order: 2;
     }
     .gym-2{
         order: 1;
@@ -327,7 +347,6 @@ body{
         margin: 0 0 20px 0;
     }
 
-    /* ESTILOS DEL FOOTER QUE CAMBIAN EN MÓVIL */
     .footer-content {
         flex-direction: column;
         align-items: center;
@@ -342,4 +361,93 @@ body{
         margin: 0 10px;
     }
 }
+.page-title {
+    text-align: center;
+    color: #e1160d;
+    text-transform: uppercase;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    /* Aumentamos el padding-top para bajar el título */
+    padding: 6rem 0 2rem 0; 
+}
 
+/* --- ESTA ES LA SECCIÓN CORREGIDA --- */
+.video-gallery {
+    display: grid;
+    /* ¡SOLUCIÓN! 
+      Forzamos 6 columnas en pantallas grandes.
+    */
+    grid-template-columns: repeat(6, 1fr);
+    
+    /* Reducimos el espacio para que quepan mejor */
+    gap: 15px; 
+    padding-bottom: 20px; /* Espacio extra al final */
+}
+
+.video-item {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.video-item video {
+    width: 100%;
+    display: block;
+}
+
+.video-item h4 {
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.1rem;
+    padding: 10px 10px 5px 10px;
+    margin: 0;
+    /* Para evitar títulos muy largos */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.video-item p {
+    color: #cccccc;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 0 10px 15px 10px;
+    margin: 0;
+}
+
+.btn-delete {
+    background-color: #a70a15;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 0 15px 15px 15px;
+    width: calc(100% - 30px); /* Ocupa el ancho con márgenes */
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.btn-delete:hover {
+    background-color: #e1160d;
+}
+
+/* ======================================= */
+/* MEDIA QUERY (PARA TABLETS Y MÓVILES)    */
+/* ======================================= */
+
+/* Para tablets (menos de 1200px) */
+@media (max-width: 1200px) {
+    .video-gallery {
+        /* Mostramos 3 columnas */
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Para móviles (menos de 768px) */
+@media (max-width: 768px) {
+    .video-gallery {
+        /* Mostramos 2 columnas */
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

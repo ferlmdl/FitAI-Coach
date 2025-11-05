@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const menuToggleBtn = document.getElementById('menu-toggle-btn');
-    const header = document.querySelector('.menu');
-
-    if (menuToggleBtn && header) {
+    const navbar = document.querySelector('.navbar');
+    if (menuToggleBtn && navbar) {
         menuToggleBtn.addEventListener('click', () => {
-             header.classList.toggle('menu-open');
+            navbar.classList.toggle('is-active');
+            menuToggleBtn.classList.toggle('is-active');
         });
     }
 });

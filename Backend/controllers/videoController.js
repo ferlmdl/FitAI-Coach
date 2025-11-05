@@ -1,65 +1,127 @@
-import { spawn } from 'child_process';
+// Archivo: Backend/controllers/videoController.js
+import { supabase } from '../lib/supabaseClient.js';
+import { spawn } from 'child_process'; // (No se usa en este código, pero lo dejo por si lo usas en otra función)
 import path from 'path';
 import fs from 'fs';
 import VideoModel from '../models/video.js'; 
 
-
-export const uploadAndAnalyzeVideo = async (req, res) => {
-    const { userId, title } = req.body;
+export const uploadVideos = async (req, res) => {
     
-    if (!req.file) {
-        return res.status(400).json({ success: false, error: 'No se recibió ningún archivo de video.' });
+    if (!res.locals.isLoggedIn || !res.locals.user) {
+        return res.status(401).json({ error: 'No autorizado' });
     }
-    if (!userId || !title) {
-        return res.status(400).json({ success: false, error: 'Falta el userId o el title.' });
+    const userId = res.locals.user.id;
+    const { title, exerciseType } = req.body;
+    const files = req.files;
+
+    if (!files || files.length === 0) {
+        return res.status(400).json({ error: 'No se recibieron videos.' });
+    }
+    if (!title || !exerciseType) {
+        return res.status(400).json({ error: 'Falta el título o el tipo de ejercicio.' });
     }
 
-    const videoPath = req.file.path;
-    let videoRecord; 
+    const bucketName = 'videos_usuario';
 
     try {
-        videoRecord = await VideoModel.createVideo({
-            userId: userId,
-            title: title,
-            videoUrl: videoPath, // En un caso real, esto sería la URL en Supabase Storage
-            status: 'processing'
-        });
-        
-        const scriptPath = path.resolve('scripts/analyze_video.py');
-        const pythonProcess = spawn('python3', [scriptPath, videoPath]);
+        for (const file of files) {
+            const filePath = path.resolve(file.path);
+            const fileExt = path.extname(file.originalname);
+            const fileName = `${userId}-${Date.now()}${fileExt}`;
+            const uploadPath = `${userId}/${fileName}`;
 
-        let result = '';
-        let error = '';
-        pythonProcess.stdout.on('data', (data) => result += data.toString());
-        pythonProcess.stderr.on('data', (data) => error += data.toString());
+            const videoBuffer = fs.readFileSync(filePath);
 
-        pythonProcess.on('close', async (code) => {
-            fs.unlinkSync(videoPath);
-
-            if (code !== 0) {
-                await VideoModel.updateVideo(videoRecord.id, { status: 'failed' });
-                return res.status(500).json({ success: false, error: error || 'Error al analizar el video' });
-            }
-
-            try {
-                const analysisResult = JSON.parse(result);
-                const updatedVideo = await VideoModel.updateVideo(videoRecord.id, {
-                    analysis_result: analysisResult,
-                    status: 'analyzed'
+            const { data: storageData, error: storageError } = await supabase.storage
+                .from(bucketName)
+                .upload(uploadPath, videoBuffer, {
+                    contentType: file.mimetype,
+                    upsert: false
                 });
 
-                res.json({ success: true, analysis: updatedVideo });
-            } catch (e) {
-                await VideoModel.updateVideo(videoRecord.id, { status: 'failed' });
-                res.status(500).json({ success: false, error: 'Error al procesar el resultado del análisis' });
+            if (storageError) {
+                fs.unlinkSync(filePath); 
+                throw new Error(`Error de Storage: ${storageError.message}`);
             }
-        });
+
+            const { data: publicUrlData } = supabase.storage
+                .from(bucketName)
+                .getPublicUrl(uploadPath);
+            
+            const publicUrl = publicUrlData.publicUrl;
+
+            // --- ¡CORRECCIÓN AQUÍ! ---
+            // Hemos eliminado la línea 'analysis: analysis' que causaba el error.
+            await VideoModel.createVideo({
+                userId: userId,
+                videoUrl: publicUrl,
+                title: title,
+                exerciseType: exerciseType
+                // El modelo se encargará de poner 'status' y 'analysis'
+            });
+            // -------------------------
+
+            fs.unlinkSync(filePath);
+        }
+
+        res.status(201).json({ success: true, message: 'Videos subidos exitosamente.' });
 
     } catch (err) {
-        if (videoPath && fs.existsSync(videoPath)) {
-            fs.unlinkSync(videoPath);
+        console.error('Error en uploadVideos:', err);
+        files.forEach(file => {
+            if (fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
+        });
+        res.status(500).json({ success: false, error: err.message || 'Error interno del servidor' });
+    }
+};
+
+// --- (El resto de tus funciones: deleteVideo, getUserVideos, getVideoById...) ---
+// (Tu función deleteVideo tiene el bucketName 'videos_usuario' correcto, ¡excelente!)
+
+export const deleteVideo = async (req, res) => {
+    
+    if (!res.locals.isLoggedIn || !res.locals.user) {
+        return res.status(401).json({ error: 'No autorizado' });
+    }
+    const userId = res.locals.user.id;
+    const videoId = req.params.id;
+    const { videoRoute } = req.body;
+
+    if (!videoRoute) {
+        return res.status(400).json({ error: 'Falta la ruta del video.' });
+    }
+
+    try {
+        const video = await VideoModel.getVideoById(videoId);
+        if (!video) {
+            return res.status(404).json({ error: 'Video no encontrado.' });
         }
-        res.status(500).json({ success: false, error: 'Error de servidor: ' + err.message });
+        if (video.user_id !== userId) {
+            return res.status(403).json({ error: 'No tienes permiso para borrar este video.' });
+        }
+
+        const bucketName = 'videos_usuario'; 
+        const fileName = videoRoute.split(`${bucketName}/`).pop();
+
+        if (fileName) {
+            const { error: storageError } = await supabase.storage
+                .from(bucketName)
+                .remove([fileName]);
+
+            if (storageError) {
+                console.warn('Error borrando de Storage (quizás ya no existía):', storageError.message);
+            }
+        }
+
+        await VideoModel.deleteVideo(videoId);
+
+        res.status(200).json({ success: true, message: 'Video borrado exitosamente.' });
+
+    } catch (err) {
+        console.error('Error en deleteVideo:', err);
+        res.status(500).json({ success: false, error: err.message || 'Error interno del servidor' });
     }
 };
 

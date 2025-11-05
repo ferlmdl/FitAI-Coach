@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmarpasswordInput = document.getElementById('confirmarpassword');
     const passwordMatch = document.getElementById('passwordMatch');
 
+    const showPasswordToggle = document.getElementById('showPasswordToggle');
+    const showConfirmPasswordToggle = document.getElementById('showConfirmPasswordToggle');
+
     const requirements = {
         length: { validator: (password) => password.length >= 8, el: document.getElementById('req-length') },
         upper: { validator: (password) => /[A-Z]/.test(password), el: document.getElementById('req-upper') },
@@ -12,20 +15,32 @@ document.addEventListener('DOMContentLoaded', () => {
         symbol: { validator: (password) => /[!@#$%^&*-_]/.test(password), el: document.getElementById('req-symbol') }
     };
 
-    if(contrasenaInput) {
+    if (showPasswordToggle && contrasenaInput) {
+        showPasswordToggle.addEventListener('change', function() {
+            contrasenaInput.type = this.checked ? 'text' : 'password';
+        });
+    }
+
+    if (showConfirmPasswordToggle && confirmarpasswordInput) {
+        showConfirmPasswordToggle.addEventListener('change', function() {
+            confirmarpasswordInput.type = this.checked ? 'text' : 'password';
+        });
+    }
+
+    if (contrasenaInput) {
         contrasenaInput.addEventListener('input', () => {
             const password = contrasenaInput.value;
             Object.values(requirements).forEach(req => {
-                if(req.el) req.el.classList.toggle('met', req.validator(password));
+                if (req.el) req.el.classList.toggle('met', req.validator(password));
             });
             checkPasswordMatch();
         });
     }
 
-    if(confirmarpasswordInput) {
+    if (confirmarpasswordInput) {
         confirmarpasswordInput.addEventListener('input', checkPasswordMatch);
     }
-    
+
     function checkPasswordMatch() {
         if (!confirmarpasswordInput || !passwordMatch) return;
         if (confirmarpasswordInput.value === '') {
@@ -42,11 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if(registroForm) {
+    if (registroForm) {
         registroForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(registroForm);
             const data = {
+                age: formData.get('age'),
                 allName: formData.get('allName'),
                 email: formData.get('email'),
                 password: formData.get('password'),

@@ -1,16 +1,58 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mi Perfil - FIT AI</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/auth.js" defer></script>
-    <script src="/js/main.js" defer></script>
-</head>
-<body>
-    <main class="container">
-        <h1>Bienvenido a tu Perfil</h1>
-        <p>Aquí podrás ver tus videos subidos y tu progreso.</p>
-        </main>
-</body>
-</html>
+<div class="profile-wrapper">
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-info">
+                <h1 id="displayName">Bienvenido, {{profile.allName}}</h1> 
+                <p id="displayEmail">{{profile.email}}</p>
+                <p id="displayUsername">@{{profile.userName}}</p>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{videoCount}}</span>
+                        <span class="stat-label">Videos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{monthsActive}}</span>
+                        <span class="stat-label">Meses Activo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-section view-mode" id="personalInfo">
+            <h2 class="section-title">Información Personal</h2>
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="allName">Nombre Completo</label>
+                        <input type="text" id="allName" name="allName" value="{{profile.allName}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="userName">Nombre de Usuario</label>
+                        <input type="text" id="userName" name="userName" value="{{profile.userName}}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" value="{{profile.email}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Edad</label>
+                        <input type="number" id="age" name="age" value="{{profile.age}}" readonly>
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <button type="button" class="btn-primary" id="editBtn">Editar Perfil</button>
+                    <button type="button" class="btn-primary" id="saveBtn" style="display: none;">Guardar Cambios</button>
+                    <button type="button" class="btn-secondary" id="cancelBtn" style="display: none;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/js/profile.js" defer></script>

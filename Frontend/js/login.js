@@ -17,6 +17,7 @@
 
             if (response.ok) {
                 localStorage.setItem('authToken', result.token);
+                localStorage.setItem('user', JSON.stringify(result.user));
                 alert('¡Inicio de sesión exitoso!');
                 window.location.href = '/'; 
             } else {

@@ -1,19 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - FIT AI</title>
+    <title>Historial - FIT AI</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/styleLog.css">
     <script src="/js/main.js" defer></script>
-</head>
+    </head>
+
 <body>
-            <div class="header-info">
-                <h1>Galeria</h1>
-                <p>Aqui irian las fotos respectivamente
-                </p>
-                <a href="#" class="btn-1">Empieza</a>
+    <input type="checkbox" id="menu" style="display: none;" /> 
+
+    <main class="container">
+        
+        <h1 class="page-title">Historial de Videos</h1>
+        
+        {{#if videos.length}}
+            
+            <div class="video-gallery">
+                {{#each videos}}
+                <div class="video-item">
+                    <video controls src="{{this.video_route}}"></video>
+                    <h4>{{this.title}}</h4> 
+                    <p>{{this.exercise_type}}</p>
+
+                        <div class="video-item-buttons">
+                            <a href="/analysis/{{this.exercise_type}}" class="btn-analysis">
+                                Análisis
+                            </a>
+                            <button class="btn-delete" 
+                                data-video-id="{{this.id}}" 
+                                data-video-route="{{this.video_route}}">
+                                Borrar
+                            </button>
+                        </div>
+
+                    </div>
+                {{/each}}
             </div>
+
+        {{else}}
+            
+            <div class="header-info" style="text-align: center; padding-top: 2rem;">
+                <p style="color: #ccc; font-size: 1.2rem;">Aún no has subido ningún video.</p>
+                <br>
+                <a href="/upload" class="btn-1">Empieza</a>
+            </div>
+        {{/if}}
+
+    </main>
 </body>
 </html>
