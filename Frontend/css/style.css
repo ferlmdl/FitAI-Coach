@@ -203,10 +203,10 @@ main {
 }
 
 .footer-section {
-    flex: 1;
+    flex-basis: 300px; 
+    flex-grow: 1;
     padding: 0 20px;
-    min-width: 250px;
-    margin-bottom: 20px; /* Espacio para móvil */
+    margin-bottom: 30px;
 }
 
 .footer h2 {
@@ -450,4 +450,27 @@ main {
         /* Mostramos 2 columnas */
         grid-template-columns: repeat(2, 1fr);
     }
+}
+.footer .links ul {
+    padding: 0;
+    margin: 0;
+}
+.footer .links ul li {
+    margin-bottom: 10px; /* Añade espacio entre los links */
+}
+
+/* Arregla los iconos de redes sociales */
+.social-links {
+    display: flex;
+    flex-direction: column; /* Alinea el título sobre los iconos */
+}
+.social-links div {
+    display: flex; /* Nuevo div para los iconos */
+    gap: 15px; /* Espacio entre iconos */
+    align-items: center;
+    margin-top: 10px;
+}
+.social-links img {
+    width: 32px;
+    height: 32px;
 }
