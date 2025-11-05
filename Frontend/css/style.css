@@ -23,9 +23,6 @@ body{
     padding: 0 20px; 
 }
 
-/* ======================================= */
-/* HEADER Y HERO SECTION                   */
-/* ======================================= */
 .hero-wrapper {
     background-image: url(/images/SentadillaXray2.jpg);
     background-position: center bottom;
@@ -47,19 +44,8 @@ body{
     padding: 0 20px; 
 }
 main {
-    /* 1. Añade espacio arriba y abajo para que el 
-       contenido no se pegue al header ni al footer.
-    */
     padding-top: 7rem;
     padding-bottom: 4rem;
-
-    /* 2. ¡LA SOLUCIÓN! 
-       Esto fuerza al <main> a tener una altura mínima.
-       Ocupará el 100% de la altura de la pantalla (100vh) MENOS
-       la altura de tu header (ej. 70px) y tu footer (ej. 150px).
-       
-       Ajusta el '220px' si tu header+footer miden más o menos.
-    */
     min-height: calc(100vh - 220px);
 }
 
@@ -86,14 +72,10 @@ main {
     color: #e1160d;
 }
 
-/* (ID 'menu-toggle' de checkbox eliminado) */
-
 .menu-icon{
-    display: none; /* Oculto en PC, se mostrará en móvil */
+    display: none; 
     cursor: pointer;
 }
-
-/* (Estilos de .menu-icon img eliminados, usamos SVG) */
 
 .header-info {
     display: flex;
@@ -138,9 +120,6 @@ main {
     background-color: #a70a15;
 }
 
-/* ======================================= */
-/* SECCIONES DE CONTENIDO (GYM)            */
-/* ======================================= */
 .gym{
     padding: 100px 0; 
     display: flex;
@@ -193,7 +172,7 @@ main {
     border-top: 1px solid #FFFFFF29;
     padding: 50px 0;
     background-color: #040404;
-    color: #CCCCCC; /* Color de texto base para el footer */
+    color: #CCCCCC;
 }
 
 .footer-content {
@@ -213,7 +192,7 @@ main {
 .footer h2 {
     color: #FFFFFF;
     margin-bottom: 15px;
-    font-size: 20px; /* Tamaño unificado para los títulos */
+    font-size: 20px;
 }
 
 .footer .links ul {
@@ -246,12 +225,12 @@ main {
 @media(max-width:991px) {
     
     .menu-icon {
-        display: flex; /* Cambiado a flex */
+        display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px 0;
         cursor: pointer;
-        z-index: 1001; /* Sobre el menú */
+        z-index: 1001;
         background: transparent;
         border: none;
     }
@@ -262,29 +241,25 @@ main {
         stroke: #FFFFFF; 
     }
     
-    /* Lógica para mostrar/ocultar íconos */
     .menu-icon .icon-close { display: none; }
     .menu-icon .icon-menu { display: block; }
     .menu-icon.is-active .icon-close { display: block; }
     .menu-icon.is-active .icon-menu { display: none; }
     
     .menu .navbar {
-        position: fixed; /* Cambiado a 'fixed' para un menú lateral */
+        position: fixed;
         top: 0;
         right: 0;
-        width: 250px; /* Ancho del menú */
-        height: 100vh; /* Alto completo */
+        width: 250px;
+        height: 100vh;
         background-color: #060606; 
         border-left: 1px solid #FFFFFF29;
-        padding-top: 80px; /* Espacio superior */
-        z-index: 1000; /* Debajo del botón */
-        
-        /* Estado oculto */
+        padding-top: 80px;
+        z-index: 1000;
         transform: translateX(100%);
         transition: transform 0.3s ease-in-out;
     }
 
-    /* Estado visible (cuando JS añade la clase) */
     .menu .navbar.is-active {
         transform: translateX(0);
     }
@@ -297,8 +272,6 @@ main {
     .hero-wrapper {
         min-height: 50vh; 
     }
-    
-    /* (Se elimina el :has() que no es necesario) */
     
     .header-info {
         position: static; 
@@ -489,4 +462,8 @@ main {
 .social-links img {
     width: 32px;
     height: 32px;
+}
+.menu-navbar ul li {
+    float: none;
+    width: 100%
 }
