@@ -12,6 +12,7 @@ import { checkAuth } from './middleware/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -30,8 +31,8 @@ app.engine(
     "hbs",
     engine({
         extname: ".hbs",
-        layoutsDir: path.join(__dirname, '../Backend/views/layouts'),
-        partialsDir: path.join(__dirname, '../Backend/views/partials'),
+        layoutsDir: path.join(__dirname, 'views/layouts'),
+        partialsDir: path.join(__dirname, 'views/partials'),
         defaultLayout: "main",
         helpers: {
             json: function(context) {
@@ -48,10 +49,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(checkAuth);
 app.use(express.static(path.join(__dirname, '../Frontend')));
+
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/videos', videosRouter);
-
 
 app.get('/', (req, res) => {
     res.render('index'); 
@@ -68,22 +69,27 @@ app.get('/galery', async (req, res) => {
         .select('*')
         .eq('user_id', userId) 
         .order('created_at', { ascending: false }); 
+
     if (error) {
         console.error('Error al buscar videos:', error);
         return res.status(500).send('Error al cargar la galería.');
     }
 
     res.render('galery', {
-        videos: videos
+        videos: videos,
     });
 });
 
 app.get('/login', (req, res) => {
-    res.render('login'); 
+    res.render('login', {
+        pageCss: 'styleLog.css'
+    }); 
 });
 
 app.get('/register', (req, res) => {
-    res.render('register'); 
+    res.render('register',{
+        pageCss: 'styleReg.css'
+    }); 
 });
 
 app.get('/analysis/:id', async (req, res) => {
@@ -108,9 +114,7 @@ app.get('/analysis/:id', async (req, res) => {
 
     res.render('analysis', {
         analysis: videoData,
-        pageStyles: [
-            { href: '/css/styleAnalysis.css' } 
-        ]
+        pageCss: 'styleAnalysis.css'
     });
 });
 
@@ -136,27 +140,29 @@ app.get('/profile', async (req, res) => {
         .from('video')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId); 
-    
+
     const createdAtDate = new Date(profileData.created_at);
     const currentDate = new Date();
-    
     const yearDiff = currentDate.getFullYear() - createdAtDate.getFullYear();
     const monthDiff = currentDate.getMonth() - createdAtDate.getMonth();
-    
     const monthsActive = Math.max(0, yearDiff * 12 + monthDiff);
 
     res.render('profile', {
         profile: profileData,
         videoCount: videoCount || 0,
-        monthsActive: monthsActive
+        monthsActive: monthsActive,
+        pageCss: 'stylePerfil.css'
     });
 });
 
 app.get('/upload', (req, res) => {
-    res.render('upload');
+    res.render('upload', {
+        pageCss: 'styleSub.css'
+    });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+
 export default app;

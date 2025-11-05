@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIT AI Coach</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/styleLog.css">
-    <link rel="stylesheet" href="/css/styleSub.css">
-    <link rel="stylesheet" href="/css/styleV2.css">
-    <link rel="stylesheet" href="/css/styleReg.css">
-    <link rel="stylesheet" href="/css/stylePerfil.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.2"> 
+    {{#if pageCss}}
+    <link rel="stylesheet" href="/css/{{pageCss}}?v=1.2">
+    {{/if}}
+
 </head>
 <body>
     {{> header}}
+
     <main>
         {{{body}}}
     </main>
+
     {{> footer}}
+
     <script src="/js/auth.js" defer></script>
     <script src="/js/login.js" defer></script>
     <script src="/js/main.js" defer></script>
@@ -24,4 +26,3 @@
 
 </body>
 </html>
-
