@@ -404,25 +404,18 @@ main {
     margin-bottom: 1rem; 
 }
 
-/* --- ¡AQUÍ ESTÁ LA CORRECCIÓN! --- */
-
-/* 1. Definimos el contenedor de botones */
 .video-item-buttons {
     display: flex;
-    gap: 10px; /* Espacio entre los botones */
+    flex-direction: column; 
+    gap: 10px; 
     width: 100%;
-    margin-top: auto; /* ¡Empuja los botones al fondo de la tarjeta! */
+    margin-top: auto; 
 }
 
-/* 2. Unificamos TODOS los botones */
-/* Aplicamos los estilos de layout a TODAS las clases 
-   de botón, ya que no estás usando la clase base ".btn".
-*/
 .btn-primary,
 .btn-delete {
     display: inline-block;
     padding: 0.8rem 1.2rem;
-    flex: 1;
     font-size: 1rem;
     text-align: center;
     text-transform: uppercase;
