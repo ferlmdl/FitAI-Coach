@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial - FIT AI</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/styleLog.css">
     <script src="/js/main.js" defer></script>
     </head>
 
@@ -22,21 +21,21 @@
                 {{#each videos}}
                 <div class="video-item">
                     <video controls src="{{this.video_route}}"></video>
-                    <h4>{{this.title}}</h4> 
-                    <p>{{this.exercise_type}}</p>
-
-                        <div class="video-item-buttons">
-                            <a href="/analysis/{{this.exercise_type}}" class="btn-analysis">
-                                Análisis
-                            </a>
-                            <button class="btn-delete" 
-                                data-video-id="{{this.id}}" 
-                                data-video-route="{{this.video_route}}">
-                                Borrar
-                            </button>
-                        </div>
-
+                    <div class="video-info-and-actions">
+                        <h4>{{this.title}}</h4> 
+                        <p>{{this.exercise_type}}</p>
+                            <div class="video-item-buttons">
+                                <a href="/analysis/{{this.id}}" class="btn-primary"> 
+                                    Análisis
+                                </a>
+                                <button class="btn-delete btn" 
+                                    data-video-id="{{this.id}}" 
+                                    data-video-route="{{this.video_route}}">
+                                    Borrar
+                                </button>
+                            </div>
                     </div>
+                </div>
                 {{/each}}
             </div>
 

@@ -1,20 +1,18 @@
 <div class="container analysis-container">
     
     {{#if analysis}}
-        <h1 class="page-title">{{analysis.nombre_video}}</h1>
-        <p class="analysis-group">{{analysis.grupo_muscular}}</p>
+        <h1 class="page-title">{{analysis.title}}</h1>
+        <p class="analysis-group">{{analysis.excercise_type}}</p>
         
         <div class="analysis-content">
             <div class="video-wrapper">
                 <h3>Video de Referencia</h3>
-                <video controls src="{{analysis.ruta_video}}" style="width: 100%;"></video>
+                <video controls src="{{analysis.video_route}}" style="width: 100%;"></video>
             </div>
             <div class="description-wrapper">
                 <h3>Descripción y Análisis</h3>
-                <p>{{analysis.descripcion}}</p>
+                <p>{{analysis.analysis}}</p>
                 
-                <h4>Duración:</h4>
-                <p>{{analysis.duracion_segundos}} segundos</p>
             </div>
         </div>
 

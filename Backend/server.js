@@ -86,28 +86,28 @@ app.get('/register', (req, res) => {
     res.render('register'); 
 });
 
-app.get('/analysis/:exerciseName', async (req, res) => {
+app.get('/analysis/:id', async (req, res) => {
     if (!res.locals.isLoggedIn) {
         return res.redirect('/login');
     }
 
-    const exerciseName = req.params.exerciseName;
+    const videoId = req.params.id;
 
-    const { data: analysisData, error } = await supabase
-        .from('videos_usuario') 
+    const { data: videoData, error } = await supabase
+        .from('video') 
         .select('*')
-        .eq('nombre_video', exerciseName) 
+        .eq('id', videoId)
         .single();
 
-    if (error || !analysisData) {
-        console.error('Error al buscar análisis:', error);
+    if (error || !videoData) {
+        console.error('Error al buscar el video:', error);
         return res.render('analysis', {
-            error: 'No se encontró un análisis para este ejercicio.'
+            error: 'No se encontró un video con ese ID.'
         });
     }
 
     res.render('analysis', {
-        analysis: analysisData,
+        analysis: videoData,
         pageStyles: [
             { href: '/css/styleAnalysis.css' } 
         ]

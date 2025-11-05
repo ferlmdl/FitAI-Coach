@@ -185,9 +185,6 @@ main {
     margin-right: 30px;
 }
 
-/* ======================================= */
-/* FOOTER - ESTILOS BASE (PARA TODOS)      */
-/* ======================================= */
 .footer {
     border-top: 1px solid #FFFFFF29;
     padding: 50px 0;
@@ -242,13 +239,6 @@ main {
     border-top: 1px solid #FFFFFF29;
 }
 
-
-/* ======================================= */
-/* MEDIA QUERIES (Móvil)                   */
-/* ======================================= */
-/* BLOQUE MODIFICADO:
-   Ahora usa la clase '.is-active' que añade el JavaScript.
-*/
 @media(max-width:991px) {
     
     .menu-icon {
@@ -361,6 +351,7 @@ main {
         margin: 0 10px;
     }
 }
+
 .page-title {
     text-align: center;
     color: #e1160d;
@@ -368,86 +359,115 @@ main {
     font-size: 3rem;
     font-weight: 800;
     letter-spacing: 2px;
-    /* Aumentamos el padding-top para bajar el título */
     padding: 6rem 0 2rem 0; 
 }
 
-/* --- ESTA ES LA SECCIÓN CORREGIDA --- */
 .video-gallery {
     display: grid;
-    /* ¡SOLUCIÓN! 
-      Forzamos 6 columnas en pantallas grandes.
-    */
     grid-template-columns: repeat(6, 1fr);
-    
-    /* Reducimos el espacio para que quepan mejor */
     gap: 15px; 
-    padding-bottom: 20px; /* Espacio extra al final */
+    padding-bottom: 20px;
 }
 
 .video-item {
     background-color: #1a1a1a;
     border-radius: 10px;
-    overflow: hidden; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
 }
 
 .video-item video {
     width: 100%;
-    display: block;
+    height: auto;
+    display: block; 
+}
+
+.video-info-and-actions {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Esto es clave para que ocupe el espacio */
 }
 
 .video-item h4 {
-    color: #ffffff;
-    text-align: center;
-    font-size: 1.1rem;
-    padding: 10px 10px 5px 10px;
-    margin: 0;
-    /* Para evitar títulos muy largos */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #e1160d;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
 }
 
 .video-item p {
-    color: #cccccc;
+    color: #ccc;
+    font-size: 0.95rem;
+    margin-bottom: 1rem; 
+}
+
+/* --- ¡AQUÍ ESTÁ LA CORRECCIÓN! --- */
+
+/* 1. Definimos el contenedor de botones */
+.video-item-buttons {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
+    width: 100%;
+    margin-top: auto; /* ¡Empuja los botones al fondo de la tarjeta! */
+}
+
+/* 2. Unificamos TODOS los botones */
+/* Aplicamos los estilos de layout a TODAS las clases 
+   de botón, ya que no estás usando la clase base ".btn".
+*/
+.btn-primary,
+.btn-delete {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    flex: 1;
+    font-size: 1rem;
     text-align: center;
-    font-size: 0.9rem;
-    padding: 0 10px 15px 10px;
-    margin: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    border-radius: 2px; 
+    cursor: pointer;
+    transition: none; 
+    transform: none;
+}
+
+.btn-primary {
+    background-color: #fff; 
+    color: #e1160d; 
 }
 
 .btn-delete {
-    background-color: #a70a15;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    margin: 0 15px 15px 15px;
-    width: calc(100% - 30px); /* Ocupa el ancho con márgenes */
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-}
-.btn-delete:hover {
-    background-color: #e1160d;
+    background-color: #e1160d; 
+    color: #fff;
 }
 
-/* ======================================= */
-/* MEDIA QUERY (PARA TABLETS Y MÓVILES)    */
-/* ======================================= */
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited { 
+    background-color: #fff; 
+    color: #e1160d;
+    transform: none;
+}
 
-/* Para tablets (menos de 1200px) */
+.btn-delete:hover,
+.btn-delete:active {
+    background-color: #e1160d; 
+    color: #fff;
+    transform: none;
+}
+
 @media (max-width: 1200px) {
     .video-gallery {
-        /* Mostramos 3 columnas */
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-/* Para móviles (menos de 768px) */
 @media (max-width: 768px) {
     .video-gallery {
-        /* Mostramos 2 columnas */
         grid-template-columns: repeat(2, 1fr);
     }
 }
@@ -456,17 +476,16 @@ main {
     margin: 0;
 }
 .footer .links ul li {
-    margin-bottom: 10px; /* Añade espacio entre los links */
+    margin-bottom: 10px; 
 }
 
-/* Arregla los iconos de redes sociales */
 .social-links {
     display: flex;
-    flex-direction: column; /* Alinea el título sobre los iconos */
+    flex-direction: column;
 }
 .social-links div {
-    display: flex; /* Nuevo div para los iconos */
-    gap: 15px; /* Espacio entre iconos */
+    display: flex; 
+    gap: 15px; 
     align-items: center;
     margin-top: 10px;
 }
