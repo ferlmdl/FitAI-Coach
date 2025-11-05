@@ -1,20 +1,16 @@
-.upload-page-container * {
-    box-sizing: border-box;
-}
-
 .back-button:hover { background-color: #c41e3a; color: white; transform: scale(1.1); }
 
 .upload-page-container {
-  background-color: white;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  max-width: 800px;
-  width: 90%;
-  margin-top: 120px;
-  margin-bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 90%;
+    margin-top: 120px;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .header { text-align: center; margin-bottom: 30px; }

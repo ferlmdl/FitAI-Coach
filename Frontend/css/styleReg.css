@@ -12,14 +12,6 @@
     position: relative;
 }
 
-.menu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-}
-
 .registro-container {
     width: 100%;
     display: flex;
@@ -36,7 +28,7 @@
     max-width: 500px;
     width: 100%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    margin-top: 80px;
+    margin-top: 80px; 
 }
 
 .registro-box h1 {

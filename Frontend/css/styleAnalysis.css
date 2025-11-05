@@ -1,8 +1,4 @@
-Styleanalysis.css
-/* Archivo: Frontend/css/styleAnalysis.css */
-
 .analysis-container {
-    padding-top: 4rem;
     padding-bottom: 4rem;
 }
 
@@ -44,9 +40,8 @@ Styleanalysis.css
     border-radius: 10px;
 }
 
-/* Media Query para móviles */
 @media (max-width: 991px) {
     .analysis-content {
-        grid-template-columns: 1fr; /* Una columna */
+        grid-template-columns: 1fr;
     }
 }
