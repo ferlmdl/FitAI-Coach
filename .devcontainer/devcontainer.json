@@ -1,5 +1,0 @@
-{
-    "mounts": [
-        "source=${localWorkspaceFolder}/.devcontainer/upload-limit.conf,target=/etc/nginx/conf.d/upload-limit.conf,type=bind,consistency=cached"
-    ]
-}

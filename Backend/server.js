@@ -156,6 +156,7 @@ app.get('/upload', (req, res) => {
     res.render('upload');
 });
 
-app.listen(PORT, () => {
+/*app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
+});*/
+export default app;
