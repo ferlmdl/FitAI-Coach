@@ -1,4 +1,4 @@
-import supabase from '../lib/supabaseClient.js';
+import { supabase } from '../lib/supabaseClient.js';
 
 class UserModel {
     static async createUser({ email, password, userName, allName }) {
@@ -6,10 +6,10 @@ class UserModel {
             email,
             password,
             options: {
-                data: { userName: userName,
-                        allName: allName
-                 }
-
+                data: { 
+                    userName: userName,
+                    allName: allName
+                }
             }
         });
         if (error) throw error;
@@ -31,19 +31,29 @@ class UserModel {
             .from('profiles')
             .update(updates)
             .eq('id', id)
-            .single();
+            .single(); 
         if (error) throw error;
         return data;
     }
 
     static async deleteUser(id) {
-        const { data, error } = await supabase
+        const { data: authData, error: authError } = await supabase.auth.admin.deleteUser(id);
+        
+        if (authError) {
+            console.error('Error al eliminar usuario de Supabase Auth:', authError);
+            throw new Error('Error al eliminar el usuario de autenticación.');
+        }
+
+        const { error: profileError } = await supabase
             .from('profiles')
             .delete()
-            .eq('id', id)
-            .single();
-        if (error) throw error;
-        return data;
+            .eq('id', id);
+
+        if (profileError) {
+            console.error('Error al eliminar el perfil (auth user fue eliminado):', profileError);
+        }
+
+        return authData;
     }
 }
 

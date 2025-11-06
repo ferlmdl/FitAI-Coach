@@ -1,33 +1,38 @@
-const users = [];
+import UserModel from '../models/user.js';
 
-export const getUsers = (req, res) => {
-    res.json({ success: true, users });
-};
-export const getUserByEmail = (req, res) => {
-    const { email } = req.params;
-    const users = users.find(u => u.email === email);
-    if (!users) {
-        return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
-    }
-    res.json({ success: true, users });
-};
+export const updateCurrentUser = async (req, res) => {
+    try {
+        const userId = res.locals.user.id;
+        
+        const { allName, userName, age } = req.body;
+        const updates = { allName, userName, age };
 
-export const updateUser = (req, res) => {
-    const { email } = req.params;
-    const users = users.find(u => u.email === email);
-    if (!users) {
-        return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
+        await UserModel.updateUser(userId, updates);
+        
+        res.json({ success: true, message: 'Perfil actualizado exitosamente' });
+
+    } catch (error) {
+        console.error('Error al actualizar el perfil:', error);
+        res.status(500).json({ success: false, error: error.message || 'Error interno del servidor.' });
     }
-    Object.assign(users, req.body);
-    res.json({ success: true, message: 'Usuario actualizado', users });
 };
 
-export const deleteUser = (req, res) => {
-    const { email } = req.params;
-    const index = users.findIndex(u => u.email === email);
-    if (index === -1) {
-        return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
+export const deleteCurrentUser = async (req, res) => {
+    try {
+        const userId = res.locals.user.id;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, error: 'No autorizado o ID de usuario no encontrado.' });
+        }
+
+        await UserModel.deleteUser(userId);
+        
+        res.clearCookie('sb-access-token');
+        
+        res.status(204).send();
+
+    } catch (error) {
+        console.error('Error al eliminar el usuario:', error);
+        res.status(500).json({ success: false, error: error.message || 'Error interno del servidor.' });
     }
-    users.splice(index, 1);
-    res.json({ success: true, message: 'Usuario eliminado' });
 };

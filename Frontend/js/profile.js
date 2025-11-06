@@ -3,11 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const section = document.getElementById('personalInfo');
     const form = document.getElementById('profileForm');
     
-    const inputs = form.querySelectorAll('input[id="allName"], input[id="userName"], input[id="age"], textarea'); 
+    // El input de email está deshabilitado, así que lo quitamos de la query
+    const inputs = form.querySelectorAll('input[id="allName"], input[id="userName"], input[id="age"]'); 
     
     const editBtn = document.getElementById('editBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    
+    // --- NUEVO BOTÓN AÑADIDO ---
+    const deleteBtn = document.getElementById('deleteBtn');
 
     editBtn.addEventListener('click', () => {
         inputs.forEach(input => {
@@ -74,6 +78,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error al guardar el perfil:', error);
+            alert(`Error: ${error.message}`);
+        }
+    });
+
+    // --- NUEVA LÓGICA AÑADIDA PARA ELIMINAR ---
+    deleteBtn.addEventListener('click', async () => {
+        // Doble confirmación para seguridad
+        const confirmation = prompt('Esta acción es irreversible. Para confirmar la eliminación de tu cuenta, escribe "ELIMINAR" en mayúsculas:');
+        
+        if (confirmation !== 'ELIMINAR') {
+            alert('Acción cancelada.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/users/profile', {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                // Intenta leer el error del backend
+                const result = await response.json().catch(() => ({})); 
+                throw new Error(result.error || 'No se pudo eliminar el perfil.');
+            }
+            alert('Tu perfil ha sido eliminado exitosamente. Serás redirigido a la página principal.');
+            
+            window.location.href = '/'; 
+
+        } catch (error) {
+            console.error('Error al eliminar el perfil:', error);
             alert(`Error: ${error.message}`);
         }
     });

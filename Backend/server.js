@@ -86,6 +86,12 @@ app.get('/login', (req, res) => {
     }); 
 });
 
+app.get('/recovery', (req, res) => {
+    res.render('recovery', {
+        pageCss: 'styleLog.css'
+    }); 
+});
+
 app.get('/register', (req, res) => {
     res.render('register',{
         pageCss: 'styleReg.css'
