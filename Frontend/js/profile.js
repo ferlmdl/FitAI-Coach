@@ -2,16 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalData = {};
     const section = document.getElementById('personalInfo');
     const form = document.getElementById('profileForm');
-    
-    // El input de email está deshabilitado, así que lo quitamos de la query
     const inputs = form.querySelectorAll('input[id="allName"], input[id="userName"], input[id="age"]'); 
-    
     const editBtn = document.getElementById('editBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
-    
-    // --- NUEVO BOTÓN AÑADIDO ---
     const deleteBtn = document.getElementById('deleteBtn');
+
+    const avatarContainer = document.getElementById('avatarContainer');
+    const avatarUploadInput = document.getElementById('avatarUpload');
+    const originalAvatarHTML = avatarContainer.innerHTML;
+    let newAvatarFile = null;
 
     editBtn.addEventListener('click', () => {
         inputs.forEach(input => {
@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.style.display = 'none';
         saveBtn.style.display = 'inline-block';
         cancelBtn.style.display = 'inline-block';
+
+        avatarContainer.addEventListener('click', openFilePicker);
+        avatarContainer.style.cursor = 'pointer';
     });
 
     cancelBtn.addEventListener('click', () => {
@@ -41,20 +44,56 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.style.display = 'inline-block';
         saveBtn.style.display = 'none';
         cancelBtn.style.display = 'none';
+
+        avatarContainer.removeEventListener('click', openFilePicker);
+        avatarContainer.style.cursor = 'default';
+        newAvatarFile = null;
+        avatarContainer.innerHTML = originalAvatarHTML; 
     });
 
-    saveBtn.addEventListener('click', async () => {
-        const updatedData = {
-            allName: document.getElementById('allName').value,
-            userName: document.getElementById('userName').value,
-            age: document.getElementById('age').value
+    function openFilePicker() {
+        avatarUploadInput.click();
+    }
+
+    avatarUploadInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        newAvatarFile = file; 
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            let img = avatarContainer.querySelector('img'); 
+            
+            if (!img) {
+                avatarContainer.innerHTML = ''; 
+                img = document.createElement('img');
+                img.id = 'avatarPreviewImg';
+                img.alt = 'Vista previa de perfil';
+                avatarContainer.appendChild(img);
+            }
+            img.src = event.target.result;
         };
+        reader.readAsDataURL(file);
+    });
+
+
+    saveBtn.addEventListener('click', async () => {
+        
+        const formData = new FormData();
+
+        formData.append('allName', document.getElementById('allName').value);
+        formData.append('userName', document.getElementById('userName').value);
+        formData.append('age', document.getElementById('age').value);
+
+        if (newAvatarFile) {
+            formData.append('avatarFile', newAvatarFile, newAvatarFile.name);
+        }
 
         try {
             const response = await fetch('/api/users/profile', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedData)
+                body: formData
             });
 
             const result = await response.json();
@@ -63,18 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(result.error || 'No se pudo actualizar el perfil.');
             }
 
-            document.getElementById('displayName').textContent = updatedData.allName;
-            document.getElementById('displayUsername').textContent = '@' + updatedData.userName;
-
-            inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
-            section.classList.remove('edit-mode');
-            section.classList.add('view-mode');
-
-            editBtn.style.display = 'inline-block';
-            saveBtn.style.display = 'none';
-            cancelBtn.style.display = 'none';
-
-            alert('Perfil actualizado exitosamente');
+            if (newAvatarFile) {
+                alert('Perfil actualizado exitosamente. La página se recargará.');
+                location.reload();
+            } else {
+                document.getElementById('displayName').textContent = `Bienvenido, ${document.getElementById('allName').value}`;
+                document.getElementById('displayUsername').textContent = '@' + document.getElementById('userName').value;
+    
+                inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
+                section.classList.remove('edit-mode');
+                section.classList.add('view-mode');
+    
+                editBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                avatarContainer.removeEventListener('click', openFilePicker);
+                avatarContainer.style.cursor = 'default';
+    
+                alert('Perfil actualizado exitosamente');
+            }
 
         } catch (error) {
             console.error('Error al guardar el perfil:', error);
@@ -82,9 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- NUEVA LÓGICA AÑADIDA PARA ELIMINAR ---
     deleteBtn.addEventListener('click', async () => {
-        // Doble confirmación para seguridad
         const confirmation = prompt('Esta acción es irreversible. Para confirmar la eliminación de tu cuenta, escribe "ELIMINAR" en mayúsculas:');
         
         if (confirmation !== 'ELIMINAR') {
@@ -98,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                // Intenta leer el error del backend
                 const result = await response.json().catch(() => ({})); 
                 throw new Error(result.error || 'No se pudo eliminar el perfil.');
             }

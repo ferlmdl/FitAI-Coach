@@ -1,7 +1,15 @@
 <div class="profile-wrapper">
     <div class="container">
         <div class="profile-header">
-            <div class="profile-avatar">👤</div>
+            <div class="profile-avatar" id="avatarContainer">
+                {{#if profile.avatar_url}}
+                    <img src="{{profile.avatar_url}}" alt="Foto de perfil" id="avatarPreviewImg">
+                {{else}}
+                    <span id="avatarPreviewSpan">👤</span>
+                {{/if}}
+            </div>
+
+<input type="file" id="avatarUpload" name="avatarFile" accept="image/png, image/jpeg" style="display: none;">
             <div class="profile-info">
                 <h1 id="displayName">Bienvenido, {{profile.allName}}</h1> 
                 <p id="displayEmail">{{profile.email}}</p>
@@ -55,8 +63,8 @@
 
         <div class="profile-section danger-zone">
             <h2 class="section-title">Zona de Peligro</h2>
-            <p>Una vez que eliminas tu cuenta, no hay vuelta atrás. Por favor, ten la seguridad de que deseas hacerlo.</p>
-            <button type="button" class="btn-danger" id="deleteBtn">Eliminar mi cuenta permanentemente</button>
+            <p>Una vez que eliminas tu cuenta, ya no puedes deshacer la acción. Por favor, ten la seguridad de que deseas hacerlo.</p>
+            <button type="button" class="btn-danger" id="deleteBtn">Eliminar mi cuenta</button>
         </div>
         </div>
 </div>

@@ -13,23 +13,32 @@ html{
 }
 
 .danger-zone {
-  border-top: 1px solid #ddd; 
+  border-top: 30px solid #ddd; 
   margin-top: 30px;
-  padding-top: 20px;
+  padding-top: 50px;
+  color: white;
+  margin-top: 20px;
 }
 
 .danger-zone h2 {
-  color: #dc3545; 
+  color: #e1160d;
+}
+p {
+  margin-bottom: 30px;
 }
 
 .btn-danger {
-  background-color: #dc3545;
+  background-color: #e1160d;
   color: white;
   border: none;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 12px 30px;
   border-radius: 5px;
-  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s ease;
 }
 
 .btn-danger:hover {
@@ -48,12 +57,23 @@ body{
 }
 
 .hero-wrapper {
-    background-image: url(/images/SentadillaXray2.jpg);
-    background-position: center bottom;
+    background-color: black;
+    margin-top: 0;
     background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 70vh; 
+    background-size: contain;
+    background-image: url(/images/SentadillaXray.png);
+    min-height: 60vh;
     position: relative; 
+
+    /* JUEGA CON ESTA LÍNEA */
+    /* Muestra la cabeza, pero corta los pies */
+    background-position: center center; 
+    
+    /* Muestra los pies, pero corta la cabeza (como la tienes ahora) */
+    /* background-position: center bottom; */
+
+    /* Muestra el torso, pero corta cabeza y pies */
+    /* background-position: center center; */
 }
 
 .menu {
@@ -112,6 +132,7 @@ main {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
+    
 }
 
 .header-info h1{
@@ -120,14 +141,18 @@ main {
     font-size: 70px;
     font-weight: 800;
     letter-spacing: 2px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.7), 
+    -2px -2px 4px rgba(255, 255, 255, 0.2);
 }
 
 .header-info p {
     color: #e1160d;
     font-size: 22px;
     text-transform: capitalize;
-    margin-bottom: 35px;
+    margin-bottom: 0px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .btn-1 {
@@ -142,6 +167,18 @@ main {
 
 .btn-1:hover{
     background-color: #a70a15;
+}
+
+.qs{
+    color: #646363;
+    padding-right: 150px;
+}
+
+.qs span{
+    font-size: 40px;
+    color: #a70a15;
+    text-align: center;
+    display: block;
 }
 
 .gym{
@@ -288,7 +325,6 @@ main {
         transform: translateX(0);
     }
 
-    /* Estilos de los links en móvil */
     .menu .navbar ul { display: block; padding: 0; }
     .menu .navbar ul li { float: none; width: 100%; }
     .menu .navbar ul li a { padding: 15px 20px; text-align: center; }
