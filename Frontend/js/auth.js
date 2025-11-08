@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (result.success) {
                     if (window.SwalToast) {
-                        SwalToast.fire({ icon: 'success', title: 'Has cerrado sesión.' }).then(() => window.location.href = '/login');
+                        SwalToast.fire({ icon: 'success', title: 'Has cerrado sesión, esperamos que vuelvas pronto' }).then(() => window.location.href = '/login');
                     } else if (window.Swal) {
                         Swal.fire({ icon: 'success', title: 'Has cerrado sesión.' }).then(() => window.location.href = '/login');
                     } else {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.location.href = '/login';
                     }
                 } else {
-                    if (window.Swal) Swal.fire({ icon: 'error', title: 'Error', text: 'Hubo un error al cerrar la sesión.' });
+                    if (window.Swal) Swal.fire({ icon: 'error', title: 'Error', text: 'Hubo un error al cerrar la sesión, te quedarás aquí para siempre muajaja' });
                     else alert('Hubo un error al cerrar la sesión.');
                 }
             } catch (error) {

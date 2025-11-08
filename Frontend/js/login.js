@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('authToken', result.token);
                 localStorage.setItem('user', JSON.stringify(result.user));
                 if (window.SwalToast) {
-                    SwalToast.fire({ icon: 'success', title: 'Inicio de sesión exitoso' });
+                    SwalToast.fire({ icon: 'success', title: 'Bienvenido, ya te extrañabamos' });
                     setTimeout(() => window.location.href = '/', 800);
                 } else if (window.Swal) {
-                    Swal.fire({ icon: 'success', title: 'Inicio de sesión exitoso' }).then(() => window.location.href = '/');
+                    Swal.fire({ icon: 'success', title: 'Bienvenido, te extrañabamos' }).then(() => window.location.href = '/');
                 } else {
                     alert('¡Inicio de sesión exitoso!');
                     window.location.href = '/';
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error de conexión:', error);
             if (window.Swal) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor, hemos sido hackeados *miedo*' });
             } else {
                 alert('No se pudo conectar con el servidor.');
             }

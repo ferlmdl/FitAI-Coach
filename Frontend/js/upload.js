@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let selectedFiles = [];
+    let selectedFiles = []; // Almacenará los { file, previewUrl }
     const maxFileSize = 100 * 1024 * 1024; // 100MB
     const maxFiles = 3;
     const allowedTypes = [
@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progressBar');
     const progressFill = document.getElementById('progressFill');
 
+    // --- (Toda tu lógica de drag-and-drop está perfecta, se queda igual) ---
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         uploadArea.addEventListener(eventName, preventDefaults, false);
     });
@@ -23,19 +24,25 @@ document.addEventListener('DOMContentLoaded', () => {
     ['dragleave', 'drop'].forEach(eventName => {
         uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
     });
-
     function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    
     uploadArea.addEventListener('drop', (e) => {
         handleFiles(e.dataTransfer.files);
     }, false);
-
     fileInput.addEventListener('change', (e) => {
         handleFiles(e.target.files);
     });
+
+    // --- MODIFICADO: Usaremos SweetAlert (asegúrate de tenerlo importado) ---
+    function showAlert(title, text, icon) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire(title, text, icon);
+        } else {
+            alert(text);
+        }
+    }
 
     function handleFiles(files) {
         [...files].forEach(addFile);
@@ -44,20 +51,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addFile(file) {
-        if (selectedFiles.length >= maxFiles) return alert(`Solo puedes subir máximo ${maxFiles} videos`);
-        if (file.size > maxFileSize) return alert(`El video ${file.name} excede el tamaño máximo de 100MB`);
-        if (!allowedTypes.includes(file.type)) return alert(`El formato del video ${file.name} no está permitido`);
-        if (selectedFiles.find(f => f.name === file.name && f.size === file.size)) return;
+        // Validaciones
+        if (selectedFiles.length >= maxFiles) return showAlert('Límite alcanzado', `Solo puedes subir máximo ${maxFiles} videos`, 'warning');
+        if (file.size > maxFileSize) return showAlert('Archivo muy grande', `El video ${file.name} excede el tamaño máximo de 100MB`, 'warning');
+        if (!allowedTypes.includes(file.type)) return showAlert('Formato no válido', `El formato del video ${file.name} no está permitido`, 'warning');
+        if (selectedFiles.find(f => f.file.name === file.name && f.file.size === file.size)) return;
         
-        selectedFiles.push(file);
+        // --- NUEVO: Creamos un Object URL para la previsualización ---
+        const previewUrl = URL.createObjectURL(file);
+        selectedFiles.push({ file: file, previewUrl: previewUrl });
     }
 
+    // --- MODIFICADO: Añadimos la previsualización de video ---
     function updateFileList() {
         fileList.innerHTML = '';
-        selectedFiles.forEach((file, index) => {
+        selectedFiles.forEach((fileWrapper, index) => {
+            const file = fileWrapper.file;
             const fileItem = document.createElement('div');
-            fileItem.className = 'file-item'; // Asegúrate de estilizar 'file-item'
+            fileItem.className = 'file-item'; 
+            
+            // --- NUEVO: HTML con la etiqueta <video> ---
             fileItem.innerHTML = `
+                <video class="file-preview" src="${fileWrapper.previewUrl}" controls muted></video>
                 <div class="file-info">
                     <span class="file-name">${file.name}</span>
                     <span class="file-size">${formatFileSize(file.size)}</span>
@@ -67,16 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
             fileList.appendChild(fileItem);
         });
 
-        // Añade el event listener para los botones de borrar
         fileList.querySelectorAll('.file-remove').forEach(button => {
             button.addEventListener('click', (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
+                const index = parseInt(e.currentTarget.getAttribute('data-index'));
                 removeFile(index);
             });
         });
     }
     
+    // --- MODIFICADO: Revocamos el Object URL para liberar memoria ---
     function removeFile(index) {
+        const fileWrapper = selectedFiles[index];
+        URL.revokeObjectURL(fileWrapper.previewUrl); // --- NUEVO ---
+        
         selectedFiles.splice(index, 1);
         updateFileList();
         updateUploadButton();
@@ -87,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function formatFileSize(bytes) {
+        // ... (tu función está perfecta, se queda igual)
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -94,63 +113,87 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
     
-    // --- Lógica de Subida ---
     uploadBtn.addEventListener('click', uploadFiles);
 
-    async function uploadFiles() {
+    // --- MODIFICADO: Reemplazamos 'fetch' con 'XMLHttpRequest' para la barra de progreso ---
+    function uploadFiles() {
         if (selectedFiles.length === 0) return;
         
         const title = document.getElementById('videoTitle').value;
         const exerciseType = document.getElementById('exerciseType').value;
 
         if (!title || !exerciseType) {
-            return alert('Por favor, completa el título y el tipo de ejercicio.');
+            return showAlert('Campos incompletos', 'Por favor, completa el título y el tipo de ejercicio.', 'warning');
         }
 
         progressBar.style.display = 'block';
+        progressFill.style.width = '0%';
+        progressFill.textContent = '0%'; // --- NUEVO: Texto de porcentaje ---
         uploadBtn.disabled = true;
         uploadBtn.textContent = 'Subiendo...';
 
         const formData = new FormData();
-        selectedFiles.forEach(file => {
-            formData.append('videos', file); // 'videos' (plural)
+        selectedFiles.forEach(fileWrapper => {
+            formData.append('videos', fileWrapper.file); 
         });
         
         formData.append('title', title);
         formData.append('exerciseType', exerciseType);
 
-        try {
-            const response = await fetch('/api/videos/upload', {
-                method: 'POST',
-                body: formData
-                // No 'Authorization' header needed, cookie se envía sola
-            });
+        const xhr = new XMLHttpRequest();
 
-            const result = await response.json();
+        // --- NUEVO: Evento de progreso ---
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percentComplete = (event.loaded / event.total) * 100;
+                progressFill.style.width = percentComplete + '%';
+                progressFill.textContent = Math.round(percentComplete) + '%';
+            }
+        };
 
-            if (response.ok) {
-                progressFill.style.width = '100%';
+        // --- NUEVO: Evento de subida completada ---
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Éxito
+                progressFill.textContent = '¡Completado!';
                 setTimeout(() => {
-                    alert('¡Videos subidos exitosamente!');
+                    showAlert('¡Éxito!', '¡Videos subidos exitosamente!', 'success');
                     resetForm();
-                    window.location.href = '/galery'; // Redirige a la galería
+                    window.location.href = '/galery';
                 }, 500);
             } else {
-                throw new Error(result.error || 'Ocurrió un error en el servidor.');
+                // Error del servidor
+                const result = JSON.parse(xhr.responseText);
+                console.error('Error al subir los videos:', result.error);
+                showAlert('Error', `Error: ${result.error || 'Ocurrió un error en el servidor.'}`, 'error');
+                resetForm(); // Resetear en caso de error
             }
-        } catch (error) {
-            console.error('Error al subir los videos:', error);
-            alert(`Error: ${error.message}`);
-            resetForm();
-        }
+        };
+
+        // --- NUEVO: Evento de error de red ---
+        xhr.onerror = () => {
+            console.error('Error de red al subir los videos.');
+            showAlert('Error de Red', 'No se pudo conectar con el servidor. Intenta de nuevo.', 'error');
+            resetForm(); // Resetear en caso de error
+        };
+
+        xhr.open('POST', '/api/videos/upload', true);
+        xhr.send(formData);
     }
     
+    // --- MODIFICADO: Revocamos todos los URLs al resetear ---
     function resetForm() {
+        // --- NUEVO: Limpiar URLs de previsualización ---
+        selectedFiles.forEach(fileWrapper => {
+            URL.revokeObjectURL(fileWrapper.previewUrl);
+        });
+        // ---
         selectedFiles = [];
         updateFileList();
         updateUploadButton();
         progressBar.style.display = 'none';
         progressFill.style.width = '0%';
+        progressFill.textContent = ''; // --- NUEVO ---
         uploadBtn.textContent = 'Subir Videos';
         fileInput.value = '';
         document.getElementById('videoTitle').value = '';

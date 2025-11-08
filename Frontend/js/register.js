@@ -26,8 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const svgs = toggleEl.querySelectorAll('svg');
         let eyeOpen = svgs[0] || toggleEl.querySelector('.eye-open') || toggleEl.querySelector('#eye-open') || null;
         let eyeClosed = svgs[1] || toggleEl.querySelector('.eye-closed') || toggleEl.querySelector('#eye-closed') || null;
-
-        // Asegura visibilidad inicial correcta (forzar estilos inline)
+        
         const isHidden = inputEl.type === 'password';
         if (eyeOpen) eyeOpen.style.display = isHidden ? 'block' : 'none';
         if (eyeClosed) eyeClosed.style.display = isHidden ? 'none' : 'block';
@@ -64,15 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setupPasswordToggle(togglePassword, contrasenaInput);
     setupPasswordToggle(toggleConfirmPassword, confirmarpasswordInput);
 
-    // Función para forzar comprobación inicial de requisitos y estado de coincidencia
     function initializeState() {
         if (contrasenaInput) {
-            // Fuerza evaluación inicial de requisitos
             const event = new Event('input', { bubbles: true });
             contrasenaInput.dispatchEvent(event);
         }
         if (confirmarpasswordInput) {
-            // Fuerza evaluación inicial de coincidencia
             const ev2 = new Event('input', { bubbles: true });
             confirmarpasswordInput.dispatchEvent(ev2);
         }
@@ -155,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (response.ok) {
                     if (window.Swal) {
-                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión.' })
+                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión. Ahora eres de nuestra propiedad' })
                             .then(() => window.location.href = '/login');
                     } else {
                         alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
@@ -171,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('Error de conexión:', error);
                 if (window.Swal) {
-                    Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.' });
+                    Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.Se cayó hay que levantarlo' });
                 } else {
                     alert('No se pudo conectar con el servidor.');
                 }

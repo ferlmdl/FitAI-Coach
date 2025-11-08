@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordMatch = document.getElementById('passwordMatch');
     const passwordReqsBox = document.getElementById('passwordReqs');
 
-    // --- Lógica de Requisitos ---
     const requirements = {
         length: { validator: (password) => password.length >= 8, el: document.getElementById('req-length') },
         upper: { validator: (password) => /[A-Z]/.test(password), el: document.getElementById('req-upper') },
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         symbol: { validator: (password) => /[!@#$%^&*-_]/.test(password), el: document.getElementById('req-symbol') }
     };
 
-    // --- Lógica para mostrar/ocultar Contraseña 1 ---
     const togglePassword = document.getElementById('togglePassword');
     const eyeOpen = document.getElementById('eye-open');
     const eyeClosed = document.getElementById('eye-closed');
@@ -25,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const type = contrasenaInput.getAttribute('type') === 'password' ? 'text' : 'password';
             contrasenaInput.setAttribute('type', type);
             
-            // Cambiar el ícono
             if (type === 'password') {
                 eyeOpen.style.display = 'block';
                 eyeClosed.style.display = 'none';
@@ -36,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Lógica para mostrar/ocultar Contraseña 2 ---
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
     const eyeOpenConfirm = document.getElementById('eye-open-confirm');
     const eyeClosedConfirm = document.getElementById('eye-closed-confirm');
@@ -46,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const type = confirmarpasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             confirmarpasswordInput.setAttribute('type', type);
 
-            // Cambiar el ícono
             if (type === 'password') {
                 eyeOpenConfirm.style.display = 'block';
                 eyeClosedConfirm.style.display = 'none';
@@ -57,24 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Lógica de Validación de Contraseña (Tu código original) ---
     if (contrasenaInput) {
-        // Muestra la caja de requisitos cuando el usuario entra al campo
         contrasenaInput.addEventListener('focus', () => {
             if (passwordReqsBox) passwordReqsBox.style.display = 'block';
         });
 
-        // Valida los requisitos mientras el usuario escribe
         contrasenaInput.addEventListener('input', () => {
             const password = contrasenaInput.value;
             Object.values(requirements).forEach(req => {
                 if (req.el) req.el.classList.toggle('met', req.validator(password));
             });
-            checkPasswordMatch(); // Revisa si coinciden
+            checkPasswordMatch();
         });
     }
 
-    // --- Lógica de Coincidencia de Contraseñas (Tu código original) ---
     if (confirmarpasswordInput) {
         confirmarpasswordInput.addEventListener('input', checkPasswordMatch);
     }
@@ -95,12 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Lógica de Envío de Formulario (Tu código original) ---
     if (registroForm) {
         registroForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Antes de enviar, verifica que todas las contraseñas coinciden Y cumplen los requisitos
             const password = contrasenaInput.value;
             const allReqsMet = Object.values(requirements).every(req => req.validator(password));
             const passwordsMatch = contrasenaInput.value === confirmarpasswordInput.value;
@@ -115,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Si todo está bien, procede con el envío
             const formData = new FormData(registroForm);
             const data = {
                 age: formData.get('age'),
