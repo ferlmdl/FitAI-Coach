@@ -12,6 +12,102 @@ html{
     scroll-behavior: smooth;
 }
 
+.form-group {
+    position: relative; 
+}
+
+.password-toggle-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2; 
+}
+
+/* Estilo de los SVGs (puedes usar tu color .text-muted) */
+.password-toggle-icon svg {
+    fill: #818181; /* Color gris de tu CSS */
+    display: block; /* Evita espacio extra */
+}
+
+/* --- ESTILOS PARA VALIDACIÓN DE CONTRASEÑA --- */
+
+.password-requirements {
+    margin-top: 10px;
+    padding-left: 10px;
+    /* Oculta la lista por defecto */
+    /*display: none;*/ 
+}
+
+.password-requirements p {
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #ffffff; /* Color de tu texto */
+}
+
+.req-item {
+    font-size: 0.85em;
+    margin-bottom: 5px;
+    transition: color 0.2s ease-in-out;
+    /* Por defecto: No cumplido (Rojo) */
+    color: #e1160d; 
+}
+
+.req-item::before {
+    content: '✕ '; /* Ícono de 'X' */
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* Cuando se cumple: Cumplido (Verde) */
+.req-item.met {
+    color: #28a745; /* Un color verde estándar */
+}
+
+.req-item.met::before {
+    content: '✓ '; /* Ícono de 'Check' */
+}
+
+/* --- ESTILOS PARA COINCIDENCIA DE CONTRASEÑA --- */
+
+.password-match {
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+.password-match.match {
+    color: #28a745; /* Verde */
+}
+.password-match.no-match {
+    color: #e1160d; /* Rojo */
+}
+
+
+/* Asegura que el input no tape el ícono */
+.form-group input[type="password"],
+.form-group input[type="text"] {
+    /* Tu input debe tener padding-right para no escribir "debajo" del ícono */
+    padding-right: 45px !important; 
+}
+
+/* Arregla el input de número (Edad) para que no tenga ese padding */
+.form-group input[type="number"] {
+    padding-right: 15px !important; /* O tu padding original */
+}
+
+/* Corrige el z-index de tu label si se queda detrás del input */
+.form-group label {
+    position: relative;
+    z-index: 1;
+}
+
+
 .danger-zone {
   border-top: 30px solid #ddd; 
   margin-top: 30px;

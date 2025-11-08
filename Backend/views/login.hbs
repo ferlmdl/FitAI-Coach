@@ -1,4 +1,4 @@
-        <div class="login-container">
+<div class="login-container">
             <div class="login-box">
                 <h1>Bienvenido</h1>
                 <p>Inicia sesión en FIT AI</p>
@@ -15,10 +15,10 @@
                     </div>
 
                     <div class="form-options">
-                        <label class="remember-me">
+                        <!--<label class="remember-me">
                             <input type="checkbox" name="remember">
                             Recuérdame
-                        </label>
+                        </label>-->
                         <a href="/recovery" class="forgot-password">¿Olvidaste la contraseña?</a>
                     </div>
 
@@ -30,3 +30,20 @@
                 </div>
             </div>
         </div>
+
+<!-- SweetAlert2 (CDN) + helper Toast -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    if (window.Swal) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+        window.SwalToast = Toast;
+    }
+</script>
+
+<script src="/js/login.js" defer></script>

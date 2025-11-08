@@ -6,42 +6,56 @@ document.addEventListener("DOMContentLoaded", function() {
     const videoGallery = document.querySelector('.video-gallery');
 
     if (videoGallery) {
-        // Usamos delegación de eventos para escuchar clics en la galería
         videoGallery.addEventListener('click', async (e) => {
-            
-            // Si el clic fue en un botón de borrar
             if (e.target.classList.contains('btn-delete')) {
-                
                 const button = e.target;
                 const videoId = button.dataset.videoId;
-                const videoRoute = button.dataset.videoRoute; // La URL completa
+                const videoRoute = button.dataset.videoRoute;
 
-                // 1. Pedir confirmación
-                if (!confirm('¿Estás seguro de que quieres borrar este video? Esta acción no se puede deshacer.')) {
-                    return;
+                let confirmed = false;
+                if (window.Swal) {
+                    const r = await Swal.fire({
+                        title: '¿Seguro?',
+                        text: 'Esta acción no se puede deshacer.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, borrar',
+                        cancelButtonText: 'Cancelar'
+                    });
+                    confirmed = r.isConfirmed;
+                } else {
+                    confirmed = confirm('¿Estás seguro de que quieres borrar este video? Esta acción no se puede deshacer.');
                 }
+
+                if (!confirmed) return;
 
                 try {
                     const response = await fetch(`/api/videos/${videoId}`, {
                         method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ videoRoute: videoRoute }) 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ videoRoute: videoRoute })
                     });
 
                     const result = await response.json();
 
                     if (response.ok) {
                         button.closest('.video-item').remove();
-                        alert('Video borrado exitosamente.');
+                        if (window.SwalToast) {
+                            SwalToast.fire({ icon: 'success', title: 'Video borrado' });
+                        } else {
+                            alert('Video borrado exitosamente.');
+                        }
                     } else {
                         throw new Error(result.error || 'No se pudo borrar el video.');
                     }
 
                 } catch (error) {
                     console.error('Error al borrar video:', error);
-                    alert(`Error: ${error.message}`);
+                    if (window.Swal) {
+                        Swal.fire({ icon: 'error', title: 'Error', text: error.message });
+                    } else {
+                        alert(`Error: ${error.message}`);
+                    }
                 }
             }
         });
@@ -93,8 +107,4 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Error al cerrar sesión:', error);
         }
     };
-
-    // Cargar el header y el footer
-    loadComponent("#header-placeholder", "/partials/header.html");
-    loadComponent("#footer-placeholder", "/partials/footer.html");
 });

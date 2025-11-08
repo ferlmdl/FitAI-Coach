@@ -1,157 +1,156 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const originalData = {};
-    const section = document.getElementById('personalInfo');
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input[id="allName"], input[id="userName"], input[id="age"]'); 
-    const editBtn = document.getElementById('editBtn');
-    const saveBtn = document.getElementById('saveBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const deleteBtn = document.getElementById('deleteBtn');
+    const registroForm = document.getElementById('registroForm');
+    const contrasenaInput = document.getElementById('password');
+    const confirmarpasswordInput = document.getElementById('confirmarpassword');
+    
+    const passwordMatch = document.getElementById('passwordMatch');
+    const passwordReqsBox = document.getElementById('passwordReqs');
 
-    const avatarContainer = document.getElementById('avatarContainer');
-    const avatarUploadInput = document.getElementById('avatarUpload');
-    const originalAvatarHTML = avatarContainer.innerHTML;
-    let newAvatarFile = null;
+    // --- Lógica de Requisitos ---
+    const requirements = {
+        length: { validator: (password) => password.length >= 8, el: document.getElementById('req-length') },
+        upper: { validator: (password) => /[A-Z]/.test(password), el: document.getElementById('req-upper') },
+        lower: { validator: (password) => /[a-z]/.test(password), el: document.getElementById('req-lower') },
+        number: { validator: (password) => /[0-9]/.test(password), el: document.getElementById('req-number') },
+        symbol: { validator: (password) => /[!@#$%^&*-_]/.test(password), el: document.getElementById('req-symbol') }
+    };
 
-    editBtn.addEventListener('click', () => {
-        inputs.forEach(input => {
-            originalData[input.id] = input.value;
-            input.removeAttribute('readonly');
-        });
+    // --- Lógica para mostrar/ocultar Contraseña 1 ---
+    const togglePassword = document.getElementById('togglePassword');
+    const eyeOpen = document.getElementById('eye-open');
+    const eyeClosed = document.getElementById('eye-closed');
 
-        section.classList.remove('view-mode');
-        section.classList.add('edit-mode');
-
-        editBtn.style.display = 'none';
-        saveBtn.style.display = 'inline-block';
-        cancelBtn.style.display = 'inline-block';
-
-        avatarContainer.addEventListener('click', openFilePicker);
-        avatarContainer.style.cursor = 'pointer';
-    });
-
-    cancelBtn.addEventListener('click', () => {
-        inputs.forEach(input => {
-            if (originalData[input.id] !== undefined) {
-                input.value = originalData[input.id];
+    if (togglePassword && contrasenaInput && eyeOpen && eyeClosed) {
+        togglePassword.addEventListener('click', function() {
+            const type = contrasenaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            contrasenaInput.setAttribute('type', type);
+            
+            // Cambiar el ícono
+            if (type === 'password') {
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            } else {
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
             }
-            input.setAttribute('readonly', 'readonly');
         });
-
-        section.classList.remove('edit-mode');
-        section.classList.add('view-mode');
-
-        editBtn.style.display = 'inline-block';
-        saveBtn.style.display = 'none';
-        cancelBtn.style.display = 'none';
-
-        avatarContainer.removeEventListener('click', openFilePicker);
-        avatarContainer.style.cursor = 'default';
-        newAvatarFile = null;
-        avatarContainer.innerHTML = originalAvatarHTML; 
-    });
-
-    function openFilePicker() {
-        avatarUploadInput.click();
     }
 
-    avatarUploadInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+    // --- Lógica para mostrar/ocultar Contraseña 2 ---
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const eyeOpenConfirm = document.getElementById('eye-open-confirm');
+    const eyeClosedConfirm = document.getElementById('eye-closed-confirm');
 
-        newAvatarFile = file; 
+    if (toggleConfirmPassword && confirmarpasswordInput && eyeOpenConfirm && eyeClosedConfirm) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmarpasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmarpasswordInput.setAttribute('type', type);
 
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            let img = avatarContainer.querySelector('img'); 
-            
-            if (!img) {
-                avatarContainer.innerHTML = ''; 
-                img = document.createElement('img');
-                img.id = 'avatarPreviewImg';
-                img.alt = 'Vista previa de perfil';
-                avatarContainer.appendChild(img);
-            }
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-
-
-    saveBtn.addEventListener('click', async () => {
-        
-        const formData = new FormData();
-
-        formData.append('allName', document.getElementById('allName').value);
-        formData.append('userName', document.getElementById('userName').value);
-        formData.append('age', document.getElementById('age').value);
-
-        if (newAvatarFile) {
-            formData.append('avatarFile', newAvatarFile, newAvatarFile.name);
-        }
-
-        try {
-            const response = await fetch('/api/users/profile', {
-                method: 'PUT',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.error || 'No se pudo actualizar el perfil.');
-            }
-
-            if (newAvatarFile) {
-                alert('Perfil actualizado exitosamente. La página se recargará.');
-                location.reload();
+            // Cambiar el ícono
+            if (type === 'password') {
+                eyeOpenConfirm.style.display = 'block';
+                eyeClosedConfirm.style.display = 'none';
             } else {
-                document.getElementById('displayName').textContent = `Bienvenido, ${document.getElementById('allName').value}`;
-                document.getElementById('displayUsername').textContent = '@' + document.getElementById('userName').value;
-    
-                inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
-                section.classList.remove('edit-mode');
-                section.classList.add('view-mode');
-    
-                editBtn.style.display = 'inline-block';
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                avatarContainer.removeEventListener('click', openFilePicker);
-                avatarContainer.style.cursor = 'default';
-    
-                alert('Perfil actualizado exitosamente');
+                eyeOpenConfirm.style.display = 'none';
+                eyeClosedConfirm.style.display = 'block';
             }
+        });
+    }
 
-        } catch (error) {
-            console.error('Error al guardar el perfil:', error);
-            alert(`Error: ${error.message}`);
-        }
-    });
+    // --- Lógica de Validación de Contraseña (Tu código original) ---
+    if (contrasenaInput) {
+        // Muestra la caja de requisitos cuando el usuario entra al campo
+        contrasenaInput.addEventListener('focus', () => {
+            if (passwordReqsBox) passwordReqsBox.style.display = 'block';
+        });
 
-    deleteBtn.addEventListener('click', async () => {
-        const confirmation = prompt('Esta acción es irreversible. Para confirmar la eliminación de tu cuenta, escribe "ELIMINAR" en mayúsculas:');
-        
-        if (confirmation !== 'ELIMINAR') {
-            alert('Acción cancelada.');
+        // Valida los requisitos mientras el usuario escribe
+        contrasenaInput.addEventListener('input', () => {
+            const password = contrasenaInput.value;
+            Object.values(requirements).forEach(req => {
+                if (req.el) req.el.classList.toggle('met', req.validator(password));
+            });
+            checkPasswordMatch(); // Revisa si coinciden
+        });
+    }
+
+    // --- Lógica de Coincidencia de Contraseñas (Tu código original) ---
+    if (confirmarpasswordInput) {
+        confirmarpasswordInput.addEventListener('input', checkPasswordMatch);
+    }
+
+    function checkPasswordMatch() {
+        if (!confirmarpasswordInput || !passwordMatch) return;
+        if (confirmarpasswordInput.value === '') {
+            passwordMatch.textContent = '';
+            passwordMatch.className = 'password-match';
             return;
         }
-
-        try {
-            const response = await fetch('/api/users/profile', {
-                method: 'DELETE'
-            });
-
-            if (!response.ok) {
-                const result = await response.json().catch(() => ({})); 
-                throw new Error(result.error || 'No se pudo eliminar el perfil.');
-            }
-            alert('Tu perfil ha sido eliminado exitosamente. Serás redirigido a la página principal.');
-            
-            window.location.href = '/'; 
-
-        } catch (error) {
-            console.error('Error al eliminar el perfil:', error);
-            alert(`Error: ${error.message}`);
+        if (contrasenaInput.value === confirmarpasswordInput.value) {
+            passwordMatch.textContent = 'Las contraseñas coinciden';
+            passwordMatch.className = 'password-match match';
+        } else {
+            passwordMatch.textContent = 'Las contraseñas no coinciden';
+            passwordMatch.className = 'password-match no-match';
         }
-    });
+    }
+
+    // --- Lógica de Envío de Formulario (Tu código original) ---
+    if (registroForm) {
+        registroForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Antes de enviar, verifica que todas las contraseñas coinciden Y cumplen los requisitos
+            const password = contrasenaInput.value;
+            const allReqsMet = Object.values(requirements).every(req => req.validator(password));
+            const passwordsMatch = contrasenaInput.value === confirmarpasswordInput.value;
+
+            if (!allReqsMet) {
+                alert('La contraseña no cumple con todos los requisitos de seguridad.');
+                return;
+            }
+
+            if (!passwordsMatch) {
+                alert('Las contraseñas no coinciden.');
+                return;
+            }
+
+            // Si todo está bien, procede con el envío
+            const formData = new FormData(registroForm);
+            const data = {
+                age: formData.get('age'),
+                allName: formData.get('allName'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                userName: formData.get('userName')
+            };
+
+            try {
+                const response = await fetch(`/api/auth/register`, { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    if (window.Swal) {
+                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión.' })
+                            .then(() => window.location.href = '/login');
+                    } else {
+                        alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
+                        window.location.href = '/login';
+                    }
+                } else {
+                    if (window.Swal) Swal.fire({ icon: 'error', title: 'Error', text: result.error });
+                    else alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                if (window.Swal) Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.' });
+                else alert('No se pudo conectar con el servidor.');
+            }
+        });
+    }
 });

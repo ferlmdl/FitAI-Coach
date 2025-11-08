@@ -10,14 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('Has cerrado sesión.');
-                    window.location.href = '/login';
+                    if (window.SwalToast) {
+                        SwalToast.fire({ icon: 'success', title: 'Has cerrado sesión.' }).then(() => window.location.href = '/login');
+                    } else if (window.Swal) {
+                        Swal.fire({ icon: 'success', title: 'Has cerrado sesión.' }).then(() => window.location.href = '/login');
+                    } else {
+                        alert('Has cerrado sesión.');
+                        window.location.href = '/login';
+                    }
                 } else {
-                    alert('Hubo un error al cerrar la sesión.');
+                    if (window.Swal) Swal.fire({ icon: 'error', title: 'Error', text: 'Hubo un error al cerrar la sesión.' });
+                    else alert('Hubo un error al cerrar la sesión.');
                 }
             } catch (error) {
                 console.error('Error de conexión al cerrar sesión:', error);
-                alert('No se pudo conectar con el servidor.');
+                if (window.Swal) Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
+                else alert('No se pudo conectar con el servidor.');
             }
         });
     }

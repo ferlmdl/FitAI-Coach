@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('register.js cargado');
+
     const registroForm = document.getElementById('registroForm');
     const contrasenaInput = document.getElementById('password');
     const confirmarpasswordInput = document.getElementById('confirmarpassword');
     const passwordMatch = document.getElementById('passwordMatch');
 
-    const showPasswordToggle = document.getElementById('showPasswordToggle');
-    const showConfirmPasswordToggle = document.getElementById('showConfirmPasswordToggle');
+    if (!contrasenaInput) console.warn('No se encontró #password en la página');
+    if (!confirmarpasswordInput) console.warn('No se encontró #confirmarpassword en la página');
 
     const requirements = {
         length: { validator: (password) => password.length >= 8, el: document.getElementById('req-length') },
@@ -15,16 +17,65 @@ document.addEventListener('DOMContentLoaded', () => {
         symbol: { validator: (password) => /[!@#$%^&*-_]/.test(password), el: document.getElementById('req-symbol') }
     };
 
-    if (showPasswordToggle && contrasenaInput) {
-        showPasswordToggle.addEventListener('change', function() {
-            contrasenaInput.type = this.checked ? 'text' : 'password';
+    function setupPasswordToggle(toggleEl, inputEl) {
+        if (!toggleEl || !inputEl) return;
+
+        if (!toggleEl.hasAttribute('tabindex')) toggleEl.setAttribute('tabindex', '0');
+        if (!toggleEl.hasAttribute('role')) toggleEl.setAttribute('role', 'button');
+
+        const svgs = toggleEl.querySelectorAll('svg');
+        let eyeOpen = svgs[0] || toggleEl.querySelector('.eye-open') || toggleEl.querySelector('#eye-open') || null;
+        let eyeClosed = svgs[1] || toggleEl.querySelector('.eye-closed') || toggleEl.querySelector('#eye-closed') || null;
+
+        // Asegura visibilidad inicial correcta (forzar estilos inline)
+        const isHidden = inputEl.type === 'password';
+        if (eyeOpen) eyeOpen.style.display = isHidden ? 'block' : 'none';
+        if (eyeClosed) eyeClosed.style.display = isHidden ? 'none' : 'block';
+        toggleEl.setAttribute('aria-pressed', (!isHidden).toString());
+
+        toggleEl.addEventListener('click', function() {
+            const currentlyHidden = inputEl.type === 'password';
+            inputEl.type = currentlyHidden ? 'text' : 'password';
+
+            if (eyeOpen && eyeClosed) {
+                if (inputEl.type === 'password') {
+                    eyeOpen.style.display = 'block';
+                    eyeClosed.style.display = 'none';
+                } else {
+                    eyeOpen.style.display = 'none';
+                    eyeClosed.style.display = 'block';
+                }
+            }
+            toggleEl.setAttribute('aria-pressed', (inputEl.type === 'text').toString());
+            inputEl.focus();
+        });
+
+        toggleEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.code === 'Space' || e.key === ' ') {
+                e.preventDefault();
+                toggleEl.click();
+            }
         });
     }
 
-    if (showConfirmPasswordToggle && confirmarpasswordInput) {
-        showConfirmPasswordToggle.addEventListener('change', function() {
-            confirmarpasswordInput.type = this.checked ? 'text' : 'password';
-        });
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+    setupPasswordToggle(togglePassword, contrasenaInput);
+    setupPasswordToggle(toggleConfirmPassword, confirmarpasswordInput);
+
+    // Función para forzar comprobación inicial de requisitos y estado de coincidencia
+    function initializeState() {
+        if (contrasenaInput) {
+            // Fuerza evaluación inicial de requisitos
+            const event = new Event('input', { bubbles: true });
+            contrasenaInput.dispatchEvent(event);
+        }
+        if (confirmarpasswordInput) {
+            // Fuerza evaluación inicial de coincidencia
+            const ev2 = new Event('input', { bubbles: true });
+            confirmarpasswordInput.dispatchEvent(ev2);
+        }
     }
 
     if (contrasenaInput) {
@@ -57,9 +108,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    initializeState();
+
     if (registroForm) {
         registroForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const password = contrasenaInput.value;
+            const allReqsMet = Object.values(requirements).every(req => req.validator(password));
+            const passwordsMatch = contrasenaInput.value === confirmarpasswordInput.value;
+
+            if (!allReqsMet) {
+                if (window.Swal) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Creo que hasta mi perrito podría adivinar la contraseña' });
+                } else {
+                    alert('La contraseña no cumple con todos los requisitos de seguridad.');
+                }
+                return;
+            }
+            if (!passwordsMatch) {
+                if (window.Swal) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Las contraseñas no coinciden.' });
+                } else {
+                    alert('Las contraseñas no coinciden.');
+                }
+                return;
+            }
+
             const formData = new FormData(registroForm);
             const data = {
                 age: formData.get('age'),
@@ -75,18 +150,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-
+                
                 const result = await response.json();
-
+                
                 if (response.ok) {
-                    alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
-                    window.location.href = '/login';
+                    if (window.Swal) {
+                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión.' })
+                            .then(() => window.location.href = '/login');
+                    } else {
+                        alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
+                        window.location.href = '/login';
+                    }
                 } else {
-                    alert(`Error: ${result.error}`);
+                    if (window.Swal) {
+                        Swal.fire({ icon: 'error', title: 'Error', text: result.error || 'Error en el registro' });
+                    } else {
+                        alert(`Error: ${result.error}`);
+                    }
                 }
             } catch (error) {
                 console.error('Error de conexión:', error);
-                alert('No se pudo conectar con el servidor.');
+                if (window.Swal) {
+                    Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.' });
+                } else {
+                    alert('No se pudo conectar con el servidor.');
+                }
             }
         });
     }

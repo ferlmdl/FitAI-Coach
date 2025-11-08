@@ -1,4 +1,6 @@
+document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.querySelector('.login-form');
+    if (!loginForm) return;
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -18,13 +20,29 @@
             if (response.ok) {
                 localStorage.setItem('authToken', result.token);
                 localStorage.setItem('user', JSON.stringify(result.user));
-                alert('¡Inicio de sesión exitoso!');
-                window.location.href = '/'; 
+                if (window.SwalToast) {
+                    SwalToast.fire({ icon: 'success', title: 'Inicio de sesión exitoso' });
+                    setTimeout(() => window.location.href = '/', 800);
+                } else if (window.Swal) {
+                    Swal.fire({ icon: 'success', title: 'Inicio de sesión exitoso' }).then(() => window.location.href = '/');
+                } else {
+                    alert('¡Inicio de sesión exitoso!');
+                    window.location.href = '/';
+                }
             } else {
-                alert(`Error: ${result.error}`);
+                if (window.Swal) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: result.error || 'Credenciales inválidas' });
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
             }
         } catch (error) {
             console.error('Error de conexión:', error);
-            alert('No se pudo conectar con el servidor.');
+            if (window.Swal) {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
+            } else {
+                alert('No se pudo conectar con el servidor.');
+            }
         }
     });
+});
