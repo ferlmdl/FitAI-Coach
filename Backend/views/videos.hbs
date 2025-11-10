@@ -1,0 +1,41 @@
+<div class="container videos-page">
+    
+    {{#if user}}
+        <h1 class="page-title">¡Hola, {{user.userName}}!</h1>
+        <p class="page-subtitle">Explora nuestra biblioteca de ejercicios.</p>
+    {{else}}
+        <h1 class="page-title">Biblioteca de Ejercicios</h1>
+    {{/if}}
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Buscar por nombre o grupo muscular...">
+        <button id="search-button"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="video-grid" id="video-grid">
+        
+        {{#each videos}}
+            <div class="video-card" data-video-id="{{this.id}}">
+                <div class="video-thumbnail-wrapper">
+                    <img src="{{this.ruta_imagen}}" alt="{{this.nombre_video}}" class="video-thumbnail">
+                    
+                    <button class="favorite-btn {{#if this.isFavorited}}active{{/if}}">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">{{this.nombre_video}}</h3>
+                    <p class="video-category">{{this.grupo_muscular}}</p>
+                </div>
+            </div>
+        {{else}}
+            <p class="no-results">No se encontraron videos que coincidan con tu búsqueda.</p>
+        {{/each}}
+
+    </div>
+
+    <div id="error-message" class="error-popup"></div>
+
+</div>
+
+<script src="/js/videos.js"></script>

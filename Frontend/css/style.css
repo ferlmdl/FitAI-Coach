@@ -668,3 +668,174 @@ main {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   transition: width 0.3s ease;
 }
+/* --- Variables de tu Paleta (Rojo, Negro, Blanco) --- */
+:root {
+  --color-background: #111111; /* Negro (fondo) */
+  --color-card: #1c1c1c;       /* Negro (tarjeta) */
+  --color-border: #333333;       /* Gris oscuro (borde) */
+  --color-text-primary: #FFFFFF; /* Blanco */
+  --color-text-secondary: #AAAAAA; /* Gris claro */
+  --color-accent: #D90429;       /* Rojo (principal) */
+  --color-accent-dark: #A9001F;     /* Rojo (hover) */
+}
+
+/* --- Estilos Generales de la Página --- */
+.videos-page {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.page-title {
+  text-align: center;
+  color: var(--color-text-primary);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.page-subtitle {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+}
+
+/* --- Barra de Búsqueda (Como en tu captura) --- */
+.search-bar {
+  display: flex;
+  margin: 0 auto 2.5rem auto;
+  max-width: 700px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--color-text-primary); /* Fondo blanco */
+}
+.search-bar input {
+  flex-grow: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  outline: none;
+  background-color: var(--color-text-primary);
+  color: var(--color-background); /* Texto negro */
+}
+.search-bar button {
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  background-color: var(--color-accent); /* Botón rojo */
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.search-bar button:hover {
+  background-color: var(--color-accent-dark); /* Rojo oscuro */
+}
+
+/* --- Cuadrícula de Videos --- */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.no-results {
+  color: var(--color-text-secondary); /* Gris claro */
+  font-size: 1.2rem;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+/* --- Tarjeta de Video (Estilo oscuro) --- */
+.video-card {
+  background: var(--color-card); /* Fondo de tarjeta oscuro */
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.video-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-accent); /* Borde rojo al pasar el mouse */
+}
+
+.video-thumbnail-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; 
+}
+.video-thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Botón de Favorito --- */
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(30, 30, 30, 0.85); /* Fondo oscuro semitransparente */
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary); /* Corazón inactivo gris */
+  display: grid;
+  place-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.favorite-btn:hover {
+  transform: scale(1.1);
+}
+.favorite-btn.active {
+  color: var(--color-accent); /* Corazón activo rojo */
+}
+
+.video-info {
+  padding: 1rem 1.25rem;
+}
+.video-title {
+  margin: 0 0 0.25rem 0;
+  color: var(--color-text-primary); /* Texto blanco */
+  font-size: 1.2rem;
+}
+.video-category {
+  margin: 0;
+  color: var(--color-accent); /* Categoría en rojo */
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* --- Popup de Error --- */
+.error-popup {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-accent); /* Fondo rojo */
+  color: var(--color-text-primary);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  font-size: 1rem;
+}
+.error-popup.show {
+  display: block;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; bottom: 0px; }
+  20% { opacity: 1; bottom: 20px; }
+  80% { opacity: 1; bottom: 20px; }
+  100% { opacity: 0; bottom: 0px; }
+}
