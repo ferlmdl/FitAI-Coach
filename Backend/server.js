@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import { checkAuth } from './middleware/auth.js';
+import adminRouter from './routes/admin.js';  
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,8 +46,8 @@ app.engine(
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views')); 
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(cookieParser());
 app.use(checkAuth);
 app.use(express.static(path.join(__dirname, '../Frontend')));
@@ -54,6 +55,7 @@ app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/videos', videosRouter);
+app.use('/api/admin', adminRouter);
 
 app.get('/', (req, res) => {
   res.render('index'); 
@@ -162,7 +164,6 @@ app.get('/profile', async (req, res) => {
   });
 });
 
-// --- RUTA /VIDEOS CORREGIDA ---
 app.get('/videos', async (req, res) => {
   if (!res.locals.isLoggedIn) {
     return res.redirect('/login');
@@ -170,17 +171,14 @@ app.get('/videos', async (req, res) => {
 
   try {
     const userId = res.locals.user.id;
-
-    // ★★★ 1. OBTENER EL PERFIL DEL USUARIO (LA PARTE QUE FALTABA) ★★★
     const { data: userData, error: profileError } = await supabase
       .from('profiles')
-      .select('userName') // Solo necesitamos el userName
+      .select('userName, role') 
       .eq('id', userId)
       .single();
 
     if (profileError) throw profileError;
 
-    // 2. Obtener todos los videos de la biblioteca (de 'videos_web')
     const { data: allVideos, error: videosError } = await supabase
       .from('videos_web')
       .select('*')
@@ -188,7 +186,6 @@ app.get('/videos', async (req, res) => {
     
     if (videosError) throw videosError;
 
-    // 3. Obtener los IDs de los videos favoritos del usuario (de 'video_favorites')
     const { data: favoriteData, error: favoritesError } = await supabase
       .from('video_favorites')
       .select('video_id')
@@ -196,23 +193,20 @@ app.get('/videos', async (req, res) => {
 
     if (favoritesError) throw favoritesError;
 
-    // 4. Crear un Set (conjunto) con los IDs para una búsqueda rápida
     const favoriteIds = new Set(favoriteData.map(fav => fav.video_id));
 
-    // 5. Combinar la información: añadir 'isFavorited' a cada video
     const processedVideos = allVideos.map(video => ({
       ...video,
       isFavorited: favoriteIds.has(video.id)
     }));
 
-    // 6. Renderizar la vista 'videos.hbs' con los datos procesados
     res.render('videos', {
       videos: processedVideos,
-      
-      // ★★★ 2. PASAR EL OBJETO 'user' QUE LA PLANTILLA ESPERA ★★★
       user: { userName: userData.userName },
       
-      pageCss: 'styleVideos.css' // (O el CSS que le hayas puesto)
+      isAdmin: userData.role?.toLowerCase() === 'admin',
+
+      pageCss: 'style.css' 
     });
 
   } catch (error) {
@@ -220,7 +214,6 @@ app.get('/videos', async (req, res) => {
     res.status(500).send('Error al cargar la biblioteca de videos.');
   }
 });
-// --- FIN DE LA RUTA /VIDEOS ---
 
 app.get('/upload', (req, res) => {
   res.render('upload', {

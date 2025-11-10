@@ -2,30 +2,21 @@
 import { supabase } from '../lib/supabaseClient.js';
 
 class VideoModel {
-    static async createVideo({ userId, videoUrl, title, exerciseType }) {
+    static async createVideo({ userId, videoUrl, storagePath, title, exerciseType }) {
+        // Ajusta los nombres de columnas según tu tabla en supabase
+        const payload = {
+            user_id: userId,
+            video_url: videoUrl,
+            storage_path: storagePath,
+            title,
+            exercise_type: exerciseType,
+            created_at: new Date().toISOString()
+        };
         const { data, error } = await supabase
             .from('video')
-            .insert({
-                user_id: userId,
-                video_route: videoUrl,
-                title: title,
-                exercise_type: exerciseType,
-                status: 'uploaded', // <-- Asegura que el status se guarde
-                analysis: null      // <-- Pone 'analysis' como nulo por ahora
-            })
+            .insert([payload])
             .select()
             .single();
-        if (error) throw error;
-        return data;
-    }
-
-    static async getVideoById(id) {
-        const { data, error } = await supabase
-            .from('video')
-            .select('*')
-            .eq('id', id)
-            .single();
-
         if (error) throw error;
         return data;
     }
@@ -40,14 +31,12 @@ class VideoModel {
         return data;
     }
 
-    static async updateVideo(id, updates) {
+    static async getVideoById(id) {
         const { data, error } = await supabase
             .from('video')
-            .update(updates)
+            .select('*')
             .eq('id', id)
-            .select()
             .single();
-
         if (error) throw error;
         return data;
     }
@@ -56,10 +45,7 @@ class VideoModel {
         const { data, error } = await supabase
             .from('video')
             .delete()
-            .eq('id', id)
-            .select()
-            .single();
-
+            .eq('id', id);
         if (error) throw error;
         return data;
     }

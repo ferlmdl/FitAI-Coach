@@ -1,78 +1,98 @@
 // Archivo: Backend/controllers/videoController.js
 import { supabase } from '../lib/supabaseClient.js';
-import { spawn } from 'child_process'; // (No se usa en este código, pero lo dejo por si lo usas en otra función)
 import path from 'path';
 import fs from 'fs';
-import VideoModel from '../models/video.js'; 
+import VideoModel from '../models/video.js';
 
 export const uploadVideos = async (req, res) => {
-    
-    if (!res.locals.isLoggedIn || !res.locals.user) {
-        return res.status(401).json({ error: 'No autorizado' });
-    }
-    const userId = res.locals.user.id;
-    const { title, exerciseType } = req.body;
-    const files = req.files;
-
-    if (!files || files.length === 0) {
-        return res.status(400).json({ error: 'No se recibieron videos.' });
-    }
-    if (!title || !exerciseType) {
-        return res.status(400).json({ error: 'Falta el título o el tipo de ejercicio.' });
-    }
-
-    const bucketName = 'videos_usuario';
-
     try {
+        if (!res.locals.isLoggedIn || !res.locals.user) {
+            return res.status(401).json({ error: 'No autorizado' });
+        }
+        const userId = res.locals.user.id;
+        const { title, exerciseType } = req.body;
+        const files = req.files;
+
+        console.log('uploadVideos invoked', { userId, title, exerciseType, filesCount: files?.length });
+
+        if (!files || files.length === 0) {
+            return res.status(400).json({ error: 'No se recibieron videos.' });
+        }
+        if (!title || !exerciseType) {
+            return res.status(400).json({ error: 'Falta el título o el tipo de ejercicio.' });
+        }
+
+        const bucketName = 'videos_usuario';
+        const uploadedUrls = [];
+
         for (const file of files) {
             const filePath = path.resolve(file.path);
-            const fileExt = path.extname(file.originalname);
-            const fileName = `${userId}-${Date.now()}${fileExt}`;
+            const ext = path.extname(file.originalname) || '.mp4';
+            const fileName = `${userId}-${Date.now()}${ext}`;
             const uploadPath = `${userId}/${fileName}`;
 
-            const videoBuffer = fs.readFileSync(filePath);
+            console.log('Subiendo a supabase:', { filePath, uploadPath });
 
+            // Intentar subir buffer (multer ya guardó en disco)
+            const buffer = fs.readFileSync(filePath);
             const { data: storageData, error: storageError } = await supabase.storage
                 .from(bucketName)
-                .upload(uploadPath, videoBuffer, {
+                .upload(uploadPath, buffer, {
                     contentType: file.mimetype,
                     upsert: false
                 });
 
             if (storageError) {
-                fs.unlinkSync(filePath); 
-                throw new Error(`Error de Storage: ${storageError.message}`);
+                console.error('storageError', storageError);
+                // limpiar temporal antes de responder
+                try { fs.unlinkSync(filePath); } catch(e){}
+                return res.status(500).json({ success: false, error: 'Error subiendo al storage', details: storageError });
             }
 
-            const { data: publicUrlData } = supabase.storage
+            // Obtener URL pública o almacenar ruta en BD si bucket privado
+            const { data: publicUrlData, error: publicUrlError } = await supabase.storage
                 .from(bucketName)
                 .getPublicUrl(uploadPath);
-            
-            const publicUrl = publicUrlData.publicUrl;
 
-            // --- ¡CORRECCIÓN AQUÍ! ---
-            // Hemos eliminado la línea 'analysis: analysis' que causaba el error.
-            await VideoModel.createVideo({
-                userId: userId,
-                videoUrl: publicUrl,
-                title: title,
-                exerciseType: exerciseType
-                // El modelo se encargará de poner 'status' y 'analysis'
-            });
-            // -------------------------
+            if (publicUrlError) {
+                console.warn('getPublicUrl error', publicUrlError);
+            }
 
-            fs.unlinkSync(filePath);
+            const publicUrl = publicUrlData?.publicUrl || null;
+            console.log('Upload OK, publicUrl:', publicUrl);
+
+            // Guardar metadatos en la tabla 'video'
+            try {
+                const created = await VideoModel.createVideo({
+                    userId,
+                    videoUrl: publicUrl,
+                    storagePath: uploadPath,
+                    title,
+                    exerciseType
+                });
+                console.log('VideoModel.createVideo result:', created);
+            } catch (e) {
+                console.error('Error guardando metadata en BD:', e);
+                // Decide si eliminar del storage en caso de fallo en BD
+                // await supabase.storage.from(bucketName).remove([uploadPath]);
+                try { fs.unlinkSync(filePath); } catch(e){}
+                return res.status(500).json({ success: false, error: 'Error guardando metadata en BD', details: e.message || e });
+            }
+
+            // eliminar temporal multer
+            try { fs.unlinkSync(filePath); } catch(e){}
+            uploadedUrls.push(publicUrl);
         }
 
-        res.status(201).json({ success: true, message: 'Videos subidos exitosamente.' });
-
+        res.status(201).json({ success: true, uploaded: uploadedUrls });
     } catch (err) {
-        console.error('Error en uploadVideos:', err);
-        files.forEach(file => {
-            if (fs.existsSync(file.path)) {
-                fs.unlinkSync(file.path);
-            }
-        });
+        console.error('Error en uploadVideos unexpected:', err);
+        // limpiar temporales remanentes
+        if (req.files) {
+            req.files.forEach(f => {
+                try { if (f.path && fs.existsSync(f.path)) fs.unlinkSync(f.path); } catch(e){}
+            });
+        }
         res.status(500).json({ success: false, error: err.message || 'Error interno del servidor' });
     }
 };

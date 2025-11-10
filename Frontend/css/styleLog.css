@@ -192,3 +192,26 @@
         align-self: flex-start;
     }
 }
+.form-group {
+    position: relative; 
+}
+
+.password-toggle-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2; 
+}
+
+/* Estilo de los SVGs (puedes usar tu color .text-muted) */
+.password-toggle-icon svg {
+    fill: #818181; /* Color gris de tu CSS */
+    display: block; /* Evita espacio extra */
+}

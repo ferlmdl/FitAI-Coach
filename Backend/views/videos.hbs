@@ -1,5 +1,38 @@
 <div class="container videos-page">
-    
+    {{#if isAdmin}}
+        <div class="admin-upload-section">
+            <h2 class="section-title">Panel de Administrador</h2>
+            <p>Añadir nuevo ejercicio a la biblioteca pública.</p>
+            
+            <form id="adminExerciseForm" class="admin-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="nombre_video">Nombre del Ejercicio</label>
+                    <input type="text" id="nombre_video" name="nombre_video" required>
+                </div>
+                <div class="form-group">
+                    <label for="grupo_muscular">Grupo Muscular</label>
+                    <input type="text" id="grupo_muscular" name="grupo_muscular" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="videoFile">Archivo de Video (.mp4)</label>
+                        <input type="file" id="videoFile" name="videoFile" accept="video/mp4" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile">Imagen Miniatura (.jpg, .png)</label>
+                        <input type="file" id="imageFile" name="imageFile" accept="image/jpeg, image/png" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Subir Ejercicio</button>
+                <div id="admin-message" class="admin-message"></div>
+            </form>
+        </div>
+    {{/if}}
+
     {{#if user}}
         <h1 class="page-title">¡Hola, {{user.userName}}!</h1>
         <p class="page-subtitle">Explora nuestra biblioteca de ejercicios.</p>
@@ -11,18 +44,23 @@
         <input type="text" id="search-input" placeholder="Buscar por nombre o grupo muscular...">
         <button id="search-button"><i class="fas fa-search"></i></button>
     </div>
-
     <div class="video-grid" id="video-grid">
         
         {{#each videos}}
-            <div class="video-card" data-video-id="{{this.id}}">
+            <div class="video-card" data-video-id="{{this.id}}" data-video-src="{{this.ruta_video}}">
+                
                 <div class="video-thumbnail-wrapper">
                     <img src="{{this.ruta_imagen}}" alt="{{this.nombre_video}}" class="video-thumbnail">
                     
                     <button class="favorite-btn {{#if this.isFavorited}}active{{/if}}">
                         <i class="fas fa-heart"></i>
                     </button>
+                    
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
                 </div>
+
                 <div class="video-info">
                     <h3 class="video-title">{{this.nombre_video}}</h3>
                     <p class="video-category">{{this.grupo_muscular}}</p>
@@ -38,4 +76,12 @@
 
 </div>
 
-<script src="/js/videos.js"></script>
+<div class="video-modal" id="videoModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+        <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+        <video id="modalVideoPlayer" width="100%" controls controlsList="nodownload"></video>
+    </div>
+</div>
+
+<script src="/js/video.js"></script>

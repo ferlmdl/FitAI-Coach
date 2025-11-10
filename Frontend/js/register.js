@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!allReqsMet) {
                 if (window.Swal) {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'Creo que hasta mi perrito podría adivinar la contraseña' });
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'La contraseña no cumple con los requisitos de seguridad ' });
                 } else {
                     alert('La contraseña no cumple con todos los requisitos de seguridad.');
                 }
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (response.ok) {
                     if (window.Swal) {
-                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión. Ahora eres de nuestra propiedad' })
+                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión.' })
                             .then(() => window.location.href = '/login');
                     } else {
                         alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('Error de conexión:', error);
                 if (window.Swal) {
-                    Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.Se cayó hay que levantarlo' });
+                    Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.' });
                 } else {
                     alert('No se pudo conectar con el servidor.');
                 }

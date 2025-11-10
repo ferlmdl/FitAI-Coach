@@ -12,6 +12,7 @@ html{
     scroll-behavior: smooth;
 }
 
+
 .form-group {
     position: relative; 
 }
@@ -107,7 +108,6 @@ html{
     z-index: 1;
 }
 
-
 .danger-zone {
   border-top: 30px solid #ddd; 
   margin-top: 30px;
@@ -149,7 +149,7 @@ body{
 .container{
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px; 
+    padding: 0 10px; 
 }
 
 .hero-wrapper {
@@ -271,10 +271,16 @@ main {
 }
 
 .qs span{
+    
     font-size: 40px;
     color: #a70a15;
     text-align: center;
     display: block;
+}
+.qs p{
+    font-size: 17px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .gym{
@@ -795,7 +801,7 @@ main {
   transform: scale(1.1);
 }
 .favorite-btn.active {
-  color: var(--color-accent); /* Corazón activo rojo */
+  color: var(--color-accent, #D90429); /* Corazón activo rojo */
 }
 
 .video-info {
@@ -838,4 +844,194 @@ main {
   20% { opacity: 1; bottom: 20px; }
   80% { opacity: 1; bottom: 20px; }
   100% { opacity: 0; bottom: 0px; }
+}
+/* --- Estilos del Panel de Administrador --- */
+.admin-upload-section {
+  background-color: var(--color-card); /* #1c1c1c */
+  border: 1px solid var(--color-border); /* #333333 */
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.admin-upload-section .section-title {
+  color: var(--color-accent); /* Rojo */
+  margin-top: 0;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 1rem;
+}
+
+.admin-upload-section p {
+  color: var(--color-text-secondary); /* #AAAAAA */
+  font-size: 1rem;
+}
+
+.admin-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.admin-form label {
+  display: block;
+  color: var(--color-text-primary); /* Blanco */
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Estilos para los inputs */
+.admin-form input[type="text"],
+.admin-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #2f2f2f; /* Un gris un poco más claro */
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  box-sizing: border-box; /* Importante */
+}
+
+.admin-form input[type="file"] {
+  color: var(--color-text-secondary);
+}
+
+/* Estilo para el botón de subir */
+.admin-form .btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-form .btn-primary:hover {
+  background-color: var(--color-accent-dark);
+}
+
+.admin-message {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+/* --- Estilos para el Modal de Video --- */
+.video-modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Centramos el contenido */
+    display: grid;
+    place-items: center;
+}
+
+/* Fondo oscuro semi-transparente */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+/* Contenedor del video */
+.modal-content {
+    position: relative;
+    z-index: 1001;
+    width: 90%;
+    max-width: 900px; /* Ancho máximo del video */
+    background: #000;
+    border: 1px solid var(--color-border, #333);
+}
+
+.modal-content video {
+    display: block; /* Elimina espacio extra debajo del video */
+}
+
+/* Botón de cerrar (X) */
+.modal-close-btn {
+    position: absolute;
+    top: -40px; /* Fuera de la caja de video, arriba a la derecha */
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- (Opcional) Ícono de Play sobre la miniatura --- */
+.video-thumbnail-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+.play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+.video-card:hover .play-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* --- Estilos para el ícono de ver/ocultar contraseña --- */
+
+.form-group {
+  /* Necesita ser 'relative' para que el ícono se posicione 
+     en relación a este div y no a la página entera */
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  
+  /* * 'top: 32px' lo baja desde el borde superior del .form-group.
+   * Este número mágico (32px) se calcula así:
+   * (Altura de tu "label" + su "margin-bottom") + (mitad de la altura del "input") - (mitad de la altura del "icono")
+   * 32px debería funcionar perfecto con tu código.
+   */
+  top: 32px; 
+  
+  right: 15px; /* Lo alinea 15px desde la derecha */
+  
+  color: #818181;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.password-toggle-icon:hover {
+  color: #e1160d;
+}
+
+/* * Le damos al input de contraseña más espacio a la derecha
+ * para que el texto no se escriba ENCIMA del ícono.
+ */
+.form-group input[name="password"] {
+  /* 15px de padding normal + 30px extra para el ícono */
+  padding-right: 45px;
 }
