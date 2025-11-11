@@ -5,57 +5,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const editBtn = document.getElementById('editBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
-    const deleteBtn = document.getElementById('deleteBtn');
-    
-    // --- ★ CORRECCIÓN: Apuntar al DIV principal ---
-    const personalInfoSection = document.getElementById('personalInfo');
-
-    // Inputs del formulario
+    const deleteBtn = document.getElementById('deleteBtn'); 
+    const personalInfoSection = document.getElementById('personalInfo'); 
     const allNameInput = document.getElementById('allName');
     const userNameInput = document.getElementById('userName');
     const ageInput = document.getElementById('age');
-    const emailInput = document.getElementById('email');
-
-    // --- Avatar ---
+    const emailInput = document.getElementById('email'); 
     const avatarContainer = document.getElementById('avatarContainer');
     const avatarUpload = document.getElementById('avatarUpload');
     const avatarPreviewImg = document.getElementById('avatarPreviewImg');
     const avatarPreviewSpan = document.getElementById('avatarPreviewSpan');
     let selectedAvatarFile = null;
 
-    // --- Estado original (para cancelar) ---
+    
     const originalValues = {
         allName: allNameInput.value,
         userName: userNameInput.value,
         age: ageInput.value,
         avatarSrc: avatarPreviewImg ? avatarPreviewImg.src : null
     };
-
-    // --- 1. Botón "Editar Perfil" ---
+ 
     if (editBtn) {
         editBtn.addEventListener('click', () => {
-            // Habilitar inputs
             allNameInput.readOnly = false;
             userNameInput.readOnly = false;
             ageInput.readOnly = false;
-            
-            // --- ★ CORRECCIÓN: Cambiar clases en el DIV ---
+
             personalInfoSection.classList.remove('view-mode');
             personalInfoSection.classList.add('edit-mode');
             
             avatarContainer.style.cursor = 'pointer';
 
-            // Ocultar "Editar", mostrar "Guardar" y "Cancelar"
             editBtn.style.display = 'none';
             saveBtn.style.display = 'inline-block';
             cancelBtn.style.display = 'inline-block';
         });
     }
-
-    // --- 2. Botón "Cancelar" ---
-    if (cancelBtn) {
+ 
+     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
-            // Deshabilitar inputs
             allNameInput.readOnly = true;
             userNameInput.readOnly = true;
             ageInput.readOnly = true;

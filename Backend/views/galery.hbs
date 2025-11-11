@@ -1,53 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-R">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial - FIT AI</title>
     <link rel="stylesheet" href="/css/style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="/js/main.js" defer></script>
-    </head>
+    <script src="/js/galery.js" defer></script> </head>
 
 <body>
-    <input type="checkbox" id="menu" style="display: none;" /> 
 
-    <main class="container">
+<input type="checkbox" id="menu" style="display: none;" /> 
+<main class="container">
+    <h1 class="page-title">Historial de Videos</h1>
+
+    {{#if videos.length}}
+
+    <div class="filter-container">
+        <div class="filter-group">
+            <label for="filter-title">Título</label>
+            <input type="text" id="filter-title" class="filter-input" placeholder="Buscar por título...">
+        </div>
         
-        <h1 class="page-title">Historial de Videos</h1>
+        <div class="filter-group">
+            <label for="filter-type">Tipo de Ejercicio</label>
+            <select id="filter-type" class="filter-select">
+                <option value="">-- Todos los tipos --</option>
+                </select>
+        </div>
         
-        {{#if videos.length}}
+        <div class="filter-group">
+            <label for="filter-sort">Ordenar por</label>
+            <select id="filter-sort" class="filter-select">
+                <option value="newest">Más nuevos primero</option>
+                <option value="oldest">Más antiguos primero</option>
+            </select>
+        </div>
+    </div>
+    <div class="video-gallery" id="video-gallery">
+        {{#each videos}}
+        
+        <div class="video-item" 
+             data-title="{{this.title}}" 
+             data-type="{{this.exercise_type}}" 
+             data-created="{{this.created_at}}">
+        <video controls src="{{this.video_route}}"></video>
             
-            <div class="video-gallery">
-                {{#each videos}}
-                <div class="video-item">
-                    <video controls src="{{this.video_route}}"></video>
-                    <div class="video-info-and-actions">
-                        <h4>{{this.title}}</h4> 
-                        <p>{{this.exercise_type}}</p>
-                            <div class="video-item-buttons">
-                                <a href="/analysis/{{this.id}}" class="btn-primary"> 
-                                    Análisis
-                                </a>
-                                <button class="btn-delete btn" 
-                                    data-video-id="{{this.id}}" 
-                                    data-video-route="{{this.video_route}}">
-                                    Borrar
-                                </button>
-                            </div>
-                    </div>
+            <div class="video-info-and-actions">
+                <h4>{{this.title}}</h4> 
+                <p>{{this.exercise_type}}</p>
+                <small class="video-date">{{this.created_at}}</small> 
+
+                <div class="video-item-buttons">
+                    <a href="/analysis/{{this.id}}" class="btn-primary"> 
+                        <i class="fas fa-chart-line"></i> Análisis
+                    </a>
+                    <button class="btn-delete btn" 
+                            data-video-id="{{this.id}}" 
+                            data-video-route="{{this.video_route}}">
+                        <i class="fas fa-trash"></i> Borrar
+                    </button>
                 </div>
-                {{/each}}
             </div>
+        </div>
+        {{/each}}
+    </div>
+    
+    <p id="no-results-message" class="no-results" style="display: none; text-align: center; margin-top: 2rem;">
+        No se encontraron videos que coincidan con los filtros.
+    </p>
 
-        {{else}}
-            
-            <div class="header-info" style="text-align: center; padding-top: 2rem;">
-                <p style="color: #ccc; font-size: 1.2rem;">Aún no has subido ningún video.</p>
-                <br>
-                <a href="/upload" class="btn-1">Empieza</a>
-            </div>
-        {{/if}}
+    {{else}}
+    <div class="header-info" style="text-align: center; padding-top: 2rem;">
+        <p style="color: #ccc; font-size: 1.2rem;">Aún no has subido ningún video.</p>
+        <br>
+        <a href="/upload" class="btn-1">Empieza</a>
+    </div>
+    {{/if}}
 
-    </main>
+</main>
+
 </body>
 </html>

@@ -39,14 +39,20 @@
     {{else}}
         <h1 class="page-title">Biblioteca de Ejercicios</h1>
     {{/if}}
+<div class="search-bar">
+    <input type="text" id="search-input" placeholder="Buscar por nombre o grupo muscular...">
+    <button id="search-button"><i class="fas fa-search"></i></button>
+</div>
 
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Buscar por nombre o grupo muscular...">
-        <button id="search-button"><i class="fas fa-search"></i></button>
-    </div>
-    <div class="video-grid" id="video-grid">
-        
-        {{#each videos}}
+<div class="filter-controls" style="margin: 15px 0; text-align: right; padding-right: 10px;">
+    <label for="favorites-filter" style="font-weight: bold; cursor: pointer; color: #333;">
+        <input type="checkbox" id="favorites-filter" style="margin-right: 8px; vertical-align: middle;">
+        Mostrar solo mis favoritos
+    </label>
+</div>
+<div class="video-grid" id="video-grid">
+    {{#each videos}}
+
             <div class="video-card" data-video-id="{{this.id}}" data-video-src="{{this.ruta_video}}">
                 
                 <div class="video-thumbnail-wrapper">
