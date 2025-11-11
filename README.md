@@ -105,6 +105,6 @@ Las contribuciones son bienvenidas. Si quieres mejorar FitAI - Coach, por favor:
 
 ---
 
-## Licencia
+## Extra
 
-Este proyecto está bajo la Licencia [Nombre de tu Licencia, ej: MIT]. Ver el archivo `LICENSE` para más detalles.
+Este proyecto es un trabajo universitario.
