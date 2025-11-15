@@ -1,3 +1,13 @@
+/* ================================================= */
+/* ================== MODO CLARO =================== */
+/* ================================================= */
+:root {
+  --text-primary: #2D3142;
+  --text-secondary: #6B6B6B;
+  --accent-primary: #FF6B35;
+  --border-subtle: #dddddd;
+}
+
 .analysis-container {
     padding-bottom: 4rem;
 }
@@ -5,7 +15,7 @@
 .analysis-group {
     text-align: center;
     font-size: 1.2rem;
-    color: #ccc;
+    color: var(--text-secondary);
     margin-top: -2rem;
     margin-bottom: 2rem;
 }
@@ -14,25 +24,25 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .description-wrapper h3 {
     font-size: 1.5rem;
-    color: #e1160d;
-    border-bottom: 1px solid #333;
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--border-subtle);
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
 
 .description-wrapper h4 {
     font-size: 1.1rem;
-    color: #fff;
+    color: var(--text-primary);
     margin-top: 20px;
 }
 
 .description-wrapper p {
-    color: #ccc;
+    color: var(--text-secondary);
     line-height: 1.7;
 }
 
@@ -44,4 +54,16 @@
     .analysis-content {
         grid-template-columns: 1fr;
     }
+}
+
+/* ================================================= */
+/* ================== MODO OSCURO ================== */
+/* ================================================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #FFFFFF;
+    --text-secondary: #ccc;
+    --accent-primary: #e1160d;
+    --border-subtle: #333333;
+  }
 }

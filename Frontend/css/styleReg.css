@@ -1,3 +1,37 @@
+/* ================================================= */
+/* ================== MODO CLARO =================== */
+/* ================================================= */
+:root {
+  /* --- Fondos --- */
+  --bg-container-translucent: rgba(255, 255, 255, 0.98);
+  --bg-input: #F4F4F9;
+  --bg-input-focus: #FFFFFF;
+
+  /* --- Texto --- */
+  --text-primary: #2D3142;
+  --text-secondary: #6B6B6B;
+  --text-on-accent: #FFFFFF;
+  --text-label: #2D3142;
+  --text-placeholder: #AAAAAA;
+
+  /* --- Acentos (Naranja) --- */
+  --accent-primary: #FF6B35;
+  --accent-primary-hover: #F7931E;
+  
+  /* --- Bordes --- */
+  --border-strong: #FF6B35;
+  --border-strong-hover: #F7931E;
+  --border-subtle: #dddddd;
+  --border-divider-translucent: #0000001A;
+
+  /* --- Botones --- */
+  --btn-bg-disabled: #AAAAAA;
+
+  /* --- Semánticos (No cambian con el modo) --- */
+  --color-good: #28a745;
+  --color-bad: #e1160d;
+}
+
 .header-registro {
     background-image: url(images/SentadillaXray2.jpg);
     background-position: top center;
@@ -21,26 +55,26 @@
 }
 
 .registro-box {
-    background-color: rgba(4, 4, 4, 0.95);
-    border: 2px solid #a70a15;
+    background-color: var(--bg-container-translucent);
+    border: 2px solid var(--border-strong);
     border-radius: 15px;
     padding: 50px;
     max-width: 500px;
     width: 100%;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     margin-top: 80px; 
 }
 
 .registro-box h1 {
     font-size: 32px;
-    color: #e1160d;
+    color: var(--accent-primary);
     font-weight: 800;
     margin-bottom: 10px;
     text-transform: uppercase;
 }
 
 .registro-box p {
-    color: #818181;
+    color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 30px;
 }
@@ -51,42 +85,45 @@
 
 .form-group {
     margin-bottom: 20px;
+    position: relative; 
 }
 
 .form-group label {
     display: block;
-    color: #ffffff;
+    color: var(--text-label);
     font-size: 12px;
     font-weight: 600;
     margin-bottom: 6px;
     text-transform: uppercase;
+    position: relative;
+    z-index: 1;
 }
 
 .form-group input {
     width: 100%;
     padding: 10px 12px;
-    background-color: #1a1a1a;
-    border: 1px solid #a70a15;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-strong);
     border-radius: 6px;
-    color: #ffffff;
+    color: var(--text-primary);
     font-size: 13px;
     transition: all 0.3s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    background-color: #252525;
-    border-color: #e1160d;
-    box-shadow: 0 0 8px rgba(225, 22, 13, 0.3);
+    background-color: var(--bg-input-focus);
+    border-color: var(--border-strong-hover);
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.3);
 }
 
 .form-group input::placeholder {
-    color: #666;
+    color: var(--text-placeholder);
 }
 
 .password-requirements {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
     border-radius: 6px;
     padding: 12px;
     margin-top: 10px;
@@ -94,17 +131,20 @@
 }
 
 .password-requirements p {
-    color: #e1160d;
+    color: var(--accent-primary);
     margin: 0 0 8px 0;
     font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
 }
 
 .req-item {
     display: flex;
     align-items: center;
-    color: #818181;
-    margin-bottom: 6px;
-    transition: all 0.3s ease;
+    font-size: 0.85em;
+    margin-bottom: 5px;
+    transition: color 0.2s ease-in-out;
+    color: var(--color-bad);
 }
 
 .req-item:last-child {
@@ -112,33 +152,38 @@
 }
 
 .req-icon {
-    color: #666;
+    color: var(--text-placeholder);
     margin-right: 8px;
     font-weight: bold;
     min-width: 15px;
 }
-
-.req-item.met {
-    color: #4caf50;
+.req-item::before {
+    content: '✕ '; 
+    font-weight: bold;
+    margin-right: 5px;
 }
 
+.req-item.met {
+    color: var(--color-good);
+}
 .req-item.met .req-icon {
-    color: #4caf50;
+    color: var(--color-good);
+}
+.req-item.met::before {
+    content: '✓ '; 
 }
 
 .password-match {
     margin-top: 8px;
-    font-size: 12px;
-    color: #666;
+    font-size: 0.85em;
+    color: var(--text-placeholder);
     transition: all 0.3s ease;
 }
-
 .password-match.match {
-    color: #4caf50;
+    color: var(--color-good);
 }
-
 .password-match.no-match {
-    color: #f44336;
+    color: var(--color-bad);
 }
 
 .form-checkbox {
@@ -148,9 +193,10 @@
 .form-checkbox label {
     display: flex;
     align-items: center;
-    color: #818181;
+    color: var(--text-secondary);
     font-size: 12px;
     cursor: pointer;
+    text-transform: none;
 }
 
 .form-checkbox input {
@@ -164,8 +210,8 @@
 .btn-registro-submit {
     width: 100%;
     padding: 12px;
-    background-color: #e1160d;
-    color: #ffffff;
+    background-color: var(--accent-primary);
+    color: var(--text-on-accent);
     border: none;
     border-radius: 6px;
     font-size: 14px;
@@ -176,17 +222,15 @@
 }
 
 .btn-registro-submit:hover {
-    background-color: #a70a15;
+    background-color: var(--accent-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
 }
-
 .btn-registro-submit:active {
     transform: translateY(0);
 }
-
 .btn-registro-submit:disabled {
-    background-color: #666;
+    background-color: var(--btn-bg-disabled);
     cursor: not-allowed;
     transform: none;
 }
@@ -194,53 +238,25 @@
 .registro-footer {
     margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px solid #FFFFFF29;
+    border-top: 1px solid var(--border-divider-translucent);
     text-align: center;
 }
 
 .registro-footer p {
-    color: #818181;
+    color: var(--text-secondary);
     font-size: 12px;
     margin: 0;
 }
 
 .registro-footer a {
-    color: #e1160d;
+    color: var(--accent-primary);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .registro-footer a:hover {
-    color: #ffffff;
-}
-
-@media(max-width: 768px) {
-    .registro-box {
-        padding: 30px 20px;
-        margin-top: 80px;
-    }
-
-    .registro-box h1 {
-        font-size: 24px;
-        margin-bottom: 8px;
-    }
-
-    .registro-box p {
-        font-size: 12px;
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .password-requirements {
-        padding: 10px;
-    }
-}
-.form-group {
-    position: relative; 
+    color: var(--text-primary);
 }
 
 .password-toggle-container {
@@ -256,80 +272,81 @@
     cursor: pointer;
     z-index: 2; 
 }
-
-/* Estilo de los SVGs (puedes usar tu color .text-muted) */
 .password-toggle-icon svg {
-    fill: #818181; /* Color gris de tu CSS */
-    display: block; /* Evita espacio extra */
+    fill: var(--text-secondary);
+    display: block; 
 }
-
-/* --- ESTILOS PARA VALIDACIÓN DE CONTRASEÑA --- */
-
-.password-requirements {
-    margin-top: 10px;
-    padding-left: 10px;
-    /* Oculta la lista por defecto */
-    /*display: none;*/ 
-}
-
-.password-requirements p {
-    font-size: 0.95em;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: #ffffff; /* Color de tu texto */
-}
-
-.req-item {
-    font-size: 0.85em;
-    margin-bottom: 5px;
-    transition: color 0.2s ease-in-out;
-    /* Por defecto: No cumplido (Rojo) */
-    color: #e1160d; 
-}
-
-.req-item::before {
-    content: '✕ '; /* Ícono de 'X' */
-    font-weight: bold;
-    margin-right: 5px;
-}
-
-/* Cuando se cumple: Cumplido (Verde) */
-.req-item.met {
-    color: #28a745; /* Un color verde estándar */
-}
-
-.req-item.met::before {
-    content: '✓ '; /* Ícono de 'Check' */
-}
-
-/* --- ESTILOS PARA COINCIDENCIA DE CONTRASEÑA --- */
-
-.password-match {
-    font-size: 0.85em;
-    margin-top: 5px;
-}
-.password-match.match {
-    color: #28a745; /* Verde */
-}
-.password-match.no-match {
-    color: #e1160d; /* Rojo */
-}
-
-
-/* Asegura que el input no tape el ícono */
 .form-group input[type="password"],
 .form-group input[type="text"] {
-    /* Tu input debe tener padding-right para no escribir "debajo" del ícono */
     padding-right: 45px !important; 
 }
-
-/* Arregla el input de número (Edad) para que no tenga ese padding */
 .form-group input[type="number"] {
-    padding-right: 15px !important; /* O tu padding original */
+    padding-right: 15px !important; 
 }
 
-/* Corrige el z-index de tu label si se queda detrás del input */
-.form-group label {
-    position: relative;
-    z-index: 1;
+@media(max-width: 768px) {
+    .registro-box {
+        padding: 30px 20px;
+        margin-top: 80px;
+    }
+    .registro-box h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+    .registro-box p {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .password-requirements {
+        padding: 10px;
+    }
+}
+
+/* ================================================= */
+/* ================== MODO OSCURO ================== */
+/* ================================================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --- Fondos --- */
+    --bg-container-translucent: rgba(4, 4, 4, 0.95);
+    --bg-input: #1a1a1a;
+    --bg-input-focus: #252525;
+
+    /* --- Texto --- */
+    --text-primary: #FFFFFF;
+    --text-secondary: #818181;
+    --text-on-accent: #FFFFFF;
+    --text-label: #FFFFFF;
+    --text-placeholder: #666666;
+
+    /* --- Acentos (Rojo) --- */
+    --accent-primary: #e1160d;
+    --accent-primary-hover: #a70a15;
+    
+    /* --- Bordes --- */
+    --border-strong: #a70a15;
+    --border-strong-hover: #e1160d;
+    --border-subtle: #333333;
+    --border-divider-translucent: #FFFFFF29;
+    
+    /* --- Botones --- */
+    --btn-bg-disabled: #666666;
+  }
+  
+  /* Sombras específicas de modo oscuro */
+  .registro-box {
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+  .form-group input:focus {
+      box-shadow: 0 0 8px rgba(225, 22, 13, 0.3);
+  }
+  .btn-registro-submit:hover {
+      box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+  }
+  .registro-footer a:hover {
+      color: var(--text-primary);
+  }
 }

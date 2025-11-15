@@ -1,3 +1,30 @@
+/* ================================================= */
+/* ================== MODO CLARO =================== */
+/* ================================================= */
+:root {
+  /* --- Fondos --- */
+  --bg-container-translucent: rgba(255, 255, 255, 0.98);
+  --bg-input: #F4F4F9;
+  --bg-input-focus: #FFFFFF;
+
+  /* --- Texto --- */
+  --text-primary: #2D3142;
+  --text-secondary: #6B6B6B;
+  --text-on-accent: #FFFFFF;
+  --text-label: #2D3142;
+  --text-placeholder: #AAAAAA;
+
+  /* --- Acentos (Naranja) --- */
+  --accent-primary: #FF6B35;
+  --accent-primary-hover: #F7931E;
+  
+  /* --- Bordes --- */
+  --border-strong: #FF6B35;
+  --border-strong-hover: #F7931E;
+  --border-subtle: #dddddd;
+  --border-divider-translucent: #0000001A;
+}
+
 .header-login {
     background-image: url(images/SentadillaXray2.jpg);
     background-position: top center;
@@ -21,25 +48,25 @@
 }
 
 .login-box {
-    background-color: rgba(4, 4, 4, 0.95);
-    border: 2px solid #a70a15;
+    background-color: var(--bg-container-translucent);
+    border: 2px solid var(--border-strong);
     border-radius: 15px;
     padding: 50px;
     max-width: 450px;
     width: 100%;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
 .login-box h1 {
     font-size: 36px;
-    color: #e1160d;
+    color: var(--accent-primary);
     font-weight: 800;
     margin-bottom: 10px;
     text-transform: uppercase;
 }
 
 .login-box p {
-    color: #818181;
+    color: var(--text-secondary);
     font-size: 16px;
     margin-bottom: 35px;
 }
@@ -50,11 +77,12 @@
 
 .form-group {
     margin-bottom: 25px;
+    position: relative; 
 }
 
 .form-group label {
     display: block;
-    color: #ffffff;
+    color: var(--text-label);
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 8px;
@@ -64,23 +92,23 @@
 .form-group input {
     width: 100%;
     padding: 12px 15px;
-    background-color: #1a1a1a;
-    border: 1px solid #a70a15;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-strong);
     border-radius: 8px;
-    color: #ffffff;
+    color: var(--text-primary);
     font-size: 14px;
     transition: all 0.3s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    background-color: #252525;
-    border-color: #e1160d;
-    box-shadow: 0 0 10px rgba(225, 22, 13, 0.3);
+    background-color: var(--bg-input-focus);
+    border-color: var(--border-strong-hover);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
 }
 
 .form-group input::placeholder {
-    color: #666;
+    color: var(--text-placeholder);
 }
 
 .form-options {
@@ -94,7 +122,7 @@
 .remember-me {
     display: flex;
     align-items: center;
-    color: #818181;
+    color: var(--text-secondary);
     cursor: pointer;
     user-select: none;
 }
@@ -103,23 +131,24 @@
     width: auto !important;
     margin-right: 8px;
     cursor: pointer;
+    border-color: var(--border-subtle);
 }
 
 .forgot-password {
-    color: #e1160d;
+    color: var(--accent-primary);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .forgot-password:hover {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .btn-login-submit {
     width: 100%;
     padding: 14px;
-    background-color: #e1160d;
-    color: #ffffff;
+    background-color: var(--accent-primary);
+    color: var(--text-on-accent);
     border: none;
     border-radius: 8px;
     font-size: 16px;
@@ -130,9 +159,9 @@
 }
 
 .btn-login-submit:hover {
-    background-color: #a70a15;
+    background-color: var(--accent-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
 }
 
 .btn-login-submit:active {
@@ -142,58 +171,25 @@
 .login-footer {
     margin-top: 25px;
     padding-top: 20px;
-    border-top: 1px solid #FFFFFF29;
+    border-top: 1px solid var(--border-divider-translucent);
     text-align: center;
 }
 
 .login-footer p {
-    color: #818181;
+    color: var(--text-secondary);
     font-size: 14px;
     margin: 0;
 }
 
 .login-footer a {
-    color: #e1160d;
+    color: var(--accent-primary);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .login-footer a:hover {
-    color: #ffffff;
-}
-
-@media(max-width: 768px) {
-    .login-box {
-        padding: 35px 25px;
-    }
-
-    .login-box h1 {
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-
-    .login-box p {
-        font-size: 14px;
-        margin-bottom: 25px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-options {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .forgot-password {
-        align-self: flex-start;
-    }
-}
-.form-group {
-    position: relative; 
+    color: var(--text-primary);
 }
 
 .password-toggle-container {
@@ -209,9 +205,76 @@
     cursor: pointer;
     z-index: 2; 
 }
-
-/* Estilo de los SVGs (puedes usar tu color .text-muted) */
 .password-toggle-icon svg {
-    fill: #818181; /* Color gris de tu CSS */
-    display: block; /* Evita espacio extra */
+    fill: var(--text-secondary); 
+    display: block;
+}
+
+@media(max-width: 768px) {
+    .login-box {
+        padding: 35px 25px;
+    }
+    .login-box h1 {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+    .login-box p {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .forgot-password {
+        align-self: flex-start;
+    }
+}
+
+/* ================================================= */
+/* ================== MODO OSCURO ================== */
+/* ================================================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --- Fondos --- */
+    --bg-container-translucent: rgba(4, 4, 4, 0.95);
+    --bg-input: #1a1a1a;
+    --bg-input-focus: #252525;
+
+    /* --- Texto --- */
+    --text-primary: #FFFFFF;
+    --text-secondary: #818181;
+    --text-on-accent: #FFFFFF;
+    --text-label: #FFFFFF;
+    --text-placeholder: #666666;
+
+    /* --- Acentos (Rojo) --- */
+    --accent-primary: #e1160d;
+    --accent-primary-hover: #a70a15;
+    
+    /* --- Bordes --- */
+    --border-strong: #a70a15;
+    --border-strong-hover: #e1160d;
+    --border-subtle: #444444;
+    --border-divider-translucent: #FFFFFF29;
+  }
+  
+  /* Sombras específicas de modo oscuro */
+  .login-box {
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+  .form-group input:focus {
+      box-shadow: 0 0 10px rgba(225, 22, 13, 0.3);
+  }
+  .btn-login-submit:hover {
+      box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+  }
+  .forgot-password:hover,
+  .login-footer a:hover {
+      color: var(--text-primary);
+  }
 }
