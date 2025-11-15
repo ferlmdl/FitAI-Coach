@@ -1,52 +1,58 @@
+<!-- En tu upload.hbs -->
 <div class="container upload-page-container">
-    <div class="header">
-        <h1>Sube tus Videos</h1>
-        <p>Sube hasta 3 videos a la vez (Máx 100MB c/u).</p>
-    </div>
-
-    <form id="uploadForm" class="upload-form">
-        
-        <div id="upload-area" class="upload-area">
-            <input type="file" id="fileInput" class="file-input" accept="video/*" multiple>
-            <label for="fileInput">
-                <div class="upload-icon">🎬</div>
-                <div class="upload-text">Selecciona o arrastra videos aquí</div>
-                <div class="upload-hint">Formatos: MP4, MOV, etc.</div>
-            </label>
+    <h1 class="page-title">Subir Videos de Ejercicios</h1>
+    
+    <form id="uploadForm">
+        <div class="form-group">
+            <label for="videoTitle">Título del Video *</label>
+            <input type="text" id="videoTitle" name="title" required placeholder="Ej: Sentadillas con barra">
         </div>
 
         <div class="form-group">
-            <label for="videoTitle">Título del Video</label>
-            <input type="text" id="videoTitle" placeholder="Ej: Mi primer video" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="exerciseType">Tipo de Ejercicio</label>
-            
+            <label for="exerciseType">Tipo de Ejercicio *</label>
             <select id="exerciseType" name="exerciseType" required>
-                <option value="" disabled selected>Selecciona un ejercicio...</option>
-                
-                <option value="Sentadilla">Sentadilla (Squat)</option>
-                <option value="Press de Banca">Press de Banca (Bench Press)</option>
-                <option value="Peso Muerto">Peso Muerto (Deadlift)</option>
-                <option value="Dominada">Dominada (Pull-up)</option>
-                <option value="Fondo">Fondo (Dip)</option>
-                <option value="Press Militar">Press Militar (Overhead Press)</option>
-                <option value="Remo">Remo (Row)</option>
-                <option value="Curl de Biceps">Curl de Bíceps</option>
-                <option value="Extension de Triceps">Extensión de Tríceps</option>
-                <option value="Plancha">Plancha (Plank)</option>
-                <option value="Desplante">Desplante (Lunge)</option>
-                <option value="Otro">Otro</option>
+                <option value="">Selecciona un tipo</option>
+                <option value="fuerza">Fuerza</option>
+                <option value="cardio">Cardio</option>
+                <option value="flexibilidad">Flexibilidad</option>
+                <option value="equilibrio">Equilibrio</option>
+                <option value="recuperacion">Recuperación</option>
             </select>
         </div>
-        <div id="fileList" class="file-list"></div>
-        <div id="progressBar" class="progress-bar" style="display: none;">
-            <div id="progressFill" class="progress-fill"></div>
+
+        <!-- Área de drag & drop -->
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-content">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Arrastra tus videos aquí</h3>
+                <p>o haz clic para seleccionar archivos</p>
+                <p class="file-info">Máximo 3 videos • 100MB por video</p>
+                <p class="file-types">Formatos: MP4, AVI, MOV, MKV, WebM</p>
+            </div>
+            <input 
+                type="file" 
+                id="fileInput" 
+                multiple 
+                accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm"
+                style="display: none;">
         </div>
 
-        <button type="button" id="uploadBtn" class="upload-button" disabled>Subir Videos</button>
+        <!-- Lista de archivos seleccionados -->
+        <div id="fileList" class="file-list"></div>
+
+        <!-- Barra de progreso -->
+        <div id="progressBar" class="progress-bar" style="display: none;">
+            <div id="progressFill" class="progress-fill">0%</div>
+        </div>
+
+        <!-- Botón de subir -->
+        <button type="button" id="uploadBtn" class="btn-primary" disabled>
+            <i class="fas fa-upload"></i>
+            Subir Videos
+        </button>
     </form>
 </div>
 
+<!-- Incluir SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/upload.js"></script>
