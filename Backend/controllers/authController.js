@@ -18,7 +18,7 @@ export const register = async (req, res) => {
             });
         }
         
-        const verificationUrl = process.env.APP_URL || 'https://bug-free-spork-qwpw9j4g6742x9rw-3000.app.github.dev/verify-email';
+        const verificationUrl = process.env.APP_URL || 'https://fitai-coach-c7qz.onrender.com/verify-email';
 
         const { data, error } = await supabase.auth.signUp({
             email: email,
@@ -125,7 +125,7 @@ export const requestPasswordReset = async (req, res) => {
         return res.status(400).json({ success: false, error: 'Se requiere un correo' });
     }
 
-    const resetUrl = process.env.APP_URL || 'https://bug-free-spork-qwpw9j4g6742x9rw-3000.app.github.dev/update-password';
+    const resetUrl = process.env.APP_URL || 'https://fitai-coach-c7qz.onrender.com/update-password';
 
     try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
