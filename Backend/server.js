@@ -215,10 +215,22 @@ app.get('/videos', async (req, res) => {
   }
 });
 
+app.get('/verify-email', (req, res) => {
+    res.render('verify-email', {
+        pageCss: 'styleLog.css'
+    });
+});
+
 app.get('/upload', (req, res) => {
   res.render('upload', {
     pageCss: 'styleSub.css'
   });
+});
+
+app.get('/update-password', (req, res) => {
+    res.render('update-password', {
+        pageCss: 'styleLog.css'
+    });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
