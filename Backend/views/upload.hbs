@@ -19,11 +19,27 @@
             <label for="videoTitle">Título del Video</label>
             <input type="text" id="videoTitle" placeholder="Ej: Mi primer video" required>
         </div>
+        
         <div class="form-group">
             <label for="exerciseType">Tipo de Ejercicio</label>
-            <input type="text" id="exerciseType" placeholder="Ej: Sentadilla" required>
+            
+            <select id="exerciseType" name="exerciseType" required>
+                <option value="" disabled selected>Selecciona un ejercicio...</option>
+                
+                <option value="Sentadilla">Sentadilla (Squat)</option>
+                <option value="Press de Banca">Press de Banca (Bench Press)</option>
+                <option value="Peso Muerto">Peso Muerto (Deadlift)</option>
+                <option value="Dominada">Dominada (Pull-up)</option>
+                <option value="Fondo">Fondo (Dip)</option>
+                <option value="Press Militar">Press Militar (Overhead Press)</option>
+                <option value="Remo">Remo (Row)</option>
+                <option value="Curl de Biceps">Curl de Bíceps</option>
+                <option value="Extension de Triceps">Extensión de Tríceps</option>
+                <option value="Plancha">Plancha (Plank)</option>
+                <option value="Desplante">Desplante (Lunge)</option>
+                <option value="Otro">Otro</option>
+            </select>
         </div>
-
         <div id="fileList" class="file-list"></div>
         <div id="progressBar" class="progress-bar" style="display: none;">
             <div id="progressFill" class="progress-fill"></div>

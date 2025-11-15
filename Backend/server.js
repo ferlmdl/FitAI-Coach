@@ -179,6 +179,7 @@ app.get('/videos', async (req, res) => {
 
     if (profileError) throw profileError;
 
+    // Obtener todos los videos
     const { data: allVideos, error: videosError } = await supabase
       .from('videos_web')
       .select('*')
@@ -186,6 +187,18 @@ app.get('/videos', async (req, res) => {
     
     if (videosError) throw videosError;
 
+    // Obtener grupos musculares únicos desde la base de datos
+    const { data: muscleGroupsData, error: groupsError } = await supabase
+      .from('videos_web')
+      .select('grupo_muscular')
+      .not('grupo_muscular', 'is', null);
+
+    if (groupsError) throw groupsError;
+
+    // Extraer y limpiar grupos musculares únicos
+    const muscleGroups = [...new Set(muscleGroupsData.map(item => item.grupo_muscular))].filter(Boolean);
+
+    // Obtener favoritos del usuario
     const { data: favoriteData, error: favoritesError } = await supabase
       .from('video_favorites')
       .select('video_id')
@@ -203,9 +216,8 @@ app.get('/videos', async (req, res) => {
     res.render('videos', {
       videos: processedVideos,
       user: { userName: userData.userName },
-      
+      muscleGroups: muscleGroups, // ¡IMPORTANTE: Enviar los grupos musculares!
       isAdmin: userData.role?.toLowerCase() === 'admin',
-
       pageCss: 'style.css' 
     });
 

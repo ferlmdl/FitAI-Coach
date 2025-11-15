@@ -1,59 +1,110 @@
 <div class="container videos-page">
-    {{#if isAdmin}}
-        <div class="admin-upload-section">
-            <h2 class="section-title">Panel de Administrador</h2>
-            <p>Añadir nuevo ejercicio a la biblioteca pública.</p>
-            
-            <form id="adminExerciseForm" class="admin-form" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="nombre_video">Nombre del Ejercicio</label>
-                    <input type="text" id="nombre_video" name="nombre_video" required>
-                </div>
-                <div class="form-group">
-                    <label for="grupo_muscular">Grupo Muscular</label>
-                    <input type="text" id="grupo_muscular" name="grupo_muscular" required>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Descripción</label>
-                    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="videoFile">Archivo de Video (.mp4)</label>
-                        <input type="file" id="videoFile" name="videoFile" accept="video/mp4" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="imageFile">Imagen Miniatura (.jpg, .png)</label>
-                        <input type="file" id="imageFile" name="imageFile" accept="image/jpeg, image/png" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Subir Ejercicio</button>
-                <div id="admin-message" class="admin-message"></div>
-            </form>
-        </div>
-    {{/if}}
-
+    
     {{#if user}}
         <h1 class="page-title">¡Hola, {{user.userName}}!</h1>
         <p class="page-subtitle">Explora nuestra biblioteca de ejercicios.</p>
     {{else}}
         <h1 class="page-title">Biblioteca de Ejercicios</h1>
     {{/if}}
-<div class="search-bar">
-    <input type="text" id="search-input" placeholder="Buscar por nombre o grupo muscular...">
-    <button id="search-button"><i class="fas fa-search"></i></button>
-</div>
 
-<div class="filter-controls" style="margin: 15px 0; text-align: right; padding-right: 10px;">
-    <label for="favorites-filter" style="font-weight: bold; cursor: pointer; color: #333;">
-        <input type="checkbox" id="favorites-filter" style="margin-right: 8px; vertical-align: middle;">
-        Mostrar solo mis favoritos
-    </label>
-</div>
-<div class="video-grid" id="video-grid">
-    {{#each videos}}
+    {{#if isAdmin}}
+    <!-- Formulario Admin para subir videos -->
+    <div class="admin-section">
+        <h2 class="admin-title">Panel de Administración</h2>
+        <form id="adminExerciseForm" class="admin-form" enctype="multipart/form-data">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nombre_video">Nombre del Video *</label>
+                    <input type="text" id="nombre_video" name="nombre_video" required>
+                </div>
 
-            <div class="video-card" data-video-id="{{this.id}}" data-video-src="{{this.ruta_video}}">
+                <div class="form-group">
+                    <label for="grupo_muscular">Grupo Muscular *</label>
+                    <select id="grupo_muscular" name="grupo_muscular" required>
+                        <option value="">Selecciona un grupo muscular</option>
+                        <option value="Pecho">Pecho</option>
+                        <option value="Espalda">Espalda</option>
+                        <option value="Hombros">Hombros</option>
+                        <option value="Piernas">Piernas</option>
+                        <option value="Brazos">Brazos</option>
+                        <option value="Abdomen">Abdomen</option>
+                        <option value="Glúteos">Glúteos</option>
+                        <option value="Cardio">Cardio</option>
+                        <option value="Full Body">Full Body</option>
+                        <option value="Otro">Otro (especificar)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="grupo_muscular_otro_container" style="display: none;">
+                    <label for="grupo_muscular_otro">Especificar Grupo Muscular *</label>
+                    <input type="text" id="grupo_muscular_otro" name="grupo_muscular_otro">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="description">Descripción del Ejercicio *</label>
+                    <textarea id="description" name="description" rows="4" required placeholder="Describe el ejercicio, técnica, beneficios..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="ruta_video">Archivo de Video *</label>
+                    <input type="file" id="ruta_video" name="ruta_video" accept="video/*" required>
+                    <small class="file-hint">Formatos: MP4, MOV, AVI, etc.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ruta_imagen">Imagen Miniatura *</label>
+                    <input type="file" id="ruta_imagen" name="ruta_imagen" accept="image/*" required>
+                    <small class="file-hint">Formatos: JPG, PNG, WebP</small>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-upload"></i>
+                    Subir Ejercicio
+                </button>
+                <button type="reset" class="btn-secondary">
+                    <i class="fas fa-redo"></i>
+                    Limpiar
+                </button>
+            </div>
+        </form>
+    </div>
+    {{/if}}
+
+    <div class="search-and-filter-controls">
+        
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Buscar por nombre de ejercicio...">
+            <button id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="filter-dropdown">
+            <label for="muscle-group-filter">Grupo Muscular:</label>
+            <select id="muscle-group-filter" class="custom-select">
+                <option value="all">Mostrar Todos</option>
+                {{#each muscleGroups}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <div class="filter-controls">
+        <label for="favorites-filter">
+            <input type="checkbox" id="favorites-filter">
+            Mostrar solo mis favoritos
+        </label>
+    </div>
+
+    <div class="video-grid" id="video-grid">
+        {{#each videos}}
+            <div class="video-card" 
+                 data-video-id="{{this.id}}" 
+                 data-video-src="{{this.ruta_video}}"
+                 data-title="{{this.nombre_video}}"
+                 data-group="{{this.grupo_muscular}}"
+                 data-favorited="{{this.isFavorited}}">
                 
                 <div class="video-thumbnail-wrapper">
                     <img src="{{this.ruta_imagen}}" alt="{{this.nombre_video}}" class="video-thumbnail">
@@ -62,34 +113,45 @@
                         <i class="fas fa-heart"></i>
                     </button>
                     
-                    <!-- Botón de play que el usuario debe hacer clic -->
-                    <button class="play-btn">
+                    <div class="play-overlay">
                         <i class="fas fa-play"></i>
-                    </button>
+                    </div>
                 </div>
 
                 <div class="video-info">
                     <h3 class="video-title">{{this.nombre_video}}</h3>
                     <p class="video-category">{{this.grupo_muscular}}</p>
+                    {{#if this.description}}
+                    <p class="video-description">{{this.description}}</p>
+                    {{/if}}
                 </div>
             </div>
         {{else}}
-            <p class="no-results">No se encontraron videos que coincidan con tu búsqueda.</p>
+            <p class="no-results-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
+                No se encontraron videos en la biblioteca.
+            </p>
         {{/each}}
-
     </div>
-
-    <div id="error-message" class="error-popup"></div>
-
 </div>
 
-<!-- Modal del video -->
-<div class="video-modal" id="videoModal">
+<!-- Modal para reproducir videos -->
+<div id="videoModal" class="video-modal">
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-content">
-        <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
-        <video id="modalVideoPlayer" width="100%" controls controlsList="nodownload"></video>
+        <button class="modal-close-btn" id="modalCloseBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="video-player-container">
+            <h3 id="modalVideoTitle" class="modal-video-title"></h3>
+            <video 
+                id="modalVideoPlayer" 
+                class="modal-video-player"
+                controls
+                controlsList="nodownload"
+                preload="metadata">
+                Tu navegador no soporta la reproducción de videos.
+            </video>
+        </div>
     </div>
 </div>
-
 <script src="/js/video.js"></script>
