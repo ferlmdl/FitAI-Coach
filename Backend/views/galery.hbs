@@ -1,68 +1,136 @@
-<input type="checkbox" id="menu" style="display: none;" /> 
-<main class="container">
-    <h1 class="page-title">Historial de Videos</h1>
+<div class="container gallery-page">
+    <div class="gallery-header">
+        <h1 class="page-title">Mi Historial de Videos</h1>
+        <p class="page-subtitle">Revisa y gestiona todos tus videos de ejercicios</p>
+    </div>
 
-    {{#if videos.length}}
-
-    <div class="filter-container">
-        <div class="filter-group">
-            <label for="filter-title">Título</label>
-            <input type="text" id="filter-title" class="filter-input" placeholder="Buscar por título...">
+    <!-- Filtros y búsqueda mejorados -->
+    <div class="gallery-controls">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Buscar por título..." class="search-input">
         </div>
-        
+
         <div class="filter-group">
-            <label for="filter-type">Tipo de Ejercicio</label>
-            <select id="filter-type" class="filter-select">
-                <option value="">-- Todos los tipos --</option>
+            <div class="filter-item">
+                <label for="exerciseTypeFilter">Tipo de Ejercicio</label>
+                <select id="exerciseTypeFilter" class="filter-select">
+                    <option value="all">Todos los tipos</option>
+                    <option value="fuerza">Fuerza</option>
+                    <option value="cardio">Cardio</option>
+                    <option value="flexibilidad">Flexibilidad</option>
+                    <option value="equilibrio">Equilibrio</option>
+                    <option value="recuperacion">Recuperación</option>
                 </select>
+            </div>
+
+            <div class="filter-item">
+                <label for="sortFilter">Ordenar por</label>
+                <select id="sortFilter" class="filter-select">
+                    <option value="newest">Más nuevos primero</option>
+                    <option value="oldest">Más antiguos primero</option>
+                    <option value="title">Orden alfabético</option>
+                </select>
+            </div>
         </div>
-        
-        <div class="filter-group">
-            <label for="filter-sort">Ordenar por</label>
-            <select id="filter-sort" class="filter-select">
-                <option value="newest">Más nuevos primero</option>
-                <option value="oldest">Más antiguos primero</option>
-            </select>
+
+        <div class="stats-box">
+            <div class="stat-item">
+                <span class="stat-number" id="totalVideos">0</span>
+                <span class="stat-label">Videos totales</span>
+            </div>
         </div>
     </div>
-    <div class="video-gallery" id="video-gallery">
-        {{#each videos}}
-        
-        <div class="video-item" 
-             data-title="{{this.title}}" 
-             data-type="{{this.exercise_type}}" 
-             data-created="{{this.created_at}}">
-        <video controls src="{{this.video_route}}"></video>
-            
-            <div class="video-info-and-actions">
-                <h4>{{this.title}}</h4> 
-                <p>{{this.exercise_type}}</p>
-                <small class="video-date">{{this.created_at}}</small> 
 
-                <div class="video-item-buttons">
-                    <a href="/analysis/{{this.id}}" class="btn-primary"> 
-                        <i class="fas fa-chart-line"></i> Análisis
-                    </a>
-                    <button class="btn-delete btn" 
-                            data-video-id="{{this.id}}" 
-                            data-video-route="{{this.video_route}}">
-                        <i class="fas fa-trash"></i> Borrar
-                    </button>
+    <!-- Grid de videos mejorado -->
+    <div class="gallery-grid" id="galleryGrid">
+        {{#each videos}}
+        <div class="gallery-card" 
+             data-title="{{this.title}}" 
+             data-type="{{this.exercise_type}}"
+             data-date="{{this.created_at}}"
+             data-id="{{this.id}}">
+            
+            <div class="card-header">
+                <div class="video-thumbnail-container">
+                    <video class="video-thumbnail" preload="metadata">
+                        <source src="{{this.video_route}}" type="video/mp4">
+                        Tu navegador no soporta el elemento video.
+                    </video>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="video-duration">--:--</div>
                 </div>
             </div>
+
+            <div class="card-body">
+                <h3 class="video-title">{{this.title}}</h3>
+                <div class="video-meta">
+                    <span class="exercise-type {{this.exercise_type}}">
+                        <i class="fas fa-dumbbell"></i>
+                        {{this.exercise_type}}
+                    </span>
+                    <span class="upload-date">
+                        <i class="far fa-calendar"></i>
+                        {{formatDate this.created_at}}
+                    </span>
+                </div>
+                
+                {{#if this.analysis}}
+                <div class="analysis-preview">
+                    <span class="analysis-badge">
+                        <i class="fas fa-chart-line"></i>
+                        Análisis disponible
+                    </span>
+                </div>
+                {{/if}}
+            </div>
+
+            <div class="card-actions">
+                <button class="btn-action view-analysis" data-video-id="{{this.id}}">
+                    <i class="fas fa-chart-bar"></i>
+                    Ver Análisis
+                </button>
+                <button class="btn-action delete-video" data-video-id="{{this.id}}" data-video-route="{{this.video_route}}">
+                    <i class="fas fa-trash"></i>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+        {{else}}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-video-slash"></i>
+            </div>
+            <h3>No hay videos aún</h3>
+            <p>Sube tu primer video para comenzar a analizar tus ejercicios</p>
+            <a href="/upload" class="btn-primary">
+                <i class="fas fa-upload"></i>
+                Subir Primer Video
+            </a>
         </div>
         {{/each}}
     </div>
-    
-    <p id="no-results-message" class="no-results" style="display: none; text-align: center; margin-top: 2rem;">
-        No se encontraron videos que coincidan con los filtros.
-    </p>
 
-    {{else}}
-    <div class="header-info" style="text-align: center; padding-top: 2rem;">
-        <span> Aún no has subido ningún video.</span>
-        <br>
-        <a href="/upload" class="btn-1">Empieza</a>
+    <!-- Modal de confirmación para eliminar -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Eliminación</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar este video? Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary cancel-delete">Cancelar</button>
+                <button class="btn-danger confirm-delete">Eliminar Video</button>
+            </div>
+        </div>
     </div>
-    {{/if}}
-</main>
+</div>
+
+<!-- Incluir SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/galery.js"></script>
