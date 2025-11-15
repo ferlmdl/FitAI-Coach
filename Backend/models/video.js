@@ -3,21 +3,30 @@ import { supabase } from '../lib/supabaseClient.js';
 
 class VideoModel {
     static async createVideo({ userId, videoUrl, storagePath, title, exerciseType }) {
-        // Ajusta los nombres de columnas según tu tabla en supabase
+        // Usa los nombres de columnas correctos según tu tabla
         const payload = {
             user_id: userId,
-            video_url: videoUrl,
-            storage_path: storagePath,
-            title,
+            video_route: videoUrl, // ← CORREGIDO: usa video_route en lugar de video_url
+            // storage_path no existe en tu tabla, así que lo omitimos
+            title: title,
             exercise_type: exerciseType,
-            created_at: new Date().toISOString()
+            created_at: new Date().toISOString(),
+            status: 'active', // Agrega un valor por defecto para status
+            analysis: '' // Agrega un valor por defecto para analysis
         };
+        
+        console.log('Insertando video con payload:', payload);
+        
         const { data, error } = await supabase
             .from('video')
             .insert([payload])
             .select()
             .single();
-        if (error) throw error;
+            
+        if (error) {
+            console.error('Error en VideoModel.createVideo:', error);
+            throw error;
+        }
         return data;
     }
 

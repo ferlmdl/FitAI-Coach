@@ -1,4 +1,3 @@
-// Archivo: Backend/controllers/videoController.js
 import { supabase } from '../lib/supabaseClient.js';
 import path from 'path';
 import fs from 'fs';
@@ -33,7 +32,6 @@ export const uploadVideos = async (req, res) => {
 
             console.log('Subiendo a supabase:', { filePath, uploadPath });
 
-            // Intentar subir buffer (multer ya guardó en disco)
             const buffer = fs.readFileSync(filePath);
             const { data: storageData, error: storageError } = await supabase.storage
                 .from(bucketName)
@@ -44,12 +42,10 @@ export const uploadVideos = async (req, res) => {
 
             if (storageError) {
                 console.error('storageError', storageError);
-                // limpiar temporal antes de responder
                 try { fs.unlinkSync(filePath); } catch(e){}
                 return res.status(500).json({ success: false, error: 'Error subiendo al storage', details: storageError });
             }
 
-            // Obtener URL pública o almacenar ruta en BD si bucket privado
             const { data: publicUrlData, error: publicUrlError } = await supabase.storage
                 .from(bucketName)
                 .getPublicUrl(uploadPath);
@@ -61,25 +57,28 @@ export const uploadVideos = async (req, res) => {
             const publicUrl = publicUrlData?.publicUrl || null;
             console.log('Upload OK, publicUrl:', publicUrl);
 
-            // Guardar metadatos en la tabla 'video'
             try {
                 const created = await VideoModel.createVideo({
                     userId,
                     videoUrl: publicUrl,
-                    storagePath: uploadPath,
                     title,
                     exerciseType
                 });
                 console.log('VideoModel.createVideo result:', created);
             } catch (e) {
                 console.error('Error guardando metadata en BD:', e);
-                // Decide si eliminar del storage en caso de fallo en BD
-                // await supabase.storage.from(bucketName).remove([uploadPath]);
+                
+                try {
+                    await supabase.storage.from(bucketName).remove([uploadPath]);
+                    console.log('Video eliminado del storage debido a error en BD');
+                } catch (storageDeleteError) {
+                    console.error('Error eliminando del storage:', storageDeleteError);
+                }
+                
                 try { fs.unlinkSync(filePath); } catch(e){}
                 return res.status(500).json({ success: false, error: 'Error guardando metadata en BD', details: e.message || e });
             }
 
-            // eliminar temporal multer
             try { fs.unlinkSync(filePath); } catch(e){}
             uploadedUrls.push(publicUrl);
         }
@@ -87,7 +86,6 @@ export const uploadVideos = async (req, res) => {
         res.status(201).json({ success: true, uploaded: uploadedUrls });
     } catch (err) {
         console.error('Error en uploadVideos unexpected:', err);
-        // limpiar temporales remanentes
         if (req.files) {
             req.files.forEach(f => {
                 try { if (f.path && fs.existsSync(f.path)) fs.unlinkSync(f.path); } catch(e){}
@@ -97,11 +95,7 @@ export const uploadVideos = async (req, res) => {
     }
 };
 
-// --- (El resto de tus funciones: deleteVideo, getUserVideos, getVideoById...) ---
-// (Tu función deleteVideo tiene el bucketName 'videos_usuario' correcto, ¡excelente!)
-
 export const deleteVideo = async (req, res) => {
-    
     if (!res.locals.isLoggedIn || !res.locals.user) {
         return res.status(401).json({ error: 'No autorizado' });
     }
