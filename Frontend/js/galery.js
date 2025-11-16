@@ -1,175 +1,291 @@
+// Frontend/js/galery.js
 document.addEventListener('DOMContentLoaded', () => {
     
     console.log('🎬 galery.js iniciado');
 
     // --- Elementos del DOM ---
-    const gallery = document.getElementById('video-gallery');
-    if (!gallery) {
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) {
         console.log('No hay galería en esta página.');
-        return; // Salir si no hay galería (ej. si no hay videos)
+        return;
     }
 
-    const titleFilter = document.getElementById('filter-title');
-    const typeFilter = document.getElementById('filter-type');
-    const sortFilter = document.getElementById('filter-sort');
-    const noResultsMessage = document.getElementById('no-results-message');
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('exerciseTypeFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const totalVideosEl = document.getElementById('totalVideos');
     
-    // Almacenamos todos los videos en un array para un mejor rendimiento
-    const allVideos = Array.from(gallery.querySelectorAll('.video-item'));
+    // Almacenamos todos los videos en un array
+    let allVideoCards = Array.from(galleryGrid.querySelectorAll('.gallery-card'));
     
+    // --- Elementos del Modal de Video ---
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('modalVideoPlayer');
+    const videoSource = document.getElementById('modalVideoSource');
+    const modalVideoTitle = document.getElementById('modalVideoTitle');
+    const closeModalBtn = videoModal.querySelector('.modal-close-video');
+
+    // --- Elementos del Modal de Borrado ---
+    const deleteModal = document.getElementById('deleteModal');
+    const closeDeleteModalBtn = deleteModal.querySelector('.modal-close');
+    const cancelDeleteBtn = deleteModal.querySelector('.btn-secondary.cancel-delete');
+    const confirmDeleteBtn = deleteModal.querySelector('.btn-danger.confirm-delete');
+    let videoToDelete = null; // Guardar temporalmente el ID y ruta
+
     // --- Funciones ---
 
     /**
-     * 1. Poblar el filtro de "Tipo de Ejercicio" dinámicamente
+     * 1. Poblar el filtro de "Tipo de Ejercicio" y stats
      */
-    function populateTypeFilter() {
+    function setupFiltersAndStats() {
         const types = new Set();
-        allVideos.forEach(video => {
-            // Leemos el data-attribute que pusimos en el HBS
-            types.add(video.dataset.type);
+        allVideoCards.forEach(card => {
+            const type = card.dataset.type || 'undefined'; // Manejar tipos no definidos
+            types.add(type);
         });
 
+        // Limpiar opciones existentes (excepto la primera)
+        typeFilter.innerHTML = '<option value="all">Todos los tipos</option>';
+        
         types.forEach(type => {
             if (type && type.trim() !== '') {
                 const option = document.createElement('option');
                 option.value = type;
-                option.textContent = type;
+                option.textContent = type.charAt(0).toUpperCase() + type.slice(1); // Pone la primera letra en mayúscula
                 typeFilter.appendChild(option);
             }
         });
+
+        updateVideoCount();
     }
 
     /**
-     * 2. Función principal para filtrar y ordenar los videos
+     * 2. Actualizar el contador de videos visibles
+     */
+    function updateVideoCount() {
+        const visibleVideos = allVideoCards.filter(card => card.style.display !== 'none').length;
+        totalVideosEl.textContent = visibleVideos;
+    }
+
+    /**
+     * 3. Formatear duración (para las miniaturas)
+     */
+    function formatDuration(seconds) {
+        const min = Math.floor(seconds / 60);
+        const sec = Math.floor(seconds % 60);
+        return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    /**
+     * 4. Cargar duraciones de los videos
+     */
+    allVideoCards.forEach(card => {
+        const videoEl = card.querySelector('.video-thumbnail');
+        const durationEl = card.querySelector('.video-duration');
+        
+        videoEl.onloadedmetadata = () => {
+            durationEl.textContent = formatDuration(videoEl.duration);
+        };
+        // Si el video ya está cargado ( caché)
+        if (videoEl.readyState >= 1) {
+             durationEl.textContent = formatDuration(videoEl.duration);
+        }
+    });
+
+
+    /**
+     * 5. Función principal para filtrar y ordenar
      */
     function filterAndSortVideos() {
-        const titleSearch = titleFilter.value.toLowerCase();
+        const titleSearch = searchInput.value.toLowerCase();
         const typeSearch = typeFilter.value;
         const sortValue = sortFilter.value;
 
-        let visibleVideos = 0;
-
-        // Primero, filtramos los videos
-        const filteredVideos = allVideos.filter(video => {
-            const title = video.dataset.title.toLowerCase();
-            const type = video.dataset.type;
+        // 1. Filtrar
+        allVideoCards.forEach(card => {
+            const title = card.dataset.title.toLowerCase();
+            const type = card.dataset.type || 'undefined';
 
             const matchesTitle = title.includes(titleSearch);
-            const matchesType = (typeSearch === "") || (type === typeSearch); // Muestra todos si la opción es ""
-
+            const matchesType = (typeSearch === "all") || (type === typeSearch);
+            
             const shouldShow = matchesTitle && matchesType;
-            
-            // Ocultamos el video si no coincide
-            video.style.display = shouldShow ? 'block' : 'none'; 
-            
-            if(shouldShow) visibleVideos++;
-            
-            return shouldShow;
+            card.style.display = shouldShow ? 'flex' : 'none'; // 'flex' porque la tarjeta es un flex container
         });
 
-        // Segundo, ordenamos los videos que SÍ son visibles
-        filteredVideos.sort((a, b) => {
-            // Leemos las fechas de los data-attributes
-            const dateA = new Date(a.dataset.created);
-            const dateB = new Date(b.dataset.created);
+        // 2. Obtener los videos visibles para ordenar
+        let visibleCards = allVideoCards.filter(card => card.style.display !== 'none');
 
-            if (sortValue === 'newest') {
-                return dateB - dateA; // Más nuevo (fecha más grande) primero
-            } else {
-                return dateA - dateB; // Más antiguo (fecha más chica) primero
+        // 3. Ordenar
+        visibleCards.sort((a, b) => {
+            const dateA = new Date(a.dataset.date);
+            const dateB = new Date(b.dataset.date);
+            const titleA = a.dataset.title.toLowerCase();
+            const titleB = b.dataset.title.toLowerCase();
+
+            switch (sortValue) {
+                case 'newest':
+                    return dateB - dateA;
+                case 'oldest':
+                    return dateA - dateB;
+                case 'title':
+                    return titleA.localeCompare(titleB);
+                default:
+                    return dateB - dateA;
             }
         });
 
-        // Tercero, los re-insertamos en el DOM en el orden correcto
-        // 'appendChild' mueve un elemento si ya existe, poniéndolo al final.
-        filteredVideos.forEach(video => {
-            gallery.appendChild(video);
+        // 4. Re-insertar en el DOM en el orden correcto
+        visibleCards.forEach(card => {
+            galleryGrid.appendChild(card);
         });
 
-        // Mostrar/Ocultar mensaje de "No hay resultados"
-        if (visibleVideos === 0) {
-            noResultsMessage.style.display = 'block';
-        } else {
-            noResultsMessage.style.display = 'none';
-        }
+        // 5. Actualizar contador
+        updateVideoCount();
     }
 
+
     /**
-     * 3. Lógica para borrar un video
+     * 6. Lógica para el Modal de Video
      */
-    async function deleteVideo(button) {
-        const videoId = button.dataset.videoId;
-        const videoItem = button.closest('.video-item');
+    function openVideoModal(card) {
+        const title = card.dataset.title;
+        const videoRoute = card.querySelector('.video-thumbnail source').src;
 
-        // Usamos SweetAlert para confirmar
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: "No podrás revertir esto. El video y su análisis se borrarán.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, ¡bórralo!',
-            cancelButtonText: 'Cancelar'
-        });
+        modalVideoTitle.textContent = title;
+        videoSource.src = videoRoute;
 
-        if (result.isConfirmed) {
-            // Asumo que tu endpoint de borrado es 'DELETE /api/videos/{id}'
-            // Ajusta esto si tu ruta es diferente
-            try {
-                const response = await fetch(`/api/videos/delete/${videoId}`, {
-                    method: 'DELETE',
-                });
+        videoModal.classList.add('is-active'); // Usamos la clase para mostrarlo
+        videoPlayer.load();
+        videoPlayer.play();
+    }
 
-                const data = await response.json();
+    function closeVideoModal() {
+        videoModal.classList.remove('is-active');
+        videoPlayer.pause();
+        videoSource.src = "";
+    }
 
-                if (response.ok && data.success) {
-                    Swal.fire(
-                        '¡Borrado!',
-                        'Tu video ha sido eliminado.',
-                        'success'
-                    );
-                    // Eliminar el video del DOM
-                    videoItem.style.transition = 'opacity 0.5s';
-                    videoItem.style.opacity = '0';
-                    setTimeout(() => {
-                        videoItem.remove();
-                        // Actualizamos el array 'allVideos' para futuros filtros
-                        allVideos.splice(allVideos.indexOf(videoItem), 1);
-                        filterAndSortVideos(); // Re-filtramos por si acaso
-                    }, 500);
 
-                } else {
-                    Swal.fire('Error', data.error || 'No se pudo borrar el video.', 'error');
-                }
-            } catch (error) {
-                console.error('Error en el fetch de borrado:', error);
-                Swal.fire('Error', 'Error de conexión al intentar borrar.', 'error');
+    /**
+     * 7. Lógica para el Modal de Borrado
+     */
+    function openDeleteModal(button) {
+        videoToDelete = {
+            id: button.dataset.videoId,
+            route: button.dataset.videoRoute,
+            card: button.closest('.gallery-card')
+        };
+        deleteModal.classList.add('is-active');
+    }
+
+    function closeDeleteModal() {
+        deleteModal.classList.remove('is-active');
+        videoToDelete = null;
+    }
+
+    async function confirmDelete() {
+        if (!videoToDelete) return;
+
+        const { id, route, card } = videoToDelete;
+
+        try {
+            // Mostrar spinner en el botón
+            confirmDeleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
+            confirmDeleteBtn.disabled = true;
+
+            const response = await fetch(`/api/videos/delete/${id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ video_route: route }) // Enviar la ruta para borrar de Supabase Storage
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                Swal.fire('¡Borrado!', 'Tu video ha sido eliminado.', 'success');
+                
+                // Eliminar del DOM con animación
+                card.style.transition = 'opacity 0.5s, transform 0.5s';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8)';
+                
+                setTimeout(() => {
+                    card.remove();
+                    // Actualizar el array de videos
+                    allVideoCards = allVideoCards.filter(c => c !== card);
+                    filterAndSortVideos(); // Re-filtrar y actualizar contador
+                }, 500);
+
+                closeDeleteModal();
+
+            } else {
+                Swal.fire('Error', data.error || 'No se pudo borrar el video.', 'error');
             }
+
+        } catch (error) {
+            console.error('Error en el fetch de borrado:', error);
+            Swal.fire('Error', 'Error de conexión al intentar borrar.', 'error');
+        } finally {
+            // Restaurar botón
+            confirmDeleteBtn.innerHTML = 'Eliminar Video';
+            confirmDeleteBtn.disabled = false;
+            videoToDelete = null; // Limpiar
         }
     }
 
 
     // --- Event Listeners ---
 
-    // Añadimos los listeners a los filtros
-    titleFilter.addEventListener('input', filterAndSortVideos);
+    // Filtros
+    searchInput.addEventListener('input', filterAndSortVideos);
     typeFilter.addEventListener('change', filterAndSortVideos);
     sortFilter.addEventListener('change', filterAndSortVideos);
 
-    // Listener para los botones de borrado (delegación de eventos)
-    gallery.addEventListener('click', (e) => {
-        const deleteButton = e.target.closest('.btn-delete');
+    // Delegación de eventos en el Grid
+    galleryGrid.addEventListener('click', (e) => {
+        // Clic en el botón de borrar
+        const deleteButton = e.target.closest('.delete-video');
         if (deleteButton) {
             e.preventDefault();
-            deleteVideo(deleteButton);
+            openDeleteModal(deleteButton);
+            return;
+        }
+
+        // Clic en el botón de "Ver Análisis"
+        const analysisButton = e.target.closest('.view-analysis');
+        if (analysisButton) {
+            e.preventDefault();
+            const videoId = analysisButton.dataset.videoId;
+            window.location.href = `/analysis/${videoId}`; // Redirigir a la página de análisis
+            return;
+        }
+
+        // Clic en el overlay de reproducir
+        const playButton = e.target.closest('.play-overlay, .video-thumbnail-container');
+        if (playButton) {
+            e.preventDefault();
+            const card = playButton.closest('.gallery-card');
+            openVideoModal(card);
         }
     });
 
-    // --- Inicialización ---
-    // Llenamos el filtro de "tipos" y ejecutamos el filtro
-    // una vez al cargar la página.
-    populateTypeFilter();
-    filterAndSortVideos();
+    // Listeners para cerrar Modales
+    closeModalBtn.addEventListener('click', closeVideoModal);
+    videoModal.addEventListener('click', (e) => {
+        if (e.target === videoModal) closeVideoModal();
+    });
 
+    closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+    cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    deleteModal.addEventListener('click', (e) => {
+        if (e.target === deleteModal) closeDeleteModal();
+    });
+
+    // Listener para confirmar borrado
+    confirmDeleteBtn.addEventListener('click', confirmDelete);
+
+    // --- Inicialización ---
+    setupFiltersAndStats();
+    filterAndSortVideos();
 });

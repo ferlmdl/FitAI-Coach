@@ -28,6 +28,8 @@ async function testSupabaseConnection() {
 
 testSupabaseConnection();
 
+// En server.js
+
 app.engine(
   "hbs",
   engine({
@@ -38,6 +40,15 @@ app.engine(
     helpers: {
       json: function(context) {
         return JSON.stringify(context);
+      },
+      formatDate: function(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
       }
     }
   })
@@ -62,25 +73,32 @@ app.get('/', (req, res) => {
 });
 
 app.get('/galery', async (req, res) => {
-  if (!res.locals.isLoggedIn) {
-    return res.redirect('/login');
+  try {
+    if (!res.locals.isLoggedIn) {
+      return res.redirect('/login');
+    }
+    const userId = res.locals.user.id;
+
+    const { data: videos, error } = await supabase
+      .from('video')
+      .select('*')
+      .eq('user_id', userId) 
+      .order('created_at', { ascending: false }); 
+
+    if (error) {
+      console.error('Error al buscar videos:', error);
+      return res.status(500).send('Error al cargar la galería.');
+    }
+
+    res.render('galery', {
+      videos: videos,
+      pageCss: 'galery.css' // <--- ¡AQUÍ ESTÁ LA MAGIA!
+    });
+
+  } catch (renderError) { 
+    console.error('Error al renderizar la página de galería:', renderError);
+    res.status(500).send('Ocurrió un error al procesar la página.');
   }
-  const userId = res.locals.user.id;
-
-  const { data: videos, error } = await supabase
-    .from('video')
-    .select('*')
-    .eq('user_id', userId) 
-    .order('created_at', { ascending: false }); 
-
-  if (error) {
-    console.error('Error al buscar videos:', error);
-    return res.status(500).send('Error al cargar la galería.');
-  }
-
-  res.render('galery', {
-    videos: videos,
-  });
 });
 
 app.get('/login', (req, res) => {

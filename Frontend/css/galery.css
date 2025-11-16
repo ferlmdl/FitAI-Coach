@@ -1,0 +1,146 @@
+/* Frontend/css/galery.css */
+
+/* Título de la página (ya existe .page-title en tu style.css) */
+.page-title {
+    color: var(--color-text-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* --- Contenedor de Filtros --- */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que se ajusten en pantallas pequeñas */
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: var(--color-card); /* Usando variables de style.css */
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Crecen para llenar el espacio */
+    min-width: 200px; /* Ancho mínimo antes de envolver */
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.filter-input,
+.filter-select {
+    /* Usando estilos base de style.css y ajustando */
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+}
+.filter-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+/* --- Galería de Videos --- */
+.video-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+/* --- Tarjeta de Video Individual --- */
+.video-item {
+    background: var(--color-card);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden; /* Para que el video no se salga */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Para que la info se ponga abajo */
+}
+
+.video-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.video-item video {
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+    background-color: #000;
+}
+
+/* Info y Acciones */
+.video-info-and-actions {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Para que ocupe el espacio restante */
+}
+
+.video-info-and-actions h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.video-info-and-actions p {
+    font-size: 1rem;
+    color: var(--color-accent); /* Destacamos el tipo de ejercicio */
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.video-info-and-actions .video-date {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Empuja los botones al fondo */
+}
+
+/* Botones de la tarjeta */
+.video-item-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Los botones .btn-primary y .btn-delete ya existen en tu style.css */
+.video-item-buttons .btn-primary,
+.video-item-buttons .btn-delete {
+    flex: 1; /* Ocupan el mismo espacio */
+    padding: 0.75rem; /* Un poco más pequeños */
+    font-size: 0.9rem;
+    text-align: center; /* Asegura que el texto esté centrado */
+}
+
+/* --- Mensaje de "No hay videos" --- */
+.no-results,
+.no-results-message {
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+    text-align: center;
+    grid-column: 1 / -1; /* Ocupa todo el grid */
+    padding: 2rem;
+}
+
+/* Estilos para el estado vacío (si no hay videos) */
+.header-info {
+    text-align: center;
+    padding-top: 2rem;
+}
+.header-info p {
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+}
+/* El .btn-1 ya está en tu style.css */

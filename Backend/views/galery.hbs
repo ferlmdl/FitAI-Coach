@@ -1,14 +1,14 @@
+{{!-- galery.hbs --}}
 <div class="container gallery-page">
     <div class="gallery-header">
         <h1 class="page-title">Mi Historial de Videos</h1>
         <p class="page-subtitle">Revisa y gestiona todos tus videos de ejercicios</p>
     </div>
 
-    <!-- Filtros y búsqueda mejorados -->
     <div class="gallery-controls">
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Buscar por título..." class="search-input">
+            <input type.text id="searchInput" placeholder="Buscar por título..." class="search-input">
         </div>
 
         <div class="filter-group">
@@ -16,14 +16,9 @@
                 <label for="exerciseTypeFilter">Tipo de Ejercicio</label>
                 <select id="exerciseTypeFilter" class="filter-select">
                     <option value="all">Todos los tipos</option>
-                    <option value="fuerza">Fuerza</option>
-                    <option value="cardio">Cardio</option>
-                    <option value="flexibilidad">Flexibilidad</option>
-                    <option value="equilibrio">Equilibrio</option>
-                    <option value="recuperacion">Recuperación</option>
+                    {{! Las opciones se llenarán con JS }}
                 </select>
             </div>
-
             <div class="filter-item">
                 <label for="sortFilter">Ordenar por</label>
                 <select id="sortFilter" class="filter-select">
@@ -33,16 +28,8 @@
                 </select>
             </div>
         </div>
-
-        <div class="stats-box">
-            <div class="stat-item">
-                <span class="stat-number" id="totalVideos">0</span>
-                <span class="stat-label">Videos totales</span>
-            </div>
-        </div>
     </div>
 
-    <!-- Grid de videos mejorado -->
     <div class="gallery-grid" id="galleryGrid">
         {{#each videos}}
         <div class="gallery-card" 
@@ -73,7 +60,7 @@
                     </span>
                     <span class="upload-date">
                         <i class="far fa-calendar"></i>
-                        {{formatDate this.created_at}}
+                        {{formatDate this.created_at}} {{! <-- Asegúrate de tener este helper en server.js }}
                     </span>
                 </div>
                 
@@ -113,7 +100,6 @@
         {{/each}}
     </div>
 
-    <!-- Modal de confirmación para eliminar -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -129,8 +115,22 @@
             </div>
         </div>
     </div>
+
+    <div id="videoModal" class="modal">
+        <div class="modal-content video-modal-content"> {{! Asignamos una clase extra }}
+            <div class="modal-header">
+                <h3 id="modalVideoTitle">Reproducir Video</h3>
+                <button class="modal-close-video">&times;</button>
+            </div>
+            <div class="modal-body">
+                <video id="modalVideoPlayer" width="100%" controls>
+                    <source id="modalVideoSource" src="" type="video/mp4">
+                    Tu navegador no soporta el elemento video.
+                </video>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Incluir SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/galery.js"></script>
