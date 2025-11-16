@@ -2,7 +2,8 @@
 
 **Tu entrenador personal de IA para perfeccionar tu técnica de ejercicio.**
 
-[Screenshot de la aplicación FitAI - Coach]
+<img width="1089" height="709" alt="image" src="https://github.com/user-attachments/assets/c13d5d4c-306f-4d46-bc59-cfc8c6b8e13e" />
+
 
 FitAI - Coach es una plataforma web que utiliza inteligencia artificial para analizar videos de tus rutinas de ejercicio. Sube un video y recibe un reporte detallado con correcciones, sugerencias y marcas de tiempo exactas para ayudarte a mejorar tu forma y prevenir lesiones.
 
@@ -27,11 +28,11 @@ El flujo de trabajo es el siguiente:
 4.  **Reporte:** Se genera un reporte detallado que se presenta al usuario, indicando los errores detectados, las sugerencias de mejora y los timestamps.
 
 ### Stack Tecnológico
-* **Frontend:** [Indica tu tecnología, ej: React, Vue, Angular]
-* **Backend:** [Indica tu tecnología, ej: Python (Flask/Django), Node.js]
+* **Frontend:** Motor de plantillas de hbs
+* **Backend:** Node.js
 * **IA / Visión por Computadora:** MediaPipe, OpenCV
-* **Base de Datos:** [Indica tu tecnología, ej: PostgreSQL, MongoDB, o "No aplica"]
-* **Despliegue:** [Indica dónde está desplegado, ej: Vercel, Heroku, AWS]
+* **Base de Datos:** Supabase (SQL)
+* **Despliegue:** Render
 
 ---
 
@@ -41,9 +42,7 @@ Sigue estos pasos para correr el proyecto en tu máquina local.
 
 ### Prerrequisitos
 Asegúrate de tener instalados:
-* [Software 1, ej: Node.js v18 o superior]
-* [Software 2, ej: Python v3.10 o superior]
-* [Software 3, ej: Git]
+* Node.js v18 o superior
 
 ### Instalación
 
@@ -55,7 +54,7 @@ Asegúrate de tener instalados:
     ```bash
     cd FitAI-Coach
     ```
-3.  Instala las dependencias (ajusta según tu estructura, ej: frontend/backend):
+3.  Instala las dependencias:
     ```bash
     # Ejemplo para el backend
     cd backend
@@ -67,14 +66,14 @@ Asegúrate de tener instalados:
     ```
 4.  Configura tus variables de entorno:
     ```bash
-    # Describe los pasos, ej: "Renombra .env.example a .env y añade tus claves API"
+    el env con las claves desde tu base de datos supabase
     ```
 
 ### Ejecución
 
 1.  Inicia el servidor backend (desde la carpeta `/backend`):
     ```bash
-    python app.py
+    
     ```
 2.  Inicia la aplicación frontend (desde la carpeta `/frontend`):
     ```bash
@@ -87,10 +86,9 @@ Asegúrate de tener instalados:
 ## Uso de la Aplicación
 
 1.  Visita la página principal.
-2.  Selecciona el tipo de ejercicio que vas a analizar.
-3.  Arrastra y suelta o selecciona tu archivo de video.
-4.  Espera a que el análisis se complete.
-5.  ¡Revisa tu reporte y mejora tu técnica!
+2.  Arrastra y suelta o selecciona tu archivo de video.
+3.  Espera a que el análisis se complete.
+4.  ¡Revisa tu reporte y mejora tu técnica!
 
 ---
 
