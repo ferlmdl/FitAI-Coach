@@ -17,17 +17,16 @@ async def get_current_user(authorization: str | None = Header(None)):
     token = token.replace('"', '').strip()
 
     try:
-        # AHORA SÍ FUNCIONARÁ LA VERIFICACIÓN MATEMÁTICA
         payload = jwt.decode(
             token,
             JWT_SECRET,
             algorithms=[JWT_ALGORITHM],
             options={"verify_aud": False},
         )
-        print("✅ Token validado y firma verificada correctamente.")
+        print("Token validado y firma verificada correctamente.")
         
     except Exception as e:
-        print(f"❌ Error validando: {e}")
+        print(f"Error validando: {e}")
         raise HTTPException(401, "Invalid token")
     
     return {"id": payload.get("sub"), "email": payload.get("email")}
