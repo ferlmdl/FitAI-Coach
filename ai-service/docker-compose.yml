@@ -1,0 +1,41 @@
+services:
+  api:
+    build: .
+    command: uvicorn app.main:app --host ${API_HOST} --port ${API_PORT}
+    env_file: .env
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./:/code
+    depends_on:
+      - redis
+      - postgres
+
+  worker:
+    build: .
+    command: python -m worker.worker
+    env_file: .env
+    volumes:
+      - ./:/code
+    depends_on:
+      - redis
+      - postgres
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./:/code 
+
+volumes:
+  pgdata:

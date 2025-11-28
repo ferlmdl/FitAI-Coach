@@ -1,0 +1,217 @@
+.header-login {
+    background-image: url(images/SentadillaXray2.jpg);
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.login-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 50px 20px;
+}
+
+.login-box {
+    background-color: rgba(4, 4, 4, 0.95);
+    border: 2px solid #a70a15;
+    border-radius: 15px;
+    padding: 50px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.login-box h1 {
+    font-size: 36px;
+    color: #e1160d;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.login-box p {
+    color: #818181;
+    font-size: 16px;
+    margin-bottom: 35px;
+}
+
+.login-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #1a1a1a;
+    border: 1px solid #a70a15;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    background-color: #252525;
+    border-color: #e1160d;
+    box-shadow: 0 0 10px rgba(225, 22, 13, 0.3);
+}
+
+.form-group input::placeholder {
+    color: #666;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    color: #818181;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remember-me input {
+    width: auto !important;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: #e1160d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #ffffff;
+}
+
+.btn-login-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #e1160d;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-login-submit:hover {
+    background-color: #a70a15;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+}
+
+.btn-login-submit:active {
+    transform: translateY(0);
+}
+
+.login-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #FFFFFF29;
+    text-align: center;
+}
+
+.login-footer p {
+    color: #818181;
+    font-size: 14px;
+    margin: 0;
+}
+
+.login-footer a {
+    color: #e1160d;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.login-footer a:hover {
+    color: #ffffff;
+}
+
+@media(max-width: 768px) {
+    .login-box {
+        padding: 35px 25px;
+    }
+
+    .login-box h1 {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .login-box p {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .forgot-password {
+        align-self: flex-start;
+    }
+}
+.form-group {
+    position: relative; 
+}
+
+.password-toggle-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2; 
+}
+
+/* Estilo de los SVGs (puedes usar tu color .text-muted) */
+.password-toggle-icon svg {
+    fill: #818181; /* Color gris de tu CSS */
+    display: block; /* Evita espacio extra */
+}
