@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
 Unified pipeline (classification + squat evaluation)
 
@@ -24,10 +21,6 @@ from dataclasses import dataclass
 import mediapipe as mp
 mp_pose = mp.solutions.pose
 
-# =========================
-# CONFIGURACIÓN DEL USUARIO
-# =========================
-# Rutas a tu CSV de entrenamiento y al video a evaluar
 CSV_PATH      = "/home/imsebs/mediapipe-env/angulos_dataset.csv"
 VIDEO_PATH    = "/home/imsebs/mediapipe-env/videos/Sentadilla/sentadilla1.mp4"
 
@@ -39,15 +32,7 @@ CONFIDENCE_THRESHOLD = 0.70
 
 # Forzar ejecución del evaluador de sentadilla (para pruebas rápidas)
 FORCE_SQUAT_EVAL = False
-# =========================
-
-
-# -----------------------------------------------------------
 # DEFINICIÓN DE ÁNGULOS
-# - Las CLAVES deben coincidir con las columnas del CSV
-# - Cada ángulo se define por 3 landmarks: (punto A, vértice B, punto C)
-#   y se calcula ∠ABC.
-# -----------------------------------------------------------
 ANGLE_DEFS = {
     "elbow_right":    (mp_pose.PoseLandmark.RIGHT_SHOULDER, mp_pose.PoseLandmark.RIGHT_ELBOW, mp_pose.PoseLandmark.RIGHT_WRIST),
     "elbow_left":     (mp_pose.PoseLandmark.LEFT_SHOULDER,  mp_pose.PoseLandmark.LEFT_ELBOW,  mp_pose.PoseLandmark.LEFT_WRIST),
@@ -61,10 +46,6 @@ ANGLE_DEFS = {
     "ankle_left":     (mp_pose.PoseLandmark.LEFT_KNEE,      mp_pose.PoseLandmark.LEFT_ANKLE,  mp_pose.PoseLandmark.LEFT_FOOT_INDEX),
 }
 
-# -----------------------------------------------------------
-# LANDMARKS CLAVE (x,y) PARA HEURÍSTICAS DE SENTADILLA
-# - Usamos abreviaturas cortas para hombros, caderas, rodillas, tobillos y pies
-# -----------------------------------------------------------
 LM_KEYS = {
     "LS":  mp_pose.PoseLandmark.LEFT_SHOULDER,
     "RS":  mp_pose.PoseLandmark.RIGHT_SHOULDER,
@@ -78,10 +59,6 @@ LM_KEYS = {
     "RFI": mp_pose.PoseLandmark.RIGHT_FOOT_INDEX,
 }
 
-
-# =========================
-# UTILIDADES DE POSE/ÁNGULOS
-# =========================
 def compute_angle(a, b, c):
     """
     Calcula el ángulo en grados ∠ABC a partir de 3 puntos 3D (x,y,z).
@@ -157,10 +134,6 @@ def process_video(video_path, skip=SKIP_FRAMES):
     df_lm     = pd.DataFrame(rows_lm) if rows_lm else pd.DataFrame(columns=[f"{k}_{c}" for k in LM_KEYS.keys() for c in ("x","y")])
     return df_angles, df_lm
 
-
-# =========================
-# FEATURES PARA ML (POR VIDEO)
-# =========================
 def extract_basic_features(df_angles):
     """
     Resume todos los frames del video en un vector de features:
@@ -249,10 +222,6 @@ def predict_topk(model, feat_cols, df_angles, k=3):
     pred, conf = topk[0]
     return pred, conf, topk
 
-
-# =========================
-# EVALUADOR DE SENTADILLA (REGLAS)
-# =========================
 @dataclass
 class EvalResult:
     ok: bool
@@ -356,9 +325,6 @@ class SquatEvaluator:
         return EvalResult(ok, float(score), msgs)
 
 
-# =========================
-# MAIN
-# =========================
 if __name__ == "__main__":
     # Validación de rutas
     csv_path = Path(CSV_PATH).expanduser().resolve()
