@@ -70,3 +70,91 @@ El proyecto sigue una arquitectura de microservicios híbrida:
 ```bash
 git clone [https://github.com/tu-usuario/fitai-coach.git](https://github.com/tu-usuario/fitai-coach.git)
 cd fitai-coach
+```
+
+### 2. Configurar Web App (Node.js)
+```bash
+cd web-app/Backend
+npm install
+```
+
+### 3. Crea un archivo .env en web-app/Backend/:
+```Ini, TOML
+PORT=3000
+SUPABASE_URL=[https://tu-proyecto.supabase.co](https://tu-proyecto.supabase.co)
+SUPABASE_KEY=tu-anon-key
+AI_SERVICE_URL=http://localhost:8000
+```
+
+### 4. Crea un archivo .env en ai-service/:
+```Ini, TOML
+API_HOST=0.0.0.0
+API_PORT=8000
+DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT].supabase.co:5432/postgres
+REDIS_URL=rediss://default:[TOKEN]@tus-redis.upstash.io:6379
+SUPABASE_JWT_SECRET=[TU_LEGACY_JWT_SECRET]
+```
+
+---
+
+## Base de Datos
+
+Ejecuta este SQL en tu panel de Supabase para crear las tablas necesarias para la IA:
+```SQL
+CREATE TABLE IF NOT EXISTS jobs (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    status TEXT NOT NULL,
+    input_video_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+CREATE TABLE IF NOT EXISTS analyses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    job_id UUID REFERENCES jobs(id) ON DELETE CASCADE,
+    exercise TEXT,
+    reps INTEGER,
+    score FLOAT,
+    details JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+```
+
+---
+
+## Ejecución
+
+El sistema requiere 3 terminales simultáneas:
+### Terminal 1
+```bash
+cd web-app/Backend
+npm start
+```
+
+### Terminal 2
+```bash
+cd ai-service
+python -m uvicorn app.main:app --reload --port 8000
+```
+
+### Terminal 3
+```bash
+cd ai-service
+python -m worker.worker
+```
+
+Visita http://localhost:3000 para usar la aplicación.
+
+
+---
+
+## Captura de pantalla análisis
+
+![Imagen de WhatsApp 2025-11-27 a las 23 25 08_671729ae](https://github.com/user-attachments/assets/37b16881-3256-4b7a-832f-874c8145360c)
+
+---
+
+## Autor
+
+FitAi - Coach -- Desarrollo fullstack para proyecto universitario
