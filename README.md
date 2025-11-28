@@ -39,7 +39,7 @@ El proyecto sigue una arquitectura de microservicios híbrida:
 
 ---
 
-## 🛠 Tecnologías
+##  Tecnologías
 
 ### Backend & Frontend
 * **Node.js / Express:** Servidor principal.
