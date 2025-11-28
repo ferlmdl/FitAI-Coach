@@ -156,7 +156,7 @@ def analyze_squat(video_url: str):
     }
 
 def run_analysis(job_id: str, video_url: str, exercise: str, video_id: str = None):
-    print(f"🔄 Iniciando análisis detallado para: {exercise} (ID: {video_id})")
+    print(f"Iniciando análisis detallado para: {exercise} (ID: {video_id})")
     
     exercise_clean = exercise.lower().strip()
     
@@ -190,7 +190,7 @@ def run_analysis(job_id: str, video_url: str, exercise: str, video_id: str = Non
             "exercise": exercise_clean
         })
 
-        print(f"✅ Análisis completado. Reps: {result['reps']} - Score: {result['score']}")
+        print(f"Análisis completado. Reps: {result['reps']} - Score: {result['score']}")
 
         # Guardar en BD
         with engine.begin() as conn:
@@ -220,7 +220,7 @@ def run_analysis(job_id: str, video_url: str, exercise: str, video_id: str = Non
             )
 
     except Exception as e:
-        print(f"❌ Error crítico en análisis: {e}")
+        print(f"Error crítico en análisis: {e}")
         try:
             with engine.begin() as conn:
                 conn.execute(text("UPDATE jobs SET status = 'failed' WHERE id = :id"), {"id": job_id})
