@@ -26,7 +26,11 @@
         <p>
             Si no sabes por dónde empezar, no te preocupes. Nosotros te guiaremos en cada paso gracias a la IA integrada de google.
         </p>
-        <a href="/login" class="btn-2">Empieza</a>
+        {{#if isLoggedIn}}
+            <a href="/upload" class="btn-2">Sube un video</a>
+        {{else}}
+            <a href="/login" class="btn-2">Empieza</a>
+        {{/if}}
     </div>
 
     <div class="gym-2">
@@ -57,7 +61,11 @@
             Porque tu bienestar es nuestra prioridad.
             Y sabemos lo importante de verse y sentirse bien.
         </p>
-        <a href="login" class="btn-2">Empieza</a>
+        {{#if isLoggedIn}}
+            <a href="/galery" class="btn-2">Repasa tus ejercicios</a>
+        {{else}}
+            <a href="/login" class="btn-2">Empieza</a>
+        {{/if}}
     </div>
 
     <div class="gym-2">
