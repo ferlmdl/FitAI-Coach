@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (response.ok) {
                     if (window.Swal) {
-                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Hemos enviado un <b>correo de verificación</b> a tu dirección de email.<br>Por favor, revisa tu bandeja de entrada (y spam) para activar tu cuenta antes de iniciar sesión.' })
+                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Hemos enviado un correo de verificación a tu correo. Por favor, activa tu cuenta antes de iniciar sesión.' })
                             .then(() => window.location.href = '/login');
                     } else {
                         alert('¡Registro exitoso! Hemos enviado un correo de verificación. Por favor revisa tu bandeja de entrada para activar tu cuenta.');
