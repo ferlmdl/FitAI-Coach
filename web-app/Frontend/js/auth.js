@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    const path = window.location.pathname;
 
+    if (hash && hash.includes('type=recovery') && !path.includes('/update-password')) {
+        console.log('🔄 Token de recuperación detectado. Redirigiendo a /update-password...');
+        window.location.href = '/update-password' + hash;
+        return;
+    }
     const registerForm = document.getElementById('registerForm');
 
     if (registerForm) {
