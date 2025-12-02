@@ -1,5 +1,10 @@
+/* ========================================= */
+/* ESTILOS DE REGISTRO (CON MODO CLARO)      */
+/* ========================================= */
+
 .header-registro {
-    background-image: url(images/SentadillaXray2.jpg);
+    /* MODO OSCURO (Default) */
+    background-image: url(images/SentadillaXray.png); /* Imagen oscura por defecto */
     background-position: top center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -10,6 +15,13 @@
     justify-content: center;
     text-align: center;
     position: relative;
+    transition: background-image 0.3s ease;
+}
+
+/* CAMBIO DE IMAGEN EN MODO CLARO */
+body.light-mode .header-registro {
+    background-image: url(images/SentadillaXray2.jpg); /* Imagen clara */
+    background-color: #FFF8F5; /* Fondo crema por si la imagen tarda */
 }
 
 .registro-container {
@@ -20,23 +32,35 @@
     padding: 50px 20px;
 }
 
+/* --- CAJA DE REGISTRO --- */
 .registro-box {
     background-color: rgba(4, 4, 4, 0.95);
-    border: 2px solid #a70a15;
+    border: 2px solid #a70a15; /* Rojo original */
     border-radius: 15px;
     padding: 50px;
     max-width: 500px;
     width: 100%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    margin-top: 80px; 
+    transition: all 0.3s ease;
+}
+
+/* Caja en Modo Claro */
+body.light-mode .registro-box {
+    background-color: #FFFFFF;       /* Fondo Blanco */
+    border: 2px solid #FF6B35;       /* Borde Naranja */
+    box-shadow: 0 10px 40px rgba(255, 107, 53, 0.15); /* Sombra naranja suave */
 }
 
 .registro-box h1 {
     font-size: 32px;
-    color: #e1160d;
+    color: #af4717;
     font-weight: 800;
     margin-bottom: 10px;
     text-transform: uppercase;
+}
+
+body.light-mode .registro-box h1 {
+    color: #FF6B35; /* Título Naranja */
 }
 
 .registro-box p {
@@ -45,12 +69,17 @@
     margin-bottom: 30px;
 }
 
+body.light-mode .registro-box p {
+    color: #8C4A32; /* Texto secundario color tierra */
+}
+
 .registro-form {
     width: 100%;
 }
 
 .form-group {
     margin-bottom: 20px;
+    position: relative;
 }
 
 .form-group label {
@@ -62,6 +91,11 @@
     text-transform: uppercase;
 }
 
+body.light-mode .form-group label {
+    color: #421105; /* Label color chocolate */
+}
+
+/* --- INPUTS --- */
 .form-group input {
     width: 100%;
     padding: 10px 12px;
@@ -73,17 +107,31 @@
     transition: all 0.3s ease;
 }
 
+/* Inputs en Modo Claro */
+body.light-mode .form-group input {
+    background-color: #FFFFFF;
+    border: 1px solid #FF6B3540; /* Borde naranja suave */
+    color: #421105; /* Texto oscuro al escribir */
+}
+
 .form-group input:focus {
     outline: none;
     background-color: #252525;
-    border-color: #e1160d;
+    border-color: #af4717;
     box-shadow: 0 0 8px rgba(225, 22, 13, 0.3);
+}
+
+body.light-mode .form-group input:focus {
+    background-color: #FFF8F5;
+    border-color: #FF6B35;
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.3);
 }
 
 .form-group input::placeholder {
     color: #666;
 }
 
+/* --- REQUISITOS DE CONTRASEÑA (TU FIX ANTERIOR) --- */
 .password-requirements {
     background-color: #1a1a1a;
     border: 1px solid #333;
@@ -93,10 +141,21 @@
     font-size: 12px;
 }
 
+/* Requisitos en Modo Claro */
+body.light-mode .password-requirements {
+    background-color: #FFFFFF;
+    border: 1px solid #FF6B35;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
 .password-requirements p {
-    color: #e1160d;
+    color: #af4717;
     margin: 0 0 8px 0;
     font-weight: 600;
+}
+
+body.light-mode .password-requirements p {
+    color: #421105; /* Título oscuro */
 }
 
 .req-item {
@@ -105,6 +164,11 @@
     color: #818181;
     margin-bottom: 6px;
     transition: all 0.3s ease;
+}
+
+/* Items no cumplidos en modo claro */
+body.light-mode .req-item {
+    color: #D90429; /* Rojo legible sobre blanco */
 }
 
 .req-item:last-child {
@@ -120,6 +184,12 @@
 
 .req-item.met {
     color: #4caf50;
+}
+
+/* Items cumplidos (verde) */
+body.light-mode .req-item.met {
+    color: #28a745;
+    font-weight: 600;
 }
 
 .req-item.met .req-icon {
@@ -141,6 +211,7 @@
     color: #f44336;
 }
 
+/* --- CHECKBOX --- */
 .form-checkbox {
     margin-bottom: 20px;
 }
@@ -153,6 +224,10 @@
     cursor: pointer;
 }
 
+body.light-mode .form-checkbox label {
+    color: #8C4A32;
+}
+
 .form-checkbox input {
     width: 16px !important;
     height: 16px;
@@ -161,10 +236,11 @@
     padding: 0 !important;
 }
 
+/* --- BOTÓN DE REGISTRO --- */
 .btn-registro-submit {
     width: 100%;
     padding: 12px;
-    background-color: #e1160d;
+    background-color: #af4717;
     color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -175,10 +251,19 @@
     transition: all 0.3s ease;
 }
 
+body.light-mode .btn-registro-submit {
+    background-color: #FF6B35;
+}
+
 .btn-registro-submit:hover {
     background-color: #a70a15;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
+}
+
+body.light-mode .btn-registro-submit:hover {
+    background-color: #E55100;
+    box-shadow: 0 5px 15px rgba(229, 81, 0, 0.3);
 }
 
 .btn-registro-submit:active {
@@ -191,11 +276,16 @@
     transform: none;
 }
 
+/* --- FOOTER --- */
 .registro-footer {
     margin-top: 20px;
     padding-top: 15px;
     border-top: 1px solid #FFFFFF29;
     text-align: center;
+}
+
+body.light-mode .registro-footer {
+    border-top: 1px solid rgba(255, 107, 53, 0.2);
 }
 
 .registro-footer p {
@@ -204,17 +294,30 @@
     margin: 0;
 }
 
+body.light-mode .registro-footer p {
+    color: #8C4A32;
+}
+
 .registro-footer a {
-    color: #e1160d;
+    color: #af4717;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
+}
+
+body.light-mode .registro-footer a {
+    color: #FF6B35;
 }
 
 .registro-footer a:hover {
     color: #ffffff;
 }
 
+body.light-mode .registro-footer a:hover {
+    color: #421105;
+}
+
+/* --- MEDIA QUERIES --- */
 @media(max-width: 768px) {
     .registro-box {
         padding: 30px 20px;
@@ -239,6 +342,8 @@
         padding: 10px;
     }
 }
+
+/* --- UTILIDADES EXTRA E ICONOS --- */
 .form-group {
     position: relative; 
 }
@@ -257,78 +362,21 @@
     z-index: 2; 
 }
 
-/* Estilo de los SVGs (puedes usar tu color .text-muted) */
 .password-toggle-icon svg {
-    fill: #818181; /* Color gris de tu CSS */
-    display: block; /* Evita espacio extra */
+    fill: #818181; 
+    display: block; 
 }
-
-/* --- ESTILOS PARA VALIDACIÓN DE CONTRASEÑA --- */
-
-.password-requirements {
-    margin-top: 10px;
-    padding-left: 10px;
-    /* Oculta la lista por defecto */
-    /*display: none;*/ 
-}
-
-.password-requirements p {
-    font-size: 0.95em;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: #ffffff; /* Color de tu texto */
-}
-
-.req-item {
-    font-size: 0.85em;
-    margin-bottom: 5px;
-    transition: color 0.2s ease-in-out;
-    /* Por defecto: No cumplido (Rojo) */
-    color: #e1160d; 
-}
-
-.req-item::before {
-    content: '✕ '; /* Ícono de 'X' */
-    font-weight: bold;
-    margin-right: 5px;
-}
-
-/* Cuando se cumple: Cumplido (Verde) */
-.req-item.met {
-    color: #28a745; /* Un color verde estándar */
-}
-
-.req-item.met::before {
-    content: '✓ '; /* Ícono de 'Check' */
-}
-
-/* --- ESTILOS PARA COINCIDENCIA DE CONTRASEÑA --- */
-
-.password-match {
-    font-size: 0.85em;
-    margin-top: 5px;
-}
-.password-match.match {
-    color: #28a745; /* Verde */
-}
-.password-match.no-match {
-    color: #e1160d; /* Rojo */
-}
-
 
 /* Asegura que el input no tape el ícono */
 .form-group input[type="password"],
 .form-group input[type="text"] {
-    /* Tu input debe tener padding-right para no escribir "debajo" del ícono */
     padding-right: 45px !important; 
 }
 
-/* Arregla el input de número (Edad) para que no tenga ese padding */
 .form-group input[type="number"] {
-    padding-right: 15px !important; /* O tu padding original */
+    padding-right: 15px !important; 
 }
 
-/* Corrige el z-index de tu label si se queda detrás del input */
 .form-group label {
     position: relative;
     z-index: 1;

@@ -2,6 +2,7 @@
     <div class="header">
         <h1>Sube tus Videos</h1>
         <p>Sube hasta 3 videos a la vez (Máx 100MB c/u).</p>
+        <p>Para un mejor análisis se recomienda utilizar ropa ajustada y enseñar cuerpo completo</p>
     </div>
 
     <form id="uploadForm" class="upload-form">
@@ -20,9 +21,15 @@
             <input type="text" id="videoTitle" placeholder="Ej: Mi primer video" required>
         </div>
         <div class="form-group">
-            <label for="exerciseType">Tipo de Ejercicio</label>
-            <input type="text" id="exerciseType" placeholder="Ej: Sentadilla" required>
-        </div>
+    <label for="exerciseType">Tipo de Ejercicio</label>
+
+    <select id="exerciseType" name="exerciseType" class="input-select" required>
+        <option value="">Selecciona una opción...</option>
+        <option value="sentadilla">Sentadilla</option>
+        <option value="flexiones">Flexiones</option>
+        <option value="dominadas">Dominadas</option>
+    </select>
+</div>
 
         <div id="fileList" class="file-list"></div>
         <div id="progressBar" class="progress-bar" style="display: none;">

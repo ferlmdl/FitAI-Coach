@@ -221,6 +221,27 @@ app.get('/upload', (req, res) => {
   });
 });
 
+// Agrega esto en server.js
+app.get('/api/video-status/:id', async (req, res) => {
+  if (!res.locals.isLoggedIn) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const { id } = req.params;
+
+  const { data, error } = await supabase
+    .from('video')
+    .select('analysis, status')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  return res.json(data);
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });

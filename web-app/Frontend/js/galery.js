@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- FUNCIÓN DE FORMATEO (La magia visual) ---
     function formatearAnalisis(analysisData) {
         let data = analysisData;
         
-        // Si viene como texto, intentamos convertirlo a objeto
         if (typeof analysisData === 'string') {
             try {
                 // Limpieza extra por si acaso
@@ -61,20 +59,53 @@ document.addEventListener('DOMContentLoaded', () => {
         return html;
     }
 
-    // --- LÓGICA DE LA GALERÍA ---
-
     const gallery = document.getElementById('video-gallery');
     
-    // Si estamos en la página de Detalle de Análisis (analysis.hbs), ejecutamos el formateo allí
     const analysisPageContainer = document.getElementById('analysis-text-container');
     if (analysisPageContainer) {
         const rawJson = analysisPageContainer.getAttribute('data-raw');
-        if (rawJson) {
+        const videoId = analysisPageContainer.getAttribute('data-video-id');
+
+        const hasData = (jsonString) => {
+            return jsonString && jsonString !== "null" && jsonString.trim() !== "";
+        };
+
+        if (hasData(rawJson)) {
             analysisPageContainer.innerHTML = formatearAnalisis(rawJson);
+        } else {
+            console.log("Iniciando búsqueda automática de análisis...");
+            
+            const intervalId = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/video-status/${videoId}`);
+                    if (!response.ok) throw new Error('Error de red');
+                    
+                    const data = await response.json();
+                    
+                    if (data && hasData(data.analysis)) {
+                        console.log("¡Análisis recibido!");
+                        
+                        analysisPageContainer.innerHTML = formatearAnalisis(data.analysis);
+                        clearInterval(intervalId);
+                        
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Análisis completado'
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error consultando estado:", error);
+                }
+            }, 3000);
         }
     }
 
-    // Si no hay galería, terminamos aquí (pero después de chequear la página de análisis)
     if (!gallery) {
         return; 
     }
@@ -85,22 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const noResultsMessage = document.getElementById('no-results-message');
     
     const allVideos = Array.from(gallery.querySelectorAll('.video-item'));
-    
-    function populateTypeFilter() {
-        const types = new Set();
-        allVideos.forEach(video => {
-            types.add(video.dataset.type);
-        });
-
-        types.forEach(type => {
-            if (type && type.trim() !== '') {
-                const option = document.createElement('option');
-                option.value = type;
-                option.textContent = type;
-                typeFilter.appendChild(option);
-            }
-        });
-    }
 
     function filterAndSortVideos() {
         const titleSearch = titleFilter.value.toLowerCase();
@@ -114,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const type = video.dataset.type;
 
             const matchesTitle = title.includes(titleSearch);
-            const matchesType = (typeSearch === "") || (type === typeSearch); 
+            const matchesType = (typeSearch === "") || (type.toLowerCase() === typeSearch.toLowerCase());
 
             const shouldShow = matchesTitle && matchesType;
             video.style.display = shouldShow ? 'block' : 'none'; 
@@ -235,6 +250,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    populateTypeFilter();
     filterAndSortVideos();
 });

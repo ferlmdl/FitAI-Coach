@@ -1,4 +1,9 @@
+/* ========================================= */
+/* ESTILOS DE LOGIN (LOG.CSS)                */
+/* ========================================= */
+
 .header-login {
+    /* Usamos la misma imagen que en el registro */
     background-image: url(images/SentadillaXray2.jpg);
     background-position: top center;
     background-repeat: no-repeat;
@@ -20,6 +25,7 @@
     padding: 50px 20px;
 }
 
+/* --- CAJA DEL LOGIN (MODO OSCURO - DEFAULT) --- */
 .login-box {
     background-color: rgba(4, 4, 4, 0.95);
     border: 2px solid #a70a15;
@@ -28,6 +34,14 @@
     max-width: 450px;
     width: 100%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* --- CAJA DEL LOGIN (MODO CLARO - NUEVO) --- */
+body.light-mode .login-box {
+    background-color: rgba(255, 248, 245, 0.98); /* Fondo Crema */
+    border: 2px solid #FF6B35; /* Borde Naranja */
+    box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2);
 }
 
 .login-box h1 {
@@ -38,10 +52,20 @@
     text-transform: uppercase;
 }
 
+/* Título en Modo Claro */
+body.light-mode .login-box h1 {
+    color: #FF6B35;
+}
+
 .login-box p {
     color: #818181;
     font-size: 16px;
     margin-bottom: 35px;
+}
+
+/* Texto secundario en Modo Claro */
+body.light-mode .login-box p {
+    color: #8C4A32; /* Tono terracota */
 }
 
 .login-form {
@@ -50,6 +74,7 @@
 
 .form-group {
     margin-bottom: 25px;
+    position: relative; /* Necesario para el ícono de ojo */
 }
 
 .form-group label {
@@ -59,6 +84,11 @@
     font-weight: 600;
     margin-bottom: 8px;
     text-transform: uppercase;
+}
+
+/* Label en Modo Claro */
+body.light-mode .form-group label {
+    color: #421105; /* Marrón oscuro */
 }
 
 .form-group input {
@@ -72,6 +102,13 @@
     transition: all 0.3s ease;
 }
 
+/* --- INPUTS EN MODO CLARO --- */
+body.light-mode .form-group input {
+    background-color: #FFFFFF;
+    border: 1px solid #E8D4C8;
+    color: #421105;
+}
+
 .form-group input:focus {
     outline: none;
     background-color: #252525;
@@ -79,10 +116,18 @@
     box-shadow: 0 0 10px rgba(225, 22, 13, 0.3);
 }
 
+/* Focus en Modo Claro */
+body.light-mode .form-group input:focus {
+    background-color: #FFF8F5;
+    border-color: #FF6B35;
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+}
+
 .form-group input::placeholder {
     color: #666;
 }
 
+/* --- OPCIONES (RECORDARME / OLVIDÉ CONTRASEÑA) --- */
 .form-options {
     display: flex;
     justify-content: space-between;
@@ -99,6 +144,10 @@
     user-select: none;
 }
 
+body.light-mode .remember-me {
+    color: #8C4A32;
+}
+
 .remember-me input {
     width: auto !important;
     margin-right: 8px;
@@ -111,10 +160,19 @@
     transition: color 0.3s ease;
 }
 
+body.light-mode .forgot-password {
+    color: #FF6B35;
+}
+
 .forgot-password:hover {
     color: #ffffff;
 }
 
+body.light-mode .forgot-password:hover {
+    color: #421105;
+}
+
+/* --- BOTÓN DE LOGIN --- */
 .btn-login-submit {
     width: 100%;
     padding: 14px;
@@ -129,16 +187,27 @@
     transition: all 0.3s ease;
 }
 
+/* Botón en Modo Claro */
+body.light-mode .btn-login-submit {
+    background-color: #FF6B35;
+}
+
 .btn-login-submit:hover {
     background-color: #a70a15;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
 }
 
+body.light-mode .btn-login-submit:hover {
+    background-color: #E55100;
+    box-shadow: 0 5px 15px rgba(229, 81, 0, 0.4);
+}
+
 .btn-login-submit:active {
     transform: translateY(0);
 }
 
+/* --- FOOTER DEL LOGIN --- */
 .login-footer {
     margin-top: 25px;
     padding-top: 20px;
@@ -146,10 +215,18 @@
     text-align: center;
 }
 
+body.light-mode .login-footer {
+    border-top: 1px solid rgba(255, 107, 53, 0.2);
+}
+
 .login-footer p {
     color: #818181;
     font-size: 14px;
     margin: 0;
+}
+
+body.light-mode .login-footer p {
+    color: #8C4A32;
 }
 
 .login-footer a {
@@ -159,10 +236,19 @@
     transition: color 0.3s ease;
 }
 
+body.light-mode .login-footer a {
+    color: #FF6B35;
+}
+
 .login-footer a:hover {
     color: #ffffff;
 }
 
+body.light-mode .login-footer a:hover {
+    color: #421105;
+}
+
+/* --- ESTILOS RESPONSIVE --- */
 @media(max-width: 768px) {
     .login-box {
         padding: 35px 25px;
@@ -192,9 +278,8 @@
         align-self: flex-start;
     }
 }
-.form-group {
-    position: relative; 
-}
+
+/* --- ESTILOS EXTRA (ICONOS Y PADDING) --- */
 
 .password-toggle-container {
     position: relative;
@@ -210,8 +295,14 @@
     z-index: 2; 
 }
 
-/* Estilo de los SVGs (puedes usar tu color .text-muted) */
+/* Estilo de los SVGs */
 .password-toggle-icon svg {
-    fill: #818181; /* Color gris de tu CSS */
-    display: block; /* Evita espacio extra */
+    fill: #818181; 
+    display: block; 
+}
+
+/* Asegura que el input no tape el ícono */
+.form-group input[type="password"],
+.form-group input[type="text"] {
+    padding-right: 45px !important; 
 }

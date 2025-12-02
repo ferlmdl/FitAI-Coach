@@ -27,7 +27,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     confirmed = confirm('¿Estás seguro de que quieres borrar este video? Esta acción no se puede deshacer.');
                 }
 
-                if (!confirmed) return;
+                if (!confirmed){
+                    return;
+                };
 
                 try {
                     const response = await fetch(`/api/videos/${videoId}`, {
@@ -40,11 +42,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     if (response.ok) {
                         button.closest('.video-item').remove();
-                        if (window.SwalToast) {
-                            SwalToast.fire({ icon: 'success', title: 'Video borrado' });
-                        } else {
-                            alert('Video borrado exitosamente.');
-                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Borrado!',
+                            text: 'El video ha sido eliminado exitosamente.',
+                            confirmButtonColor: '#af4717', // Usamos tu color naranja corporativo
+                            confirmButtonText: 'Aceptar',
+                            background: '#ffffffff',         // Fondo oscuro para combinar con tu tema
+                            color: '#000000ff'               // Texto blanco
+                        });
                     } else {
                         throw new Error(result.error || 'No se pudo borrar el video.');
                     }
@@ -107,4 +113,56 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Error al cerrar sesión:', error);
         }
     };
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const body = document.body; // IMPORTANTE: Apuntamos al body, no al html
+
+    // Función para aplicar el tema
+    const applyTheme = (theme) => {
+        // Guardamos en memoria
+        localStorage.setItem('theme', theme);
+
+        // Lógica de Clases CSS (Esto conecta con tu style.css)
+        if (theme === 'light') {
+            body.classList.add('light-mode'); // Activa las variables claras
+        } else {
+            body.classList.remove('light-mode'); // Vuelve al oscuro por defecto
+        }
+
+        // Lógica de Íconos (Sol / Luna)
+        if (themeIcon) {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+    };
+
+    // 1. Verificar preferencia al cargar
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        // Por defecto arrancamos en dark si no hay nada guardado
+        applyTheme('dark'); 
+    }
+
+    // 2. Evento del botón
+    if (themeToggle) {
+        themeToggle.addEventListener('click', (e) => {
+            e.preventDefault(); // Evita saltos si es un enlace
+            
+            // Verificamos si ya tiene la clase para saber el estado actual
+            const isLight = body.classList.contains('light-mode');
+            
+            // Si es light, pasamos a dark. Si no, a light.
+            const newTheme = isLight ? 'dark' : 'light';
+            
+            applyTheme(newTheme);
+        });
+    }
 });

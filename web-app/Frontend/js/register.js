@@ -11,36 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const eyeClosedUrl = 'https://cdn-icons-png.flaticon.com/512/565/565655.png';
 
     // Configuración del toggle de contraseña
+    // Configuración del toggle de contraseña (VERSIÓN FONT AWESOME)
     function setupPasswordToggle(toggleEl, inputEl) {
         if (!toggleEl || !inputEl) return;
-
-        // Hacer que la imagen sea clickeable
-        toggleEl.style.cursor = 'pointer';
-        toggleEl.setAttribute('tabindex', '0');
-        toggleEl.setAttribute('role', 'button');
 
         toggleEl.addEventListener('click', function() {
             const type = inputEl.getAttribute('type') === 'password' ? 'text' : 'password';
             inputEl.setAttribute('type', type);
 
-            // Cambiar la imagen
-            if (toggleEl.src.includes('565654.png') || toggleEl.src.includes('eye-open')) {
-                toggleEl.src = eyeClosedUrl;
-                toggleEl.setAttribute('alt', 'Mostrar contraseña');
-            } else {
-                toggleEl.src = eyeOpenUrl;
-                toggleEl.setAttribute('alt', 'Ocultar contraseña');
-            }
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
             
             inputEl.focus();
-        });
-
-        // Soporte para teclado
-        toggleEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleEl.click();
-            }
         });
     }
 
@@ -163,20 +145,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (response.ok) {
                     if (window.Swal) {
-                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Serás redirigido para iniciar sesión.' })
+                        Swal.fire({ icon: 'success', title: 'Registro exitoso', text: 'Hemos enviado un <b>correo de verificación</b> a tu dirección de email.<br>Por favor, revisa tu bandeja de entrada (y spam) para activar tu cuenta antes de iniciar sesión.' })
                             .then(() => window.location.href = '/login');
                     } else {
-                        alert('¡Registro exitoso! Serás redirigido para iniciar sesión.');
+                        alert('¡Registro exitoso! Hemos enviado un correo de verificación. Por favor revisa tu bandeja de entrada para activar tu cuenta.');
                         window.location.href = '/login';
                     }
                 } else {
                     if (window.Swal) {
-                        Swal.fire({ icon: 'error', title: 'Error', text: result.error || 'Error en el registro' });
-                    } else {
-                        alert(`Error: ${result.error}`);
+                        } else {
+                    let mensajeError = result.error || 'Error en el registro';
+                    if (mensajeError.includes("Password should contain")) {
+                        mensajeError = "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un carácter especial.";
                     }
-                }
-            } catch (error) {
+
+                    if (window.Swal) {
+                        Swal.fire({ icon: 'error', title: 'Error', text: mensajeError });
+                    } else {
+                        alert(`Error: ${mensajeError}`);
+                    }
+                    }
+            }} catch (error) {
                 console.error('Error de conexión:', error);
                 if (window.Swal) {
                     Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor.' });

@@ -1,4 +1,4 @@
-.back-button:hover { background-color: #c41e3a; color: white; transform: scale(1.1); }
+.back-button:hover { background-color: #924e16; color: white; transform: scale(1.1); }
 
 .upload-page-container {
     background-color: white;
@@ -7,7 +7,6 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     max-width: 800px;
     width: 90%;
-    margin-top: 120px;
     margin-bottom: 50px;
     margin-left: auto;
     margin-right: auto;
@@ -15,25 +14,25 @@
 
 .header { text-align: center; margin-bottom: 30px; }
 .header h1 { font-size: 32px; color: #333; margin-bottom: 10px; }
-.header p { color: #c41e3a; font-size: 14px; }
+.header p { color: #924e16; font-size: 14px; }
 
 .upload-area {
-    border: 2px dashed #c41e3a; border-radius: 10px; padding: 40px 20px;
+    border: 2px dashed #924e16; border-radius: 10px; padding: 40px 20px;
     text-align: center; cursor: pointer; transition: all 0.3s ease;
     background-color: #f9f9f9; margin-bottom: 20px;
 }
 .upload-area:hover, .upload-area.dragover { background-color: #fff5f5; border-color: #8b0000; }
 .upload-icon { font-size: 50px; margin-bottom: 15px; }
 .upload-text { font-size: 16px; color: #333; font-weight: 600; margin-bottom: 5px; }
-.upload-hint { font-size: 12px; color: #c41e3a; }
+.upload-hint { font-size: 12px; color: #924e16; }
 .file-input { display: none; }
 
 .upload-button {
-    width: 100%; padding: 15px; background-color: #c41e3a; color: white; border: none;
+    width: 100%; padding: 15px; background-color: #924e16; color: white; border: none;
     border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;
     transition: all 0.3s ease; margin-bottom: 30px;
 }
-.upload-button:hover:not(:disabled) { background-color: #8b0000; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(196, 30, 58, 0.4); }
+.upload-button:hover:not(:disabled) { background-color: #8b3f00; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(196, 30, 58, 0.4); }
 .upload-button:disabled { background-color: #ccc; cursor: not-allowed; }
 
 .hidden { display: none; }
@@ -68,7 +67,7 @@
     background-color: #f5f5f5;
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #c41e3a;
+    border-left: 4px solid #924e16;
     text-align: center;
 }
 .feedback-label { display: block; color: #666; font-size: 14px; margin-bottom: 8px; }
@@ -76,7 +75,7 @@
 
 .report-container {
     background-color: #f5f5f5; padding: 20px; border-radius: 8px;
-    border-left: 4px solid #c41e3a;
+    border-left: 4px solid #924e16;
 }
 .report-container h3 { color: #333; margin-bottom: 15px; font-size: 16px; }
 
@@ -90,7 +89,7 @@
 .report-item .icon { margin-right: 15px; font-size: 20px; line-height: 1.5; }
 .report-item .log-good { color: #28a745; }
 .report-item .log-error { color: #dc3545; }
-.report-item .timestamp { background-color: #c41e3a; color: #fff; padding: 2px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; margin-right: 10px; }
+.report-item .timestamp { background-color: #924e16; color: #fff; padding: 2px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; margin-right: 10px; }
 .report-item .message { flex: 1; color: #333; }
 /* ... (todo tu CSS existente va aquí arriba) ... */
 
@@ -144,7 +143,7 @@
 .file-remove {
     background: none;
     border: none;
-    color: #c41e3a;
+    color: #924e16;
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
@@ -169,7 +168,7 @@
 .progress-fill {
     width: 0%;
     height: 100%;
-    background-color: #c41e3a;
+    background-color: #924e16;
     transition: width 0.3s ease-out;
     
     /* Para centrar el texto del porcentaje */
@@ -210,11 +209,149 @@
 }
 
 .form-group input[type="text"]:focus {
-    border-color: #c41e3a; /* Borde rojo al seleccionar */
+    border-color: #924e16; /* Borde rojo al seleccionar */
     box-shadow: 0 0 5px rgba(196, 30, 58, 0.3); /* Sombra roja */
     outline: none; /* Quita el borde azul feo de Chrome/Firefox */
 }
 
 .form-group input[type="text"]::placeholder {
     color: #aaa;
+}
+/* Contenedor de la lista */
+.file-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* La tarjeta blanca horizontal */
+.file-item {
+    display: flex;
+    align-items: center; /* Centra verticalmente video, texto y botón */
+    background-color: #ffffff; /* Fondo blanco (o usa var(--bg-card) para modo oscuro) */
+    border: 1px solid #ddd;    /* Borde sutil */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombrita suave */
+    gap: 15px; /* Espacio entre el video, el texto y la X */
+}
+
+/* La miniatura del video */
+.file-preview {
+    width: 120px;       /* Ancho fijo pequeño */
+    height: 70px;       /* Alto fijo */
+    object-fit: cover;  /* CLAVE: Esto recorta el video para que llene el cuadro sin deformarse */
+    border-radius: 4px;
+    background-color: #000; /* Fondo negro por si tarda en cargar */
+}
+
+/* El área de texto (Nombre y peso) */
+.file-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;       /* Hace que el texto ocupe todo el espacio disponible en medio */
+    overflow: hidden;   /* Evita que nombres largos rompan el diseño */
+}
+
+.file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;        /* Texto oscuro (o var(--text-primary)) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Pone "..." si el nombre es muy largo */
+    margin-bottom: 4px;
+}
+
+.file-size {
+    font-size: 0.8rem;
+    color: #888;        /* Texto gris (o var(--text-secondary)) */
+}
+
+/* El botón de eliminar (X) */
+.file-remove {
+    background: transparent;
+    border: none;
+    color: #af4717; /* Tu color naranja/rojo */
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 10px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.file-remove:hover {
+    color: #ff6600; /* Rojo más fuerte al pasar el mouse */
+}
+/* Contenedor de la lista */
+.file-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* La tarjeta blanca horizontal */
+.file-item {
+    display: flex;
+    align-items: center; /* Centra verticalmente video, texto y botón */
+    background-color: #ffffff; /* Fondo blanco (o usa var(--bg-card) para modo oscuro) */
+    border: 1px solid #ddd;    /* Borde sutil */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombrita suave */
+    gap: 15px; /* Espacio entre el video, el texto y la X */
+}
+
+/* La miniatura del video */
+.file-preview {
+    width: 120px;       /* Ancho fijo pequeño */
+    height: 70px;       /* Alto fijo */
+    object-fit: cover;  /* CLAVE: Esto recorta el video para que llene el cuadro sin deformarse */
+    border-radius: 4px;
+    background-color: #000; /* Fondo negro por si tarda en cargar */
+}
+
+/* El área de texto (Nombre y peso) */
+.file-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;       /* Hace que el texto ocupe todo el espacio disponible en medio */
+    overflow: hidden;   /* Evita que nombres largos rompan el diseño */
+}
+
+.file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;        /* Texto oscuro (o var(--text-primary)) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Pone "..." si el nombre es muy largo */
+    margin-bottom: 4px;
+}
+
+.file-size {
+    font-size: 0.8rem;
+    color: #888;        /* Texto gris (o var(--text-secondary)) */
+}
+
+/* El botón de eliminar (X) */
+.file-remove {
+    background: transparent;
+    border: none;
+    color: #af4717; /* Tu color naranja/rojo */
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 10px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.file-remove:hover {
+    color: #ff0000; /* Rojo más fuerte al pasar el mouse */
 }

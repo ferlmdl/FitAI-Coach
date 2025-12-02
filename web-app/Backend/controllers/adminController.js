@@ -12,8 +12,8 @@ export const handleUploadExercise = async (req, res) => {
   console.log("\n--- ADMIN: Subida de ejercicio INICIADA ---");
 
   try {
-    const { nombre_video, grupo_muscular, descripcion } = req.body;
-    console.log("ADMIN: Datos de texto recibidos:", { nombre_video, grupo_muscular });
+    const { nombre_video, descripcion } = req.body;
+    console.log("ADMIN: Datos de texto recibidos:", { nombre_video });
 
     if (!req.files || !req.files.videoFile || !req.files.imageFile) {
       console.error("ADMIN ERROR: ¡No se encontraron archivos en req.files!");
@@ -60,7 +60,6 @@ export const handleUploadExercise = async (req, res) => {
       .from('videos_web')
       .insert({
         nombre_video: nombre_video,
-        grupo_muscular: grupo_muscular,
         descripcion: descripcion,
         ruta_video: videoUrlData.publicUrl,
         ruta_imagen: imageUrlData.publicUrl
