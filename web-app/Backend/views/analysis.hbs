@@ -1,7 +1,7 @@
 <div class="container analysis-container">
     
     {{#if analysis}}
-        <h1 class="page-title">{{analysis.title}}</h1>
+        <h3 class="page-title">{{analysis.title}}</h3>
         <p class="analysis-group">{{analysis.excercise_type}}</p>
         
         <div class="analysis-content">
@@ -17,7 +17,7 @@
                     data-video-id="{{analysis.id}}">
                 
                     <div style="text-align: center; padding: 20px;">
-                        <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: #666;"></i>
+                        <i class="fas fa-spinner fa-spin"></i>
                         <p>Procesando análisis con IA...</p>
                     </div>
                 </div>
