@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import { checkAuth } from './middleware/auth.js';
 import adminRouter from './routes/admin.js';  
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -99,6 +100,14 @@ app.get('/register', (req, res) => {
   res.render('register',{
     pageCss: 'styleReg.css'
   }); 
+});
+
+app.get('/verificacion-exitosa', (req, res) => {
+    res.render('verificacion-exitosa', { pageCss: 'styleLog.css' });
+});
+
+app.get('/update-password', (req, res) => {
+    res.render('update-password', { pageCss: 'styleLog.css' });
 });
 
 app.get('/analysis/:id', async (req, res) => {
@@ -221,7 +230,6 @@ app.get('/upload', (req, res) => {
   });
 });
 
-// Agrega esto en server.js
 app.get('/api/video-status/:id', async (req, res) => {
   if (!res.locals.isLoggedIn) {
     return res.status(401).json({ error: 'Unauthorized' });
