@@ -674,6 +674,19 @@ body.light-mode .btn-delete {
         font-size: 50px;
     }
 
+    .qs{
+        padding: 0 20px 20px 20px;
+    }
+    .qs p{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .qs span{
+        text-align: center;
+        font-size: 30px;
+    }
+
     .gym{
         flex-direction: column;
         text-align: center;
@@ -715,11 +728,36 @@ body.light-mode .btn-delete {
     .video-gallery {
         grid-template-columns: repeat(3, 1fr);
     }
+        .qs{
+        padding: 0 20px 20px 20px;
+    }
+    .qs p{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .qs span{
+        text-align: center;
+        font-size: 30px;
+    }
+
 }
 
 @media (max-width: 768px) {
     .video-gallery {
         grid-template-columns: repeat(2, 1fr);
+    }
+    .qs{
+        padding: 0 20px 20px 20px;
+    }
+    .qs p{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .qs span{
+        text-align: center;
+        font-size: 30px;
     }
 }
 /* ========================================= */
@@ -1079,7 +1117,21 @@ body.light-mode .btn-delete {
     left: 0;
     width: 100%;
     height: 100%;
+    justify-content: center;
     place-items: center;
+}
+.video-description {
+    font-size: 0.9rem;
+    color: var(--color-text-primary); /* Un gris suave para diferenciarlo del título */
+    margin: 5px 0;
+    line-height: 1.4;
+    
+    /* Truco para cortar el texto después de 3 líneas */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Número de líneas a mostrar */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .modal-overlay {
@@ -1095,17 +1147,20 @@ body.light-mode .btn-delete {
 .modal-content {
     position: relative;
     z-index: 2001;
-    width: 90%;
+    width: auto;
     max-width: 900px;
     background: #000;
     border: 1px solid var(--color-border);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
 }
 
 .modal-content video {
     display: block; 
-    width: 100%;
+    max-height: 80vh;
+    width: auto;
     height: auto;
+    max-width: 100%;
 }
 
 .modal-close-btn {

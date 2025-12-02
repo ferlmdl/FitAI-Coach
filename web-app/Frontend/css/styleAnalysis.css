@@ -1,3 +1,18 @@
+/* Valores por defecto (Modo Claro) */
+:root {
+    --color-text-primary: hsl(0, 1%, 52%);   /* Oscuro */
+    --color-text-secondary: #acacac; /* Gris oscuro */
+    --color-background-body: #fff;
+    --color-accent: #af4717; /* Tu color de acento */
+}
+
+/* Modo Oscuro */
+.dark-mode { /* o el selector que uses para el tema oscuro */
+    --color-text-primary: #fff;   /* Blanco */
+    --color-text-secondary: #ccc; /* Gris claro */
+    --color-background-body: #1e1e1e;
+}
+
 .analysis-container {
     padding-bottom: 4rem;
 }
@@ -5,7 +20,7 @@
 .analysis-group {
     text-align: center;
     font-size: 1.2rem;
-    color: #ccc;
+    color: var(--color-text-secondary);
     margin-bottom: 2rem;
 }
 
@@ -13,25 +28,24 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
-    color: #fff;
 }
 
 .description-wrapper h3 {
     font-size: 1.5rem;
-    color: #af4717;
-    border-bottom: 1px solid #333;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-text-secondary);
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
 
 .description-wrapper h4 {
     font-size: 1.1rem;
-    color: #fff;
+    color:var(--color-text-primary);
     margin-top: 20px;
 }
 
 .description-wrapper p {
-    color: #ccc;
+    color: var(--color-text-secondary);
     line-height: 1.7;
 }
 
@@ -45,3 +59,13 @@
     }
 }
 
+/* Añade este bloque al final de tu styleAnalysis */
+.video-wrapper h3 {
+    /* Usar la variable de color de acento para que coincida con el título de la columna de Análisis */
+    color: var(--color-accent); 
+    
+    /* Opcional: Aplicar el mismo borde inferior que tiene el título de Descripción y Análisis */
+    border-bottom: 1px solid var(--color-text-secondary);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}

@@ -1,5 +1,6 @@
-.back-button:hover { background-color: #924e16; color: white; transform: scale(1.1); }
-
+/* =========================================
+   1. ESTILOS GENERALES Y CONTENEDOR
+   ========================================= */
 .upload-page-container {
     background-color: white;
     padding: 40px;
@@ -12,157 +13,235 @@
     margin-right: auto;
 }
 
-.header { text-align: center; margin-bottom: 30px; }
-.header h1 { font-size: 32px; color: #333; margin-bottom: 10px; }
-.header p { color: #924e16; font-size: 14px; }
-
-.upload-area {
-    border: 2px dashed #924e16; border-radius: 10px; padding: 40px 20px;
-    text-align: center; cursor: pointer; transition: all 0.3s ease;
-    background-color: #f9f9f9; margin-bottom: 20px;
-}
-.upload-area:hover, .upload-area.dragover { background-color: #fff5f5; border-color: #8b0000; }
-.upload-icon { font-size: 50px; margin-bottom: 15px; }
-.upload-text { font-size: 16px; color: #333; font-weight: 600; margin-bottom: 5px; }
-.upload-hint { font-size: 12px; color: #924e16; }
-.file-input { display: none; }
-
-.upload-button {
-    width: 100%; padding: 15px; background-color: #924e16; color: white; border: none;
-    border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;
-    transition: all 0.3s ease; margin-bottom: 30px;
-}
-.upload-button:hover:not(:disabled) { background-color: #8b3f00; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(196, 30, 58, 0.4); }
-.upload-button:disabled { background-color: #ccc; cursor: not-allowed; }
-
-.hidden { display: none; }
-
-.video-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; 
-    background: #000;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
+.back-button:hover {
+    background-color: #924e16;
+    color: white;
+    transform: scale(1.1);
 }
 
-#user-video, #output-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-#output-canvas { pointer-events: none; }
-
-.feedback-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.header {
+    text-align: center;
     margin-bottom: 30px;
 }
 
-.feedback-item {
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 8px;
-    border-left: 4px solid #924e16;
-    text-align: center;
-}
-.feedback-label { display: block; color: #666; font-size: 14px; margin-bottom: 8px; }
-.feedback-value { display: block; color: #333; font-size: 24px; font-weight: 600; }
-
-.report-container {
-    background-color: #f5f5f5; padding: 20px; border-radius: 8px;
-    border-left: 4px solid #924e16;
-}
-.report-container h3 { color: #333; margin-bottom: 15px; font-size: 16px; }
-
-.report-list { list-style: none; padding: 0; max-height: 250px; overflow-y: auto; }
-.report-item {
-    display: flex; align-items: flex-start; padding: 12px;
-    border-bottom: 1px solid #e0e0e0; cursor: pointer; transition: background-color 0.2s;
-}
-.report-item:last-child { border-bottom: none; }
-.report-item:hover { background-color: #e9e9e9; }
-.report-item .icon { margin-right: 15px; font-size: 20px; line-height: 1.5; }
-.report-item .log-good { color: #28a745; }
-.report-item .log-error { color: #dc3545; }
-.report-item .timestamp { background-color: #924e16; color: #fff; padding: 2px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; margin-right: 10px; }
-.report-item .message { flex: 1; color: #333; }
-/* ... (todo tu CSS existente va aquí arriba) ... */
-
-/* --- NUEVO: Estilos para la lista de archivos y previsualización --- */
-.file-list {
-    margin-bottom: 20px;
-}
-
-.file-item {
-    display: flex;
-    align-items: center;
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px;
+.header h1 {
+    font-size: 32px;
+    color: #333;
     margin-bottom: 10px;
 }
 
-.file-preview {
-    width: 100px; /* Ancho fijo para la miniatura */
-    height: 60px; /* Alto fijo */
-    border-radius: 5px;
-    margin-right: 15px;
-    object-fit: cover; /* Asegura que el video llene el espacio */
-    background-color: #000;
+.header p {
+    color: #924e16;
+    font-size: 14px;
 }
 
-.file-info {
-    flex-grow: 1; /* Ocupa el espacio restante */
-    display: flex;
-    flex-direction: column;
+/* =========================================
+   2. ÁREA DE CARGA (DRAG & DROP)
+   ========================================= */
+.upload-area {
+    border: 2px dashed #924e16;
+    border-radius: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
 }
 
-.file-name {
+.upload-area:hover,
+.upload-area.dragover {
+    background-color: #fff5f5;
+    border-color: #8b0000;
+}
+
+.upload-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.upload-text {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.upload-hint {
+    font-size: 12px;
+    color: #924e16;
+}
+
+.file-input {
+    display: none;
+}
+
+/* =========================================
+   3. FORMULARIOS E INPUTS
+   ========================================= */
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
     font-size: 14px;
     color: #333;
     font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group select.input-select {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select.input-select:focus {
+    border-color: #924e16;
+    box-shadow: 0 0 5px rgba(196, 30, 58, 0.3);
+    outline: none;
+}
+
+.upload-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #924e16;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.upload-button:hover:not(:disabled) {
+    background-color: #8b3f00;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(196, 30, 58, 0.4);
+}
+
+.upload-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   4. LISTA DE ARCHIVOS (CORREGIDO)
+   ========================================= */
+.file-list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Tarjeta contenedora de cada video en la lista */
+.file-item {
+    display: flex !important;       /* Forzamos Flexbox */
+    flex-direction: row !important; /* Forzamos dirección horizontal */
+    align-items: center !important; /* Centrado vertical */
+    justify-content: flex-start;    /* Alineación izquierda */
+    gap: 15px;
     
-    /* Para cortar texto largo */
+    width: 100%;
+    height: auto !important;        /* Altura automática (evita el cuadro gigante) */
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Contenedor de la miniatura del video */
+.video-thumbnail-wrapper {
+    width: 120px !important;    /* Ancho FIJO */
+    height: 70px !important;    /* Alto FIJO */
+    min-width: 120px;           /* Evita aplastamiento */
+    
+    position: relative;
+    padding: 0 !important;      /* IMPORTANTE: Sobrescribe cualquier padding heredado */
+    margin: 0 !important;
+    background: #000;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+}
+
+/* El elemento video dentro de la miniatura */
+.file-preview {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover; /* Recorta para llenar sin deformar */
+    display: block;
+    margin: 0;
+}
+
+/* Información de texto (Nombre y peso) */
+.file-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 400px; /* Ajusta según sea necesario */
+    margin-bottom: 4px;
 }
 
 .file-size {
-    font-size: 12px;
+    font-size: 0.8rem;
     color: #888;
 }
 
+/* Botón de eliminar (X) */
 .file-remove {
-    background: none;
+    background: transparent;
     border: none;
-    color: #924e16;
-    font-size: 24px;
+    color: #af4717;
+    font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
     padding: 0 10px;
+    line-height: 1;
     transition: color 0.2s;
 }
+
 .file-remove:hover {
-    color: #8b0000;
+    color: #ff0000;
 }
 
-
-/* --- NUEVO: Estilos para la barra de progreso --- */
+/* =========================================
+   5. BARRA DE PROGRESO
+   ========================================= */
 .progress-bar {
     width: 100%;
     background-color: #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 20px;
-    height: 25px; /* Altura de la barra */
+    height: 25px;
 }
 
 .progress-fill {
@@ -170,8 +249,6 @@
     height: 100%;
     background-color: #924e16;
     transition: width 0.3s ease-out;
-    
-    /* Para centrar el texto del porcentaje */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,178 +257,92 @@
     font-weight: 600;
 }
 
-
-/* --- NUEVO: Estilos para los inputs de texto (Título y Tipo) --- */
-.form-group {
-    margin-bottom: 20px;
+/* =========================================
+   6. MODAL (POPUP DE PREVISUALIZACIÓN)
+   ========================================= */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
     width: 100%;
-    text-align: left; /* Alinea el label a la izquierda */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
-.form-group label {
-    display: block;
-    font-size: 14px;
-    color: #333; /* Texto oscuro para el label */
-    font-weight: 600;
-    margin-bottom: 8px;
+.modal.hidden {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.form-group input[type="text"] {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 16px;
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 800px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    text-align: center;
+    /* Ajustes para el video dentro del modal */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content h3 {
+    margin-top: 0;
     color: #333;
-    background-color: #f9f9f9; /* Fondo gris claro */
-    border: 2px solid #ddd; /* Borde gris claro */
-    border-radius: 8px;
-    box-sizing: border-box; /* Importante para que padding no rompa el ancho */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
-.form-group input[type="text"]:focus {
-    border-color: #924e16; /* Borde rojo al seleccionar */
-    box-shadow: 0 0 5px rgba(196, 30, 58, 0.3); /* Sombra roja */
-    outline: none; /* Quita el borde azul feo de Chrome/Firefox */
+.modal-content video {
+    width: 100%;
+    max-height: 80vh; /* Altura máxima para que no se salga de pantalla */
+    object-fit: contain;
 }
 
-.form-group input[type="text"]::placeholder {
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
     color: #aaa;
-}
-/* Contenedor de la lista */
-.file-list {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* La tarjeta blanca horizontal */
-.file-item {
-    display: flex;
-    align-items: center; /* Centra verticalmente video, texto y botón */
-    background-color: #ffffff; /* Fondo blanco (o usa var(--bg-card) para modo oscuro) */
-    border: 1px solid #ddd;    /* Borde sutil */
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombrita suave */
-    gap: 15px; /* Espacio entre el video, el texto y la X */
-}
-
-/* La miniatura del video */
-.file-preview {
-    width: 120px;       /* Ancho fijo pequeño */
-    height: 70px;       /* Alto fijo */
-    object-fit: cover;  /* CLAVE: Esto recorta el video para que llene el cuadro sin deformarse */
-    border-radius: 4px;
-    background-color: #000; /* Fondo negro por si tarda en cargar */
-}
-
-/* El área de texto (Nombre y peso) */
-.file-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-grow: 1;       /* Hace que el texto ocupe todo el espacio disponible en medio */
-    overflow: hidden;   /* Evita que nombres largos rompan el diseño */
-}
-
-.file-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #333;        /* Texto oscuro (o var(--text-primary)) */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Pone "..." si el nombre es muy largo */
-    margin-bottom: 4px;
-}
-
-.file-size {
-    font-size: 0.8rem;
-    color: #888;        /* Texto gris (o var(--text-secondary)) */
-}
-
-/* El botón de eliminar (X) */
-.file-remove {
-    background: transparent;
-    border: none;
-    color: #af4717; /* Tu color naranja/rojo */
-    font-size: 1.5rem;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    padding: 0 10px;
-    line-height: 1;
     transition: color 0.2s;
+    z-index: 10;
 }
 
-.file-remove:hover {
-    color: #ff6600; /* Rojo más fuerte al pasar el mouse */
-}
-/* Contenedor de la lista */
-.file-list {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.close-modal:hover,
+.close-modal:focus {
+    color: #924e16;
 }
 
-/* La tarjeta blanca horizontal */
-.file-item {
-    display: flex;
-    align-items: center; /* Centra verticalmente video, texto y botón */
-    background-color: #ffffff; /* Fondo blanco (o usa var(--bg-card) para modo oscuro) */
-    border: 1px solid #ddd;    /* Borde sutil */
+/* =========================================
+   7. UTILIDADES Y OTROS
+   ========================================= */
+.hidden {
+    display: none;
+}
+
+/* Report container (si se usa en esta página) */
+.report-container {
+    background-color: #f5f5f5;
+    padding: 20px;
     border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombrita suave */
-    gap: 15px; /* Espacio entre el video, el texto y la X */
+    border-left: 4px solid #924e16;
 }
 
-/* La miniatura del video */
-.file-preview {
-    width: 120px;       /* Ancho fijo pequeño */
-    height: 70px;       /* Alto fijo */
-    object-fit: cover;  /* CLAVE: Esto recorta el video para que llene el cuadro sin deformarse */
-    border-radius: 4px;
-    background-color: #000; /* Fondo negro por si tarda en cargar */
-}
-
-/* El área de texto (Nombre y peso) */
-.file-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-grow: 1;       /* Hace que el texto ocupe todo el espacio disponible en medio */
-    overflow: hidden;   /* Evita que nombres largos rompan el diseño */
-}
-
-.file-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #333;        /* Texto oscuro (o var(--text-primary)) */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Pone "..." si el nombre es muy largo */
-    margin-bottom: 4px;
-}
-
-.file-size {
-    font-size: 0.8rem;
-    color: #888;        /* Texto gris (o var(--text-secondary)) */
-}
-
-/* El botón de eliminar (X) */
-.file-remove {
-    background: transparent;
-    border: none;
-    color: #af4717; /* Tu color naranja/rojo */
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0 10px;
-    line-height: 1;
-    transition: color 0.2s;
-}
-
-.file-remove:hover {
-    color: #ff0000; /* Rojo más fuerte al pasar el mouse */
+.report-container h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 16px;
 }

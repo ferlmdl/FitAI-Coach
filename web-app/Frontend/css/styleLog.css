@@ -28,7 +28,7 @@
 /* --- CAJA DEL LOGIN (MODO OSCURO - DEFAULT) --- */
 .login-box {
     background-color: rgba(4, 4, 4, 0.95);
-    border: 2px solid #a70a15;
+    border: 2px solid #E55100;
     border-radius: 15px;
     padding: 50px;
     max-width: 450px;
@@ -46,7 +46,7 @@ body.light-mode .login-box {
 
 .login-box h1 {
     font-size: 36px;
-    color: #e1160d;
+    color: #c3620d;
     font-weight: 800;
     margin-bottom: 10px;
     text-transform: uppercase;
@@ -95,7 +95,7 @@ body.light-mode .form-group label {
     width: 100%;
     padding: 12px 15px;
     background-color: #1a1a1a;
-    border: 1px solid #a70a15;
+    border: 1px solid #a7590a;
     border-radius: 8px;
     color: #ffffff;
     font-size: 14px;
@@ -193,7 +193,7 @@ body.light-mode .btn-login-submit {
 }
 
 .btn-login-submit:hover {
-    background-color: #a70a15;
+    background-color: #a7600a;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(167, 10, 21, 0.4);
 }

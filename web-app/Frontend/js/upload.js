@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'video/x-flv', 'video/x-matroska', 'video/x-ms-wmv', 'video/webm'
     ];
 
+    const previewModal = document.getElementById('previewModal');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalTitle = document.getElementById('modalTitle');
+    const closeModalBtn = document.querySelector('.close-modal');
+
     const uploadArea = document.getElementById('upload-area');
     const fileInput = document.getElementById('fileInput');
     const fileList = document.getElementById('fileList');
@@ -70,14 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
             fileItem.className = 'file-item'; 
             
             // --- NUEVO: HTML con la etiqueta <video> ---
-            fileItem.innerHTML = `
-                <video class="file-preview" src="${fileWrapper.previewUrl}" controls muted></video>
-                <div class="file-info">
-                    <span class="file-name">${file.name}</span>
-                    <span class="file-size">${formatFileSize(file.size)}</span>
-                </div>
-                <button type="button" class="file-remove" data-index="${index}">×</button>
-            `;
+            // En upload.js dentro de function updateFileList()
+fileItem.innerHTML = `
+    <div class="video-thumbnail-wrapper" style="position: relative; cursor: pointer;">
+        <video class="file-preview" src="${fileWrapper.previewUrl}" muted></video>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 20px; pointer-events: none;">▶</div>
+    </div>
+    `;
+
             fileList.appendChild(fileItem);
         });
 
@@ -88,6 +93,77 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    // ... (Funciones preventDefaults, handleFiles, addFile igual que antes) ...
+
+    // --- MODIFICADO: updateFileList con evento de Click ---
+    function updateFileList() {
+        fileList.innerHTML = '';
+
+        selectedFiles.forEach((fileWrapper, index) => {
+            const file = fileWrapper.file;
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            // Nota: Quitamos 'controls' del video pequeño para que al dar click se abra el modal
+            // y no se reproduzca ahí mismo en chiquito.
+            fileItem.innerHTML = `
+                <div class="video-thumbnail-wrapper" style="position: relative; cursor: pointer;">
+                    <video class="file-preview" src="${fileWrapper.previewUrl}" muted></video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 20px; pointer-events: none;">▶</div>
+                </div>
+                <div class="file-info">
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${formatFileSize(file.size)}</span>
+                </div>
+                <button type="button" class="file-remove" data-index="${index}">×</button>
+            `;
+
+            fileList.appendChild(fileItem);
+            
+            // Agregar evento Click a la miniatura para abrir el modal
+            const thumbnail = fileItem.querySelector('.file-preview');
+            thumbnail.addEventListener('click', () => {
+                openModal(fileWrapper.previewUrl, file.name);
+            });
+            // También al wrapper por si acaso
+            fileItem.querySelector('.video-thumbnail-wrapper').addEventListener('click', () => {
+                openModal(fileWrapper.previewUrl, file.name);
+            });
+        });
+
+        // Eventos para borrar (igual que antes)
+        fileList.querySelectorAll('.file-remove').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                removeFile(index);
+            });
+        });
+    }
+
+    // --- NUEVO: Funciones para manejar el Modal ---
+    function openModal(videoUrl, videoName) {
+        modalVideo.src = videoUrl;
+        modalTitle.textContent = videoName; // Pone el nombre del archivo como título
+        previewModal.classList.remove('hidden');
+        modalVideo.play(); // Opcional: reproducir automáticamente al abrir
+    }
+
+    function closeModal() {
+        previewModal.classList.add('hidden');
+        modalVideo.pause(); // Pausar video
+        modalVideo.currentTime = 0; // Reiniciar
+        modalVideo.src = ""; // Limpiar fuente para liberar memoria momentánea
+    }
+
+    // Event listeners para cerrar el modal
+    closeModalBtn.addEventListener('click', closeModal);
+
+    // Cerrar si se hace click fuera del contenido (en el fondo oscuro)
+    window.addEventListener('click', (event) => {
+        if (event.target == previewModal) {
+            closeModal();
+        }
+    });
     
     // --- MODIFICADO: Revocamos el Object URL para liberar memoria ---
     function removeFile(index) {
