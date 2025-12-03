@@ -112,7 +112,7 @@ body.light-mode .form-group input {
 .form-group input:focus {
     outline: none;
     background-color: #252525;
-    border-color: #e1160d;
+    border-color: #e15b0d;
     box-shadow: 0 0 10px rgba(225, 22, 13, 0.3);
 }
 
@@ -155,7 +155,7 @@ body.light-mode .remember-me {
 }
 
 .forgot-password {
-    color: #e1160d;
+    color: #e1500d;
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -176,7 +176,7 @@ body.light-mode .forgot-password:hover {
 .btn-login-submit {
     width: 100%;
     padding: 14px;
-    background-color: #e1160d;
+    background-color: #e1620d;
     color: #ffffff;
     border: none;
     border-radius: 8px;

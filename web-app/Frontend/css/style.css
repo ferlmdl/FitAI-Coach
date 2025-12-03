@@ -389,8 +389,8 @@ p {
 
 .video-gallery {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 15px; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
     padding-bottom: 20px;
 }
 
@@ -438,23 +438,22 @@ p {
     margin-bottom: 1rem; 
 }
 
-/* --- BOTONES DE TARJETA --- */
-
 .video-item-buttons {
     display: flex;
-    flex-direction: column; /* <--- ESTA LÍNEA ES LA CLAVE */
+    flex-direction: column;
     gap: 10px;
     width: 100%;
     margin-top: auto;
 }
 
-/* BOTÓN ANÁLISIS (Estilo Outline Naranja) */
 .btn-primary {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: 100%;
-    padding: 10px 0;
+    height: 45px;
+    padding: 0;
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
@@ -462,20 +461,17 @@ p {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    gap: 8px;
-    
-    /* ESTILO BASE (Modo Oscuro y Claro por defecto) */
+    gap: 10px;
     background-color: transparent;
-    border: 2px solid var(--color-accent); /* Borde un poco más grueso para visibilidad */
-    color: var(--color-accent); /* Texto naranja brillante */
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
 }
 
 .btn-primary:hover {
     background-color: var(--color-accent);
-    color: #ffffff; /* Texto blanco al pasar el mouse */
+    color: #ffffff;
 }
 
-/* BOTÓN BORRAR (Estilo Sólido Gris Oscuro) */
 .btn-delete {
     display: flex;
     align-items: center;
@@ -490,26 +486,22 @@ p {
     cursor: pointer;
     transition: all 0.2s ease;
     gap: 8px;
-    
-    /* ESTILO BASE */
-    background-color: #333333; /* Gris oscuro visible en ambos temas */
-    border: 2px solid #333333;
+    background-color: var(--color-accent-dark);
+    border: 2px solid var(--color-accent);
     color: #ffffff;
+    height: 45px;
 }
 
 .btn-delete:hover {
-    background-color: #000000;
-    border-color: #000000;
+    background-color: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
 }
 
-/* AJUSTES ESPECÍFICOS PARA MODO CLARO (Solo si es necesario) */
 body.light-mode .btn-delete {
-    background-color: #4a4a4a; /* Un gris un poco más claro para contraste */
-    border-color: #4a4a4a;
+    background-color: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
 }
-/* ========================================= */
-/* 8. FOOTER                                 */
-/* ========================================= */
+
 .footer {
     border-top: 1px solid var(--color-border);
     padding: 50px 0;
@@ -578,9 +570,6 @@ body.light-mode .btn-delete {
     border-top: 1px solid var(--color-border);
 }
 
-/* ========================================= */
-/* 9. PÁGINAS EXTRA (UPLOAD, SEARCH)         */
-/* ========================================= */
 .search-bar {
     display: flex;
     margin: 0 auto 2.5rem auto;
@@ -612,9 +601,6 @@ body.light-mode .btn-delete {
     background-color: var(--color-accent-dark);
 }
 
-/* ========================================= */
-/* 10. MEDIA QUERIES (RESPONSIVE)            */
-/* ========================================= */
 @media(max-width:991px) {
     .menu-icon {
         display: flex;
@@ -760,9 +746,7 @@ body.light-mode .btn-delete {
         font-size: 30px;
     }
 }
-/* ========================================= */
-/* 11. ESTILOS FOOTER (Continuación)         */
-/* ========================================= */
+
 .footer .links ul {
     padding: 0;
     margin: 0;
@@ -784,7 +768,6 @@ body.light-mode .btn-delete {
 .social-links img {
     width: 32px;
     height: 32px;
-    /* Opcional: filtro para que los iconos sean blancos o grises según el tema */
     filter: grayscale(100%); 
     transition: filter 0.3s;
 }
@@ -797,16 +780,11 @@ body.light-mode .btn-delete {
     width: 100%
 }
 
-/* ========================================= */
-/* 12. PÁGINA DE UPLOAD (Subida de Video)    */
-/* ========================================= */
-
-/* Corrección de Inputs en página de Upload */
 .upload-page-container .form-group input[type="text"] {
     padding-right: 15px !important; 
-    background-color: var(--color-input-bg); /* Variable */
-    border: 1px solid var(--color-border);   /* Variable */
-    color: var(--color-text-primary);        /* Variable */
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
     border-radius: 5px;
     width: 100%;
     padding: 12px 15px;
@@ -843,10 +821,9 @@ body.light-mode .btn-delete {
     font-size: 0.9rem;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     transition: width 0.3s ease;
-    background-color: var(--color-accent); /* Barra naranja */
+    background-color: var(--color-accent);
 }
 
-/* Estructura General de Páginas Internas */
 .videos-page {
     max-width: 1400px;
     margin: 2rem auto;
@@ -867,18 +844,13 @@ body.light-mode .btn-delete {
     margin-bottom: 2.5rem;
 }
 
-/* ========================================= */
-/* 13. PANEL DE ADMINISTRADOR Y FILTROS      */
-/* ========================================= */
-
-/* Contenedor de Filtros */
 .filter-container {
     display: flex;
     flex-wrap: wrap; 
     gap: 20px;
     margin-bottom: 2.5rem;
     padding: 20px;
-    background-color: var(--color-menu-bg); /* Fondo gris oscuro/café */
+    background-color: var(--color-menu-bg);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--color-border);
@@ -909,12 +881,11 @@ body.light-mode .btn-delete {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Focus en Naranja (antes era azul) */
 .filter-input:focus,
 .filter-select:focus {
     outline: none;
     border-color: var(--color-accent); 
-    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25); /* Sombra naranja suave */
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
 }
 
 .filter-select option {
@@ -998,9 +969,6 @@ body.light-mode .btn-delete {
     color: var(--color-text-primary);
 }
 
-/* ========================================= */
-/* 14. GRID DE VIDEOS Y RESULTADOS           */
-/* ========================================= */
 .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -1044,7 +1012,6 @@ body.light-mode .btn-delete {
     display: block;
 }
 
-/* Icono Play sobre miniatura */
 .play-icon {
     position: absolute;
     top: 50%;
@@ -1052,7 +1019,7 @@ body.light-mode .btn-delete {
     transform: translate(-50%, -50%);
     font-size: 3rem;
     color: rgba(255, 255, 255, 0.9);
-    background: rgba(255, 107, 53, 0.8); /* Fondo Naranja traslúcido */
+    background: rgba(255, 107, 53, 0.8);
     border-radius: 50%;
     width: 70px;
     height: 70px;
@@ -1066,12 +1033,11 @@ body.light-mode .btn-delete {
     transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Botón Favorito */
 .favorite-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: rgba(22, 21, 20, 0.85); /* Fondo oscuro variable */
+    background: rgba(22, 21, 20, 0.85); 
     backdrop-filter: blur(4px);
     border: none;
     border-radius: 50%;
@@ -1088,7 +1054,7 @@ body.light-mode .btn-delete {
     transform: scale(1.1);
 }
 .favorite-btn.active {
-    color: var(--color-accent); /* Corazón naranja */
+    color: var(--color-accent);
 }
 
 .video-info {
@@ -1106,9 +1072,6 @@ body.light-mode .btn-delete {
     font-weight: 600;
 }
 
-/* ========================================= */
-/* 15. MODAL DE VIDEO                        */
-/* ========================================= */
 .video-modal {
     display: none; 
     position: fixed;
@@ -1122,13 +1085,12 @@ body.light-mode .btn-delete {
 }
 .video-description {
     font-size: 0.9rem;
-    color: var(--color-text-primary); /* Un gris suave para diferenciarlo del título */
+    color: var(--color-text-primary);
     margin: 5px 0;
     line-height: 1.4;
-    
-    /* Truco para cortar el texto después de 3 líneas */
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Número de líneas a mostrar */
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1169,7 +1131,7 @@ body.light-mode .btn-delete {
     right: 0;
     background: none;
     border: none;
-    color: white; /* Siempre blanco para contrastar con el overlay oscuro */
+    color: white;
     font-size: 2.5rem;
     font-weight: bold;
     cursor: pointer;
